@@ -1,0 +1,11 @@
+«IMPORT jobConfig»
+
+«DEFINE main FOR Config»
+«FILE name + "/config.xml"»
+
+«FOREACH paramSection.parameters AS param»
+
+«ENDFOREACH»
+
+«ENDFILE»
+«ENDDEFINE»

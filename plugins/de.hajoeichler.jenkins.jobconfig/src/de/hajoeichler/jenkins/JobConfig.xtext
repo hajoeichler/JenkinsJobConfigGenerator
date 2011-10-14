@@ -1,0 +1,106 @@
+grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals
+
+generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
+
+Model:
+	(configs+=Config)*;
+
+Config:
+	"job" name=ID ("extends" pareentConfig=[Config])? "("
+	(isDisabled?="isDisabled")?
+	(oldBuildHandling=OldBuildHandling)?
+	(executeConcurrent?="executeConcurrent")?
+	("description" description=STRING)?
+	(isMatixJob?="isMatrixJob")?
+	("restrictRunning" restrictTo=STRING)?
+	(paramSection=ParameterSection)?
+	(scm=Scm)?
+	(buildTriggerSection+=BuildTriggerSection)*
+	//(build = Build)?
+	//(postBuildAction += PostBuildAction)*
+	")";
+
+OldBuildHandling:
+	"oldBuilds" "("
+	("daysToKeep" daysToKeep=INT)?
+	("maxNumberOfBuilds" maxNumberOfBuilds=INT)?
+	("daysToKeepArtifact" daysToKeepArtifact=INT)?
+	("maxNumberOfBuildsWithArtifact" maxNumberOfBuildsWithArtifact=INT)?
+	")";
+
+ParameterSection:
+	"params" "("
+	parameters+=Parameter+
+	")";
+
+Parameter:
+	name=ID "("
+	type=ParameterType
+	("description" description=STRING)?
+	")";
+
+ParameterType:
+	StringParam | BooleanParam | ChoiceParam;
+
+StringParam:
+	"String" value=STRING;
+
+BooleanParam:
+	"Boolean" (checked?="isChecked")?;
+
+ChoiceParam:
+	"Choice" choices=STRING;
+
+Scm:
+	ScmGit | ScmCVS;
+
+ScmGit:
+	"git" "("
+	"url" url=STRING
+	("branch" branch=STRING)?
+	(wipeOutWorkspace?="wipeOutWorkspace")?
+	(excludedRegions?="excludedRegions")?
+	")";
+
+ScmCVS:
+	"cvs" "("
+	"cvsroot" root=STRING
+	"modules" modules=STRING
+	")";
+
+BuildTriggerSection:
+	"trigger" "("
+	buildtriggers=(TimerTrigger | PollScmTrigger | FirstStartTrigger)*
+	")";
+
+TimerTrigger:
+	"periodically" timer=STRING;
+
+PollScmTrigger:
+	"pollScm" poll=STRING;
+
+FirstStartTrigger:
+	buildOnFirstStart?="buildOnFirstStart";
+
+Build:
+	"builds" "("
+	builds+=(Maven | Shell)+ // Ant | Batch | Groovy | MSBuild | JobTrigger | Rake
+	")";
+
+Maven:
+	"maven" "("
+	"goals" mavenGoals=STRING
+	("pom" mavenPOM=STRING)?
+	("properties" mavenProperties=STRING)?
+	(mavenPrivateRepo?="usePrivateRepo")?
+	")";
+
+Shell:
+	"sh" "("
+	shellScript=STRING
+	(append?="append")?
+	")";
+
+	//PostBuildAction:
+//	"TODO PostBuildActions"
+//;
