@@ -1,9 +1,10 @@
-grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals
-
+grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals //with de.hajoeichler.jenkins.ExtMail
 generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
 
 Model:
-	(configs+=Config)*;
+	"group" name=ID "("
+	(configs+=Config)*
+	")";
 
 Config:
 	"job" name=ID ("extends" pareentConfig=[Config])? "("
@@ -13,11 +14,14 @@ Config:
 	("description" description=STRING)?
 	(isMatixJob?="isMatrixJob")?
 	("restrictRunning" restrictTo=STRING)?
+	('gitUrl' gitUrl=STRING)? // 3rdParty
+
 	(paramSection=ParameterSection)?
 	(scm=Scm)?
-	(buildTriggerSection+=BuildTriggerSection)*
-	//(build = Build)?
-	//(postBuildAction += PostBuildAction)*
+	(trigger=TriggerSection)?
+	(wrapper=WrapperSection)?
+	(buildSection=BuildSection)?
+	(publisherSection=PublisherSection)?
 	")";
 
 OldBuildHandling:
@@ -54,24 +58,15 @@ ChoiceParam:
 Scm:
 	ScmGit | ScmCVS;
 
-ScmGit:
-	"git" "("
-	"url" url=STRING
-	("branch" branch=STRING)?
-	(wipeOutWorkspace?="wipeOutWorkspace")?
-	(excludedRegions?="excludedRegions")?
-	")";
+ScmGit: // 3rdParty
+	"git" "(" "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")?
+	(excludedRegions?="excludedRegions")? ")";
 
 ScmCVS:
-	"cvs" "("
-	"cvsroot" root=STRING
-	"modules" modules=STRING
-	")";
+	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING ")";
 
-BuildTriggerSection:
-	"trigger" "("
-	buildtriggers=(TimerTrigger | PollScmTrigger | FirstStartTrigger)*
-	")";
+TriggerSection:
+	"trigger" "(" buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger)+ ")";
 
 TimerTrigger:
 	"periodically" timer=STRING;
@@ -79,12 +74,36 @@ TimerTrigger:
 PollScmTrigger:
 	"pollScm" poll=STRING;
 
-FirstStartTrigger:
+FirstStartTrigger: // 3rdParty
 	buildOnFirstStart?="buildOnFirstStart";
 
-Build:
+WrapperSection:
+	"wrappers" "("
+	wrappers+=(AnsiColor | Release | Timeout | Lock)+ // Android
+	")";
+
+AnsiColor: // 3rdParty
+	(ansicolor?='ansicolor');
+
+Release: // 3rdParty
+	"release" "("
+	(notKeepForever?='notKeepForever')?
+	(paramSection=ParameterSection)?
+	("pre" preBuildSection=BuildSection)?
+	("success" preBuildSection=BuildSection)?
+	("failed" preBuildSection=BuildSection)?
+	("final" preBuildSection=BuildSection)?
+	")";
+
+Timeout: // 3rdParty
+	"timeout" t=INT (failBuild?='failBuild')?;
+
+Lock: // 3rdParty
+	"lock" lock=STRING;
+
+BuildSection:
 	"builds" "("
-	builds+=(Maven | Shell)+ // Ant | Batch | Groovy | MSBuild | JobTrigger | Rake
+	builds+=(Maven | Shell | TriggerBuilderSection)+ // Ant | Batch | SystemGroovy | MSBuild | TriggerBuilder | Rake
 	")";
 
 Maven:
@@ -101,6 +120,30 @@ Shell:
 	(append?="append")?
 	")";
 
-	//PostBuildAction:
-//	"TODO PostBuildActions"
-//;
+TriggerBuilderSection:
+	"triggered builds" "("
+	(triggeredBuilds=TriggeredBuild)+
+	")";
+
+TriggeredBuild:
+	build=[Config]
+	(blocking?='blocking')?
+	(triggerParams+=(CurrentTriggerParams | PropertyFileTriggerParams | PredefinedTriggerParams)+)?;
+
+CurrentTriggerParams:
+	currentParams?='currentParams';
+
+PropertyFileTriggerParams:
+	'propertyFile' propertyFile=STRING;
+
+PredefinedTriggerParams:
+	'predefined' predefined=STRING;
+
+PublisherSection:
+	"publishers" "("
+	publishers+=(Artifacts)+ // | Claim | TestResult | Cobertura | Rcov | HTMLReport | DownStreamTriggerBuilder)+
+	")";
+
+Artifacts:
+	"artifacts" artifacts=STRING;
+
