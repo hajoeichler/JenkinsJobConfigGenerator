@@ -6,10 +6,83 @@ package de.hajoeichler.jenkins.generator
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess
+import de.hajoeichler.jenkins.jobConfig.*
+
+import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
 
 class JobConfigGenerator implements IGenerator {
-	
+
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-		//TODO implment me
+		for(config: resource.allContentsIterable.filter(typeof(Config))) {
+			fsa.generateFile(config.fileName, config.content)
+		}
 	}
+
+	def fileName(Config c) {
+		c.name
+	}
+
+	def content(Config config) '''
+		<?xml version='1.0' encoding='UTF-8'?>
+		«IF config.isMatixJob»
+		<matrix-project>
+		«ELSE»
+		<project>
+		«ENDIF»
+		  <description>«config.description»</description>
+		  «IF config.oldBuildHandling != null»
+		  «logRotator(config.oldBuildHandling)»
+		  «ENDIF»
+		  <properties>
+		    «IF config.gitUrl != null»
+		    «gitHub(config.gitUrl)»
+		    «ENDIF»
+		    «IF config.paramSection != null»
+		    «parameterSection(config.paramSection)»
+		    «ENDIF»
+		  </properties>
+		«IF config.isMatixJob»
+		</matrix-project>
+		«ELSE»
+		</project>
+		«ENDIF»
+	'''
+
+	def logRotator(OldBuildHandling obh) '''
+		<logRotator>
+		  <daysToKeep>«obh.daysToKeep»</daysToKeep>
+		  <numToKeep>«obh.maxNumberOfBuilds»</numToKeep>
+		  <artifactDaysToKeep>«obh.daysToKeepArtifact»</artifactDaysToKeep>
+		  <artifactNumToKeep>«obh.maxNumberOfBuildsWithArtifact»</artifactNumToKeep>
+		</logRotator>
+	'''
+
+	def gitHub(String gitUrl) '''
+		<com.coravy.hudson.plugins.github.GithubProjectProperty>
+		  <projectUrl>«gitUrl»</projectUrl>
+		</com.coravy.hudson.plugins.github.GithubProjectProperty>
+	'''
+
+	def parameterSection(ParameterSection ps) '''
+		<hudson.model.ParametersDefinitionProperty>
+		  <parameterDefinitions>
+		  «FOR p:ps.parameters»
+		  «param(p, p.type)»
+		  «ENDFOR»
+		</parameterDefinitions>
+		</hudson.model.ParametersDefinitionProperty>
+	'''
+	def dispatch param(Parameter p, StringParam s) '''
+		<hudson.model.StringParameterDefinition>
+		  <name>«p.name»</name>
+		  <description>«p.description»</description>
+		  <defaultValue>«s.value»</defaultValue>
+		</hudson.model.StringParameterDefinition>
+	'''
+
+	def dispatch param(Parameter p, BooleanParam b) '''
+	'''
+
+	def dispatch param(Parameter p, ChoiceParam c) '''
+	'''
 }
