@@ -27,9 +27,10 @@ public class JobConfigFormatter extends AbstractDeclarativeFormatter {
     @Override
     protected void configureFormatting(FormattingConfig c) {
         JobConfigGrammarAccess jobConfigGrammarAccess = (JobConfigGrammarAccess) getGrammarAccess();
-        c.setNoLinewrap();
+        
+        c.setSpace("  "); // we indent 2 spaces
 
-        ;
+        c.setNoLinewrap(); // never wrap lines that we don't wrap
         List<Assignment> allAssignments = jobConfigGrammarAccess.findAssignments(GrammarUtil.allRules(
                 getGrammarAccess().getGrammar()).toArray(new AbstractRule[0]));
         for (Assignment assignment : allAssignments) {
@@ -46,11 +47,6 @@ public class JobConfigFormatter extends AbstractDeclarativeFormatter {
 
         List<Keyword> bracketsOpen = jobConfigGrammarAccess.findKeywords("(");
         for (Keyword bracketOpen : bracketsOpen) {
-            // this ensures a line wrap after a closing bracket and before the open bracket.
-            // EObject rule = bracketOpen.eContainer().eContainer();
-            // if (!jobConfigGrammarAccess.getConfigRule().equals(rule)) {
-            // c.setLinewrap(1, 1, 1).around(rule);
-            // }
             c.setLinewrap(1, 1, 1).after(bracketOpen);
             c.setIndentationIncrement().after(bracketOpen);
         }
