@@ -2,14 +2,34 @@ grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals
 generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
 
 Model:
+	(declSpecs+=DeclSpecs)?
 	("group" name=ID "("
 	(configs+=Config)*
 	")"
 	|
 	(configs+=Config)*);
 
+DeclSpecs:
+	"declarations" "("
+	decls+=(AntDecl | MavenDecl | LockDecl)* // | WarningDecl)+
+	")"
+;
+
+AntDecl:
+	"ant" ant=ID
+;
+
+MavenDecl:
+	"maven" mvn=ID
+;
+
+LockDecl:
+	"lock" lockName=ID
+;
+
+
 Config:
-	"job" name=ID ("extends" pareentConfig=[Config])? "("
+	"job" name=ID ("extends" parentConfig=[Config])? "("
 	(isDisabled?="isDisabled")?
 	(oldBuildHandling=OldBuildHandling)?
 	(executeConcurrent?="executeConcurrent")?
@@ -17,7 +37,7 @@ Config:
 	(isMatixJob?="isMatrixJob")?
 	("restrictRunning" restrictTo=STRING)?
 	('gitUrl' gitUrl=STRING)? // 3rdParty
-
+	(concurrentBuild?="concurrentBuild")?
 	(paramSection=ParameterSection)?
 	(scm=Scm)?
 	(trigger=TriggerSection)?
@@ -101,20 +121,26 @@ Timeout: // 3rdParty
 	"timeout" t=INT (failBuild?='failBuild')?;
 
 Lock: // 3rdParty
-	"lock" lock=STRING;
+	"lock" lock=STRING; // should be LockDecl
 
 BuildSection:
 	"builds" "("
-	builds+=(Maven | Shell | TriggerBuilderSection)+ // Ant | Batch | SystemGroovy | MSBuild | TriggerBuilder | Rake
+	builds+=(Maven | Ant | Shell | Batch | SystemGroovy | TriggerBuilderSection)+ // | MSBuild | Rake
 	")";
 
 Maven:
-	"maven" "("
+	"maven" mvn=STRING "(" // should use MavenDecl
 	"goals" mavenGoals=STRING
 	("pom" mavenPOM=STRING)?
 	("properties" mavenProperties=STRING)?
 	(mavenPrivateRepo?="usePrivateRepo")?
 	")";
+
+Ant:
+	"ant" ant=STRING "(" // should be AntDecl
+	("targets" targets=STRING)?
+	")"
+;
 
 Shell:
 	"sh" "("
@@ -122,13 +148,26 @@ Shell:
 	(append?="append")?
 	")";
 
+Batch:
+	"batch" "("
+	batchScript=STRING
+	(append?="append")?
+	")";
+
+SystemGroovy:
+	"systemGroovy" "("
+	groovyScript=STRING
+	// TODO support more config
+	")"
+;
+
 TriggerBuilderSection:
 	"triggered builds" "("
 	(triggeredBuilds+=TriggeredBuild)+
 	")";
 
 TriggeredBuild:
-	build=[Config]
+	builds=[Config]
 	(blocking?='blocking')?
 	(triggerParams+=(CurrentTriggerParams | PropertyFileTriggerParams | PredefinedTriggerParams)+)?;
 
@@ -143,9 +182,42 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts)+ // | Claim | TestResult | Cobertura | Rcov | HTMLReport | DownStreamTriggerBuilder)+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream)+ // | Claim | TestResult | Cobertura | Rcov | HTMLReport | DownStreamTriggerBuilder)+
 	")";
 
 Artifacts:
 	"artifacts" artifacts=STRING;
 
+TestResult:
+	"testresults" testresults=STRING (longIO?="longIO")?;
+
+ExtMail:
+	"extMail" "("
+	("to" to=STRING)?
+	("type" type=("html" | "text"))?
+	("subject" subject=STRING)?
+	("content" content=STRING)?
+	("attachments" attachments=STRING)?
+	"trigger" "("
+	(mailTrigger+=MailTrigger)*
+	")" ")";
+
+MailTrigger:
+	type=("Still-Failing" | "Success" | "Fixed" | "Still-Unstable" | "Before-Build" | "Failure" | "Unstable")
+	(toList?="toList")?
+	(toCommiter?="toCommiter")?
+	(toRequester?="toRequester")?
+	(toCulprits?="toCulprits")?
+	("to" to=STRING)?
+	("subject" subject=STRING)?
+	("content" content=STRING)?;
+
+DownStream:
+	"downstream" "("
+	builds+=DownStreamBuild
+	")";
+
+DownStreamBuild:
+	builds=[Config]
+	"when" condition=("Stable" | "Unstable" | "Not-Failed" | "Failed" | "Complete")
+	(triggerParams+=(CurrentTriggerParams | PropertyFileTriggerParams | PredefinedTriggerParams)+)?;
