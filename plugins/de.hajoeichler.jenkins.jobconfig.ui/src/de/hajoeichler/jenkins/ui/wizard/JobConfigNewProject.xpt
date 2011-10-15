@@ -1,0 +1,28 @@
+«IMPORT de::hajoeichler::jenkins::ui::wizard»
+
+«DEFINE main FOR JobConfigProjectInfo»
+«EXPAND model FOR this»
+«EXPAND workflow FOR this»
+«ENDDEFINE»
+
+«DEFINE model FOR JobConfigProjectInfo»
+«FILE "src/model/Model.jc"-»
+/*
+ * This is an example model
+ */
+Hello Xtext!
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE workflow FOR JobConfigProjectInfo»
+«FILE "src/Generator.mwe2"-»
+module Generator
+
+var targetDir = "src-gen"
+var modelPath = "src/model"
+
+Workflow {
+	component = @workflow.JobConfigGenerator auto-inject {}
+}
+«ENDFILE»
+«ENDDEFINE»
