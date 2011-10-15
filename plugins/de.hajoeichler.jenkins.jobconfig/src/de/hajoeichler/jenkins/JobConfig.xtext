@@ -2,9 +2,11 @@ grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals
 generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
 
 Model:
-	"group" name=ID "("
+	("group" name=ID "("
 	(configs+=Config)*
-	")";
+	")"
+	|
+	(configs+=Config)*);
 
 Config:
 	"job" name=ID ("extends" pareentConfig=[Config])? "("
@@ -90,9 +92,9 @@ Release: // 3rdParty
 	(notKeepForever?='notKeepForever')?
 	(paramSection=ParameterSection)?
 	("pre" preBuildSection=BuildSection)?
-	("success" preBuildSection=BuildSection)?
-	("failed" preBuildSection=BuildSection)?
-	("final" preBuildSection=BuildSection)?
+	("success" successBuildSection=BuildSection)?
+	("failed" failedBuildSection=BuildSection)?
+	("final" finalBuildSection=BuildSection)?
 	")";
 
 Timeout: // 3rdParty
@@ -122,7 +124,7 @@ Shell:
 
 TriggerBuilderSection:
 	"triggered builds" "("
-	(triggeredBuilds=TriggeredBuild)+
+	(triggeredBuilds+=TriggeredBuild)+
 	")";
 
 TriggeredBuild:
