@@ -106,10 +106,10 @@ Workflow {
             fragment = junit.Junit4Fragment {}
 
             // project wizard (optional)
-            // fragment = projectWizard.SimpleProjectWizardFragment {
-            //      generatorProjectName = "${projectName}"
-            //      modelFileExtension = file.extensions
-            // }
+            fragment = projectWizard.SimpleProjectWizardFragment {
+                  generatorProjectName = "${projectName}"
+                  modelFileExtension = file.extensions
+            }
 
             // provides the necessary bindings for java types integration
             fragment = types.TypesGeneratorFragment {}
