@@ -36,11 +36,11 @@ class JobConfigGenerator implements IGenerator {
 
 	def List<ParameterSection> getAllParameterSections (Config c) {
 		val l = new ArrayList<ParameterSection>();
-		if (c.paramSection != null) {
-			l.add(c.paramSection)
-		}
 		if (c.parentConfig != null) {
 			l.addAll(getAllParameterSections(c.parentConfig))
+		}
+		if (c.paramSection != null) {
+			l.add(c.paramSection)
 		}
 		return l
 	}
@@ -78,15 +78,13 @@ class JobConfigGenerator implements IGenerator {
 		return m
 	}
 
-	def List<BuildSection> getAllBuilders (Config c) {
-		val l = new ArrayList<BuildSection>();
-		if (c.buildSection != null) {
-			l.add(c.buildSection)
-		}
+	def getAllBuilders (Config c, List<EObject> l) {
 		if (c.parentConfig != null) {
-			l.addAll(getAllBuilders(c.parentConfig))
+			getAllBuilders(c.parentConfig, l)
 		}
-		return l
+		if (c.buildSection != null) {
+			l.addAll(c.buildSection.builds)
+		}
 	}
 
 	def List<PublisherSection> getAllPublishers (Config c) {
@@ -153,9 +151,7 @@ class JobConfigGenerator implements IGenerator {
 		  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
 		  <concurrentBuild>«c.concurrentBuild»</concurrentBuild>
 		  «wrappers(c)»
-		  «FOR b:c.getAllBuilders»
-		  «builder(b)»
-		  «ENDFOR»
+		  «builder(c)»
 		  «publishers(c)»
 		«IF c.isMatixJob»
 		</matrix-project>
@@ -315,9 +311,11 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.build__timeout.BuildTimeoutWrapper>
 	'''
 
-	def builder(BuildSection bs) '''
+	def builder(Config c) '''
 		<builders>
-		  «FOR b:bs.builds»
+		  «var l = new ArrayList<EObject>()»
+		  «getAllBuilders(c, l)»
+		  «FOR b:l»
 		  «build(b)»
 		  «ENDFOR»
 		</builders>
@@ -356,16 +354,31 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.plugins.emailext.ExtendedEmailPublisher>
 		  <recipientList>«m.to»</recipientList>
 		  <configuredTriggers>
-		  «FOR mt:m.mailTrigger»
-		  «mailTrigger(mt)»
-		  «ENDFOR»
+		    «FOR mt:m.mailTrigger»
+		    «mailTrigger(mt)»
+		    «ENDFOR»
 		  </configuredTriggers>
+		  «IF m.type == null»
 		  <contentType>default</contentType>
+		  «ELSE»
+		  <contentType>«m.type»</contentType>
+		  «ENDIF»
+		  «IF m.subject == null»
+		  <defaultSubject>«m.subject»</defaultSubject>
+		  «ELSE»
 		  <defaultSubject>${DEFAULT_SUBJECT}</defaultSubject>
+		  «ENDIF»
+		  «IF m.content == null»
+		  <defaultContent>«m.content»</defaultContent>
+		  «ELSE»
 		  <defaultContent>${DEFAULT_CONTENT}</defaultContent>
+		  «ENDIF»
 		</hudson.plugins.emailext.ExtendedEmailPublisher>
 	'''
 
+	// TODO: different trigger types 
+	// <hudson.plugins.emailext.plugins.trigger.UnstableTrigger>
+	// <hudson.plugins.emailext.plugins.trigger.FixedTrigger>
 	def mailTrigger(MailTrigger mt) '''
 		«IF mt.type.equals("Failure")»
 		<hudson.plugins.emailext.plugins.trigger.FailureTrigger>
@@ -390,20 +403,18 @@ class JobConfigGenerator implements IGenerator {
 		«IF mt.type.equals("Failure")»
 		</hudson.plugins.emailext.plugins.trigger.FailureTrigger>
 		«ENDIF»
-
-		<hudson.plugins.emailext.plugins.trigger.UnstableTrigger>
-		<hudson.plugins.emailext.plugins.trigger.FixedTrigger>
 	'''
 
+	// TODO: claim of tests?
 	def dispatch publisher (TestResult t) '''
 		<hudson.tasks.junit.JUnitResultArchiver>
 		  <testResults>«t.testresults»</testResults>
-		  <keepLongStdio>false</keepLongStdio>
+		  <keepLongStdio>«t.longIO»</keepLongStdio>
 		</hudson.tasks.junit.JUnitResultArchiver>
 	'''
 
 	def dispatch publisher (DownStream d) '''
-		<hudson.plugins.parameterizedtrigger.BuildTrigger>»
+		<hudson.plugins.parameterizedtrigger.BuildTrigger>
 		  <configs>
 		  «FOR b:d.builds»
 		  «downStreamBuild(b)»
@@ -413,7 +424,6 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	// TODO: <hudson.plugins.git.GitRevisionBuildParameters/>
-	// TODO: names of builds
 	def downStreamBuild (DownStreamBuild b) '''
 		<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
 		  <configs>
