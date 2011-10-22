@@ -208,7 +208,7 @@ TestResult:
 
 ExtMail:
 	"extMail" "("
-	("to" to=STRING (append?="appendOnSuperTo"))?
+	("to" to=STRING (append?="appendOnSuperTo")?)?
 	("type" type=("html" | "text"))?
 	("subject" subject=STRING)?
 	("content" content=STRING)?
