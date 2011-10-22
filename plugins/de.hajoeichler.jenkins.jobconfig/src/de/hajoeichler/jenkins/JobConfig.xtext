@@ -2,35 +2,46 @@ grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals
 generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
 
 Model:
+	(imports+=Import)*
 	(declSpecs+=DeclSpecs)?
-	("group" name=ID "("
+	("group" name=IDwithMinus "("
 	(configs+=Config)*
 	")"
 	|
 	(configs+=Config)*);
 
+Import:
+	'import' importedNamespace=FqnWithWildCard;
+
+FqnWithWildCard:
+	IDwithMinus ('.*')?;
+
+IDwithMinus:
+	ID ("-" (ID)?)*;
+
 DeclSpecs:
 	"declarations" "("
-	decls+=(AntDecl | MavenDecl | LockDecl)* // | WarningDecl)+
-	")"
-;
+	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl)+ // | WarningDecl)+
+	")";
 
 AntDecl:
-	"ant" ant=ID
-;
+	"ant" name=IDwithMinus;
 
 MavenDecl:
-	"maven" mvn=ID
-;
+	"maven" name=IDwithMinus;
 
 LockDecl:
-	"lock" lockName=ID
-;
+	"lock" name=IDwithMinus;
 
+MSBuildDecl:
+	"msBuild" name=IDwithMinus;
+
+JenkinsUrl:
+	"url" url=IDwithMinus;
 
 Config:
-	"job" name=ID ("extends" parentConfig=[Config])? "("
-	(isDisabled?="isDisabled")?
+	(abstract?="abstract")? "job" name=IDwithMinus ("extends" parentConfig=[Config])? "("
+	(disabled?="isDisabled")?
 	(oldBuildHandling=OldBuildHandling)?
 	(executeConcurrent?="executeConcurrent")?
 	("description" description=STRING)?
@@ -60,7 +71,7 @@ ParameterSection:
 	")";
 
 Parameter:
-	name=ID "("
+	name=IDwithMinus "("
 	type=ParameterType
 	("description" description=STRING)?
 	")";
@@ -81,8 +92,8 @@ Scm:
 	ScmGit | ScmCVS;
 
 ScmGit: // 3rdParty
-	"git" "(" "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")?
-	(excludedRegions?="excludedRegions")? ")";
+	"git" "(" "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")? ("excludedRegions"
+	excludedRegions=STRING)? ")";
 
 ScmCVS:
 	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING ")";
@@ -121,15 +132,15 @@ Timeout: // 3rdParty
 	"timeout" t=INT (failBuild?='failBuild')?;
 
 Lock: // 3rdParty
-	"lock" lock=STRING; // should be LockDecl
+	"lock" lock=[LockDecl];
 
 BuildSection:
 	"builds" "("
-	builds+=(Maven | Ant | Shell | Batch | SystemGroovy | TriggerBuilderSection)+ // | MSBuild | Rake
+	builds+=(Maven | Ant | Shell | Batch | SystemGroovy | MSBuild | TriggerBuilderSection)+ // Rake
 	")";
 
 Maven:
-	"maven" mvn=STRING "(" // should use MavenDecl
+	"maven" version=[MavenDecl] "("
 	"goals" mavenGoals=STRING
 	("pom" mavenPOM=STRING)?
 	("properties" mavenProperties=STRING)?
@@ -137,10 +148,9 @@ Maven:
 	")";
 
 Ant:
-	"ant" ant=STRING "(" // should be AntDecl
+	"ant" version=[AntDecl] "("
 	("targets" targets=STRING)?
-	")"
-;
+	")";
 
 Shell:
 	"sh" "("
@@ -158,8 +168,13 @@ SystemGroovy:
 	"systemGroovy" "("
 	groovyScript=STRING
 	// TODO support more config
-	")"
-;
+	")";
+
+MSBuild:
+	"msbuild" version=[MSBuildDecl] "("
+	"buildFile" buildFile=STRING
+	("args" targets=STRING)?
+	")";
 
 TriggerBuilderSection:
 	"triggered builds" "("
@@ -182,7 +197,7 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream)+ // | Claim | TestResult | Cobertura | Rcov | HTMLReport | DownStreamTriggerBuilder)+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream)+ // | Claim | Cobertura | Rcov | HTMLReport )+
 	")";
 
 Artifacts:
@@ -193,14 +208,13 @@ TestResult:
 
 ExtMail:
 	"extMail" "("
-	("to" to=STRING)?
+	("to" to=STRING (append?="appendOnSuperTo"))?
 	("type" type=("html" | "text"))?
 	("subject" subject=STRING)?
 	("content" content=STRING)?
 	("attachments" attachments=STRING)?
-	"trigger" "("
-	(mailTrigger+=MailTrigger)*
-	")" ")";
+	("trigger" "(" (mailTrigger+=MailTrigger)+ ")")?
+	")";
 
 MailTrigger:
 	type=("Still-Failing" | "Success" | "Fixed" | "Still-Unstable" | "Before-Build" | "Failure" | "Unstable")
