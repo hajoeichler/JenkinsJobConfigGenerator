@@ -1,0 +1,12 @@
+The Jenkins Job Config Generator
+================================
+
+Building
+--------
+
+1. goto plugins directory
+1. execute `mvn clean install`
+
+License
+-------
+This software is distributed under the [Eclipse Public License - v 1.0](http://www.eclipse.org/legal/epl-v10.html).
