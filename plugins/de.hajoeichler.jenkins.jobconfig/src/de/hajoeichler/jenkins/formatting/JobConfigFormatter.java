@@ -39,6 +39,9 @@ public class JobConfigFormatter extends AbstractDeclarativeFormatter {
                 if ("INT".equals(ruleCall.getRule().getName())) {
                     c.setLinewrap().after(assignment);
                 }
+                if ("FqnWithWildCard".equals(ruleCall.getRule().getName())) {
+                    c.setLinewrap(2,2,2).after(assignment);
+                }
                 if ("STRING".equals(ruleCall.getRule().getName())) {
                     c.setLinewrap().after(assignment);
                 }
