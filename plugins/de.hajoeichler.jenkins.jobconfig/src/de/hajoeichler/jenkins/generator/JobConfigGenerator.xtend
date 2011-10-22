@@ -18,7 +18,9 @@ class JobConfigGenerator implements IGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
 		for(config: resource.allContentsIterable.filter(typeof(Config))) {
-			fsa.generateFile(config.fileName, config.content)
+			if (!config.abstract) {
+				fsa.generateFile(config.fileName, config.content)
+			}
 		}
 	}
 
