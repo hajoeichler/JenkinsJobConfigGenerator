@@ -26,9 +26,7 @@
                 <echo>Generating source: run Mwe2 workflow</echo>
                 <property name="compile_classpath" refid="maven.compile.classpath"/>
                 <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                <ant
-                  antfile="${basedir}/mwe2.xml"
-                  inheritRefs="true">
+                <ant antfile="${basedir}/mwe2.xml" inheritRefs="true">
                   <target name="run"/>
                 </ant>
               </tasks>

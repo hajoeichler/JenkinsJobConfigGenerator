@@ -11,8 +11,9 @@
     <tycho-version>0.13.0</tycho-version>
   </properties>
   <modules>
+    <module>de.hajoeichler.jenkins.jobconfig.platform</module>
     <module>de.hajoeichler.jenkins.jobconfig</module>
-    <module>de.hajoeichler.jenkins.jobconfig.tests</module>
+  <!-- <module>de.hajoeichler.jenkins.jobconfig.tests</module> -->
     <module>de.hajoeichler.jenkins.jobconfig.ui</module>
   </modules>
   <build>
@@ -29,15 +30,16 @@
         <version>${tycho-version}</version>
         <configuration>
           <resolver>p2</resolver>
+          <target>
+            <artifact>
+              <groupId>de.hajoeichler</groupId>
+              <artifactId>de.hajoeichler.jenkins.jobconfig.platform</artifactId>
+              <version>0.0.1-SNAPSHOT</version>
+              <classifier>indigo</classifier>
+            </artifact>
+          </target>
         </configuration>
       </plugin>
     </plugins>
   </build>
-  <repositories>
-    <repository>
-      <id>indigo</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/releases/indigo</url>
-    </repository>
-  </repositories>
 </project>
