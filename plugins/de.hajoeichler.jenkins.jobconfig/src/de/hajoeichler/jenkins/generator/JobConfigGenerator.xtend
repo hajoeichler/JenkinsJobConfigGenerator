@@ -324,7 +324,7 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch build (Maven m) '''
 		<hudson.tasks.Maven>
 		  <targets>«m.mavenGoals»</targets>
-		  <mavenName>«m.mvn»</mavenName>
+		  <mavenName>«m.version.name»</mavenName>
 		  «IF m.mavenPOM != null»
 		  <pom>«m.mavenPOM»</pom>
 		  «ENDIF»
@@ -337,7 +337,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch build (Shell s) '''
 		<hudson.tasks.Shell>
-		  <command>« s . shellScript »</command>
+		  <command>«s.shellScript»</command>
 		</hudson.tasks.Shell>
 	'''
 
