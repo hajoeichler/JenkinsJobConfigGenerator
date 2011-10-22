@@ -3,6 +3,10 @@
     <java fork="true" failonerror="yes" classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" classpath="${compile_classpath}:${runtime_classpath}:src:../../lib/antlr-generator-3.2.0.jar">
       <arg line="src/de/hajoeichler/jenkins/GenerateJobConfig.mwe2"/>
       <sysproperty key="file.encoding" value="UTF-8"/>
-    </java> 
+    </java>
+    <java fork="true" failonerror="yes" classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" classpath="${compile_classpath}:${runtime_classpath}:src:../../lib/antlr-generator-3.2.0.jar">
+       <arg line="src/de/hajoeichler/jenkins/generator/JobConfigGeneratorMWE.mwe2"/>
+       <sysproperty key="file.encoding" value="UTF-8"/>
+    </java>
   </target>
 </project>
