@@ -138,6 +138,7 @@ class JobConfigGenerator implements IGenerator {
 		  «IF c.getAnyOldBuildHandling != null»
 		  «logRotator(c.getAnyOldBuildHandling)»
 		  «ENDIF»
+		  <keepDependencies>false</keepDependencies>
 		  <properties>
 		    «IF c.gitUrl != null»
 		    «gitHub(c.gitUrl)»
