@@ -210,8 +210,8 @@ TestResult:
 	"testresults" testresults=STRING (longIO?="longIO")?;
 
 ExtMail:
-	"extMail" "("
-	("to" to=STRING (append?="appendOnSuperTo")?)?
+	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("
+	("to" to=STRING)?
 	("type" type=("html" | "text"))?
 	("subject" subject=STRING)?
 	("content" content=STRING)?
