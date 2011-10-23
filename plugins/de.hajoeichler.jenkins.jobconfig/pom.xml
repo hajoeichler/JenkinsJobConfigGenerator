@@ -12,6 +12,9 @@
   <artifactId>de.hajoeichler.jenkins.jobconfig</artifactId>
   <version>1.0.0</version>
   <packaging>eclipse-plugin</packaging>
+  <properties>
+    <job.config.file>test.jobConfig</job.config.file>
+  </properties>
   <build>
     <plugins>
       <plugin>
@@ -27,6 +30,24 @@
                 <property name="compile_classpath" refid="maven.compile.classpath"/>
                 <property name="runtime_classpath" refid="maven.runtime.classpath"/>
                 <ant antfile="${basedir}/mwe2.xml" inheritRefs="true">
+                  <target name="run"/>
+                </ant>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>execute</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <echo>Generating config: run Generator</echo>
+                <property name="compile_classpath" refid="maven.compile.classpath"/>
+                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                <property name="job_config" value="${job.config.file}"/>
+                <ant antfile="${basedir}/jc2config.xml" inheritRefs="true">
                   <target name="run"/>
                 </ant>
               </tasks>

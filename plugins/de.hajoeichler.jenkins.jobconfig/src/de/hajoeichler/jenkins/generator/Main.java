@@ -59,7 +59,7 @@ public class Main {
 		}
 		
 		// configure and start the generator
-		fileAccess.setOutputPath("src-gen/");
+		fileAccess.setOutputPath("target/configs/");
 		generator.doGenerate(resource, fileAccess);
 		
 		System.out.println("Code generation finished.");

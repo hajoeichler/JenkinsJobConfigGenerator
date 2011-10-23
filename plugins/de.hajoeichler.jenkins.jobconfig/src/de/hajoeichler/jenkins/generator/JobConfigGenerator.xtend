@@ -25,7 +25,19 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def fileName(Config c) {
-		c.name
+		return fqn(c) + "/config.xml"
+	}
+
+	def dispatch String fqn(Group g) {
+		g.name
+	}
+
+	def dispatch String fqn(Config c) {
+		if (c.eContainer instanceof Group) {
+			fqn(c.eContainer) + c.name
+		} else {
+			c.name
+		}
 	}
 
 	def OldBuildHandling getAnyOldBuildHandling (Config c) {

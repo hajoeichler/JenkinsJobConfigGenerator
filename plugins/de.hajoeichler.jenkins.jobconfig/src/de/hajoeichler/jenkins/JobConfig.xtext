@@ -4,11 +4,9 @@ generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
 Model:
 	(imports+=Import)*
 	(declSpecs+=DeclSpecs)?
-	("group" name=IDwithMinus "("
-	(configs+=Config)*
-	")"
+	(group=Group
 	|
-	(configs+=Config)*);
+	config=Config);
 
 Import:
 	'import' importedNamespace=FqnWithWildCard;
@@ -38,6 +36,11 @@ MSBuildDecl:
 
 JenkinsUrl:
 	"url" url=IDwithMinus;
+
+Group:
+	"group" name=IDwithMinus "("
+	(configs+=Config)*
+	")";
 
 Config:
 	(abstract?="abstract")? "job" name=IDwithMinus ("extends" parentConfig=[Config])? "("
