@@ -22,23 +22,6 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>generate-sources</id>
-            <phase>generate-sources</phase>
-            <configuration>
-              <tasks>
-                <echo>Generating source: run Mwe2 workflow</echo>
-                <property name="compile_classpath" refid="maven.compile.classpath"/>
-                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                <ant antfile="${basedir}/mwe2.xml" inheritRefs="true">
-                  <target name="run"/>
-                </ant>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>execute</id>
             <phase>package</phase>
             <configuration>
@@ -60,4 +43,68 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>gen-xtext</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-sources</id>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <tasks>
+                    <echo>Generating source: run Mwe2 workflow</echo>
+                    <property name="compile_classpath" refid="maven.compile.classpath"/>
+                    <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                    <ant antfile="${basedir}/mwe2.xml"
+                      inheritRefs="true">
+                      <target name="xtext"/>
+                    </ant>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>gen-xtend</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-sources</id>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <tasks>
+                    <echo>Generating source: run Mwe2 workflow</echo>
+                    <property name="compile_classpath" refid="maven.compile.classpath"/>
+                    <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                    <ant antfile="${basedir}/mwe2.xml"
+                      inheritRefs="true">
+                      <target name="xtend"/>
+                    </ant>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

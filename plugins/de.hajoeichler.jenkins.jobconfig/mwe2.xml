@@ -1,12 +1,14 @@
 <project basedir="${basedir}">
-  <target name="run">
+  <target name="xtext">
     <java fork="true" failonerror="yes" classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" classpath="${compile_classpath}:${runtime_classpath}:src:../../lib/antlr-generator-3.2.0.jar">
-      <arg line="src/de/hajoeichler/jenkins/GenerateJobConfig.mwe2"/>
-      <sysproperty key="file.encoding" value="UTF-8"/>
+      <arg line="src/de/hajoeichler/jenkins/GenerateJobConfig.mwe2" />
+      <sysproperty key="file.encoding" value="UTF-8" />
     </java>
+  </target>
+  <target name="xtend">
     <java fork="true" failonerror="yes" classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" classpath="${compile_classpath}:${runtime_classpath}:src:bin">
-       <arg line="src/de/hajoeichler/jenkins/generator/JobConfigGeneratorMWE.mwe2 -p targetDir=xtend-gen -p modelPath=src-gen/de/hajoeichler/jenkins/"/>
-       <sysproperty key="file.encoding" value="UTF-8"/>
+      <arg line="src/de/hajoeichler/jenkins/generator/JobConfigGeneratorMWE.mwe2 -p targetDir=xtend-gen -p modelPath=src-gen/de/hajoeichler/jenkins/" />
+      <sysproperty key="file.encoding" value="UTF-8" />
     </java>
   </target>
 </project>
