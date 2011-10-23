@@ -29,7 +29,7 @@ public class Main {
 		}
 		Injector injector = new de.hajoeichler.jenkins.JobConfigStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 		Main main = injector.getInstance(Main.class);
-		main.runGenerator(args[0]);
+		main.runGenerator(args);
 	}
 	
 	@Inject 
@@ -44,10 +44,16 @@ public class Main {
 	@Inject 
 	private JavaIoFileSystemAccess fileAccess;
 
-	protected void runGenerator(String string) {
+	protected void runGenerator(String... strings) {
 		// load the resource
 		ResourceSet set = resourceSetProvider.get();
-		Resource resource = set.getResource(URI.createURI(string), true);
+		Resource resource = null;
+		for (String string : strings) {
+			Resource r = set.getResource(URI.createURI(string), true);
+			if (resource == null) {
+				resource = r;
+			}
+		}
 		
 		// validate the resource
 		List<Issue> list = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
@@ -57,7 +63,6 @@ public class Main {
 			}
 			return;
 		}
-		
 		// configure and start the generator
 		fileAccess.setOutputPath("target/configs/");
 		generator.doGenerate(resource, fileAccess);
