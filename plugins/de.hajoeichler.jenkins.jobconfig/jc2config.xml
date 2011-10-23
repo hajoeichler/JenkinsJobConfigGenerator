@@ -1,0 +1,8 @@
+<project basedir="${basedir}">
+  <target name="run">
+    <java fork="true" failonerror="yes" classname="de.hajoeichler.jenkins.generator.Main" classpath="${compile_classpath}:${runtime_classpath}:bin">
+      <arg line="${job_config}"/>
+      <sysproperty key="file.encoding" value="UTF-8"/>
+    </java>
+  </target>
+</project>
