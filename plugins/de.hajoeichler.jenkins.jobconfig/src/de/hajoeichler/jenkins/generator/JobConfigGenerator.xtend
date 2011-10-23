@@ -8,24 +8,43 @@ import java.util.*
 
 import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
 import de.hajoeichler.jenkins.jobConfig.impl.ParameterSectionImpl
-import de.hajoeichler.jenkins.jobConfig.impl.TriggerSectionImpl
 
 import org.eclipse.emf.core.*
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.xtend2.lib.ResourceExtensions
 
 class JobConfigGenerator implements IGenerator {
+
+	Config currentConfig
 
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
 		for(config: resource.allContentsIterable.filter(typeof(Config))) {
 			if (!config.abstract) {
+				currentConfig = config
 				fsa.generateFile(config.fileName, config.content)
 			}
 		}
 	}
 
+	def normalize (String s) {
+		s.replaceJobName(currentConfig).escape()
+	}
+
+	def escape (String s) {
+		var r = s.replaceAll("&", "&amp;")
+		r = r.replaceAll("\"", "&quot;")
+		r = r.replaceAll("'", "&apos;")
+		r = r.replaceAll(">", "&gt;")
+		r = r.replaceAll("<", "&lt;")
+	}
+
+	def replaceJobName(String s, Config c) {
+		s.replaceAll("@@jobName@@", c.name)
+	}
+
 	def fileName(Config c) {
-		return fqn(c) + "/config.xml"
+		fqn(c) + "/config.xml"
 	}
 
 	def dispatch String fqn(Group g) {
@@ -34,22 +53,39 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch String fqn(Config c) {
 		if (c.eContainer instanceof Group) {
-			fqn(c.eContainer) + c.name
+			fqn(c.eContainer as Group) + c.name
 		} else {
 			c.name
+		}
+	}
+
+	def Config getMyConfig(EObject any) {
+		if (any instanceof Config) {
+			return any as Config
+		}
+		if (any.eContainer != null) {
+			return getMyConfig(any.eContainer)
+		}
+	}
+
+	def String getGitUrl(Config c) {
+		if (c.gitUrl != null) {
+			c.gitUrl
+		} else if (c.parentConfig != null) {
+			getGitUrl(c.parentConfig)
 		}
 	}
 
 	def OldBuildHandling getAnyOldBuildHandling (Config c) {
 		if (c.oldBuildHandling != null) {
 			c.oldBuildHandling
-		} else if (c.parentConfig != null) (
+		} else if (c.parentConfig != null) {
 			getAnyOldBuildHandling(c.parentConfig)
-		)
+		}
 	}
 
 	def List<ParameterSection> getAllParameterSections (Config c) {
-		val l = new ArrayList<ParameterSection>();
+		val l = new ArrayList<ParameterSection>()
 		if (c.parentConfig != null) {
 			l.addAll(getAllParameterSections(c.parentConfig))
 		}
@@ -62,20 +98,23 @@ class JobConfigGenerator implements IGenerator {
 	def Scm getAnyScm(Config c) {
 		if (c.scm != null) {
 			c.scm
-		} else if (c.parentConfig != null) (
+		} else if (c.parentConfig != null) {
 			getAnyScm(c.parentConfig)
-		)
+		}
 	}
 
-	def List<TriggerSection> getAllTriggerSections (Config c) {
-		val l = new ArrayList<TriggerSection>();
+	def getAllTriggers (Config c, Map<EClass, EObject> m) {
 		if (c.trigger != null) {
-			l.add(c.trigger)
+			for (t : c.trigger.buildtriggers) {
+				if (!m.containsKey(t.eClass)) {
+					m.put(t.eClass, t)
+				}
+			}
 		}
 		if (c.parentConfig != null) {
-			l.addAll(getAllTriggerSections(c.parentConfig))
+			getAllTriggers(c.parentConfig, m)
 		}
-		return l
+		return m
 	}
 
 	def getAllWrappers (Config c, Map<EClass, EObject> m) {
@@ -98,16 +137,6 @@ class JobConfigGenerator implements IGenerator {
 		}
 		if (c.buildSection != null) {
 			l.addAll(c.buildSection.builds)
-		}
-	}
-
-	def List<PublisherSection> getAllPublishers (Config c) {
-		val l = new ArrayList<PublisherSection>();
-		if (c.publisherSection != null) {
-			l.add(c.publisherSection)
-		}
-		if (c.parentConfig != null) {
-			l.addAll(getAllPublishers(c.parentConfig))
 		}
 		return l
 	}
@@ -140,9 +169,7 @@ class JobConfigGenerator implements IGenerator {
 		  «ENDIF»
 		  <keepDependencies>false</keepDependencies>
 		  <properties>
-		    «IF c.gitUrl != null»
-		    «gitHub(c.gitUrl)»
-		    «ENDIF»
+		    «gitHub(c)»
 		    «FOR ps:c.getAllParameterSections»
 		    «parameterSection(ps)»
 		    «ENDFOR»
@@ -152,22 +179,19 @@ class JobConfigGenerator implements IGenerator {
 		  «ELSE»
 		  «scm(c.getAnyScm)»
 		  «ENDIF»
-		  «IF c.trigger != null»
-		  «triggerSection(c.trigger)»
-		  «ENDIF»
-		  «IF c.restrictTo != null»
-		  <assignedNode>«c.restrictTo»</assignedNode>
-		  <canRoam>false</canRoam>
-		  «ELSE»
+		  «IF c.restrictTo == null»
 		  <canRoam>true</canRoam>
+		  «ELSE»
+		  <canRoam>«c.restrictTo»</canRoam>
 		  «ENDIF»
-		  <disabled>«c.isDisabled»</disabled>
+		  <disabled>«c.disabled»</disabled>
 		  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
 		  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+		  «triggers(c)»
 		  <concurrentBuild>«c.concurrentBuild»</concurrentBuild>
-		  «wrappers(c)»
-		  «builder(c)»
+		  «builders(c)»
 		  «publishers(c)»
+		  «wrappers(c)»
 		«IF c.isMatixJob»
 		</matrix-project>
 		«ELSE»
@@ -184,10 +208,13 @@ class JobConfigGenerator implements IGenerator {
 		</logRotator>
 	'''
 
-	def gitHub(String gitUrl) '''
+	def gitHub(Config c) '''
+		«val gitUrl = getGitUrl(c)»
+		«IF gitUrl != null»
 		<com.coravy.hudson.plugins.github.GithubProjectProperty>
 		  <projectUrl>«gitUrl»</projectUrl>
 		</com.coravy.hudson.plugins.github.GithubProjectProperty>
+		«ENDIF»
 	'''
 
 	def parameterSection(ParameterSection ps) '''
@@ -216,23 +243,14 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch scm(ScmGit git) '''
 		<scm class="hudson.plugins.git.GitSCM">
-		  <configVersion>1</configVersion>
-		  <remoteRepositories>
-		    <org.spearce.jgit.transport.RemoteConfig>
-		      <string>origin</string>
-		      <int>5</int>
-		      <string>fetch</string>
-		      <string>+refs/heads/*:refs/remotes/origin/*</string>
-		      <string>receivepack</string>
-		      <string>git-upload-pack</string>
-		      <string>uploadpack</string>
-		      <string>git-upload-pack</string>
-		      <string>url</string>
-		      <string>«git.url»</string>
-		      <string>tagopt</string>
-		      <string></string>
-		    </org.spearce.jgit.transport.RemoteConfig>
-		  </remoteRepositories>
+		  <configVersion>2</configVersion>
+		  <userRemoteConfigs>
+		    <hudson.plugins.git.UserRemoteConfig>
+		      <name>origin</name>
+		      <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
+		      <url>«git.url»</url>
+		    </hudson.plugins.git.UserRemoteConfig>
+		  </userRemoteConfigs>
 		  <branches>
 		    <hudson.plugins.git.BranchSpec>
 		      «IF git.branch != null»
@@ -242,24 +260,27 @@ class JobConfigGenerator implements IGenerator {
 		      «ENDIF»
 		    </hudson.plugins.git.BranchSpec>
 		  </branches>
-		  <mergeOptions/>
 		  <recursiveSubmodules>false</recursiveSubmodules>
 		  <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
 		  <authorOrCommitter>false</authorOrCommitter>
 		  <clean>false</clean>
 		  «IF git.wipeOutWorkspace»
 		  <wipeOutWorkspace>true</wipeOutWorkspace>
-		   «ELSE»
+		  «ELSE»
 		  <wipeOutWorkspace>false</wipeOutWorkspace>
 		  «ENDIF»
 		  <pruneBranches>false</pruneBranches>
+		  <remotePoll>false</remotePoll>
 		  <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
 		  <gitTool>Default</gitTool>
 		  <submoduleCfg class="list"/>
 		  <relativeTargetDir></relativeTargetDir>
-		  <excludedRegions>«git.excludedRegions»</excludedRegions>
+		  <excludedRegions>«git.excludedRegions.normalize»</excludedRegions>
 		  <excludedUsers></excludedUsers>
+		  <gitConfigName></gitConfigName>
+		  <gitConfigEmail></gitConfigEmail>
 		  <skipTag>false</skipTag>
+		  <scmName></scmName>
 		</scm>
 	'''
 
@@ -274,11 +295,12 @@ class JobConfigGenerator implements IGenerator {
 		</scm>
 	'''
 
-	def triggerSection(TriggerSection ts) '''
+	def triggers(Config c) '''
 		<triggers class="vector">
-		«FOR t:ts.buildtriggers»
+		  «val m = new HashMap<EClass, EObject>()»
+		  «FOR t:getAllTriggers(c, m).values»
 		  «trigger(t)»
-		«ENDFOR»
+		  «ENDFOR»
 		</triggers>
 	'''
 
@@ -302,7 +324,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def wrappers(Config c) '''
 		<buildWrappers>
-		  «var m = new HashMap<EClass, EObject>()»
+		  «val m = new HashMap<EClass, EObject>()»
 		  «FOR w:getAllWrappers(c, m).values»
 		  «wrapper(w)»
 		  «ENDFOR»
@@ -326,11 +348,10 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.build__timeout.BuildTimeoutWrapper>
 	'''
 
-	def builder(Config c) '''
+	def builders(Config c) '''
 		<builders>
-		  «var l = new ArrayList<EObject>()»
-		  «getAllBuilders(c, l)»
-		  «FOR b:l»
+		  «val l = new ArrayList<EObject>()»
+		  «FOR b:getAllBuilders(c, l)»
 		  «build(b)»
 		  «ENDFOR»
 		</builders>
@@ -352,54 +373,93 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch build (Shell s) '''
 		<hudson.tasks.Shell>
-		  <command>«s.shellScript»</command>
+		  <command>«s.shellScript.normalize»</command>
 		</hudson.tasks.Shell>
 	'''
 
 	def publishers(Config c) '''
 		<publishers>
-		  «var m = new HashMap<EClass, EObject>()»
+		  «val m = new HashMap<EClass, EObject>()»
 		  «FOR p:getAllPublishers(c, m).values»
 		  «publisher(p)»
 		  «ENDFOR»
 		</publishers>
 	'''
 
-	def dispatch publisher (ExtMail m) '''
+	def getTo(ExtMail em) {
+		if (em.mergeWithSuperConfig == true) {
+			val pm = getParentExtMail(em)
+			if (pm != null) {
+				return em.to + ' ' + getTo(pm)
+			}
+		}
+		em.to
+	}
+
+	def ExtMail getParentExtMail(ExtMail em) {
+		val c = getMyConfig(em)
+		if (c.parentConfig != null) {
+			if (c.parentConfig.publisherSection != null) {
+				for (p : c.parentConfig.publisherSection.publishers) {
+					if (p instanceof ExtMail) {
+						return p as ExtMail
+					}
+				}
+			}
+		}
+	}
+
+	def getAllMailTriggers (ExtMail em, Map<String, MailTrigger> m) {
+		for (mt : em.mailTrigger) {
+			if (!m.containsKey(mt.type)) {
+				m.put(mt.type, mt)
+			}
+		}
+		if (em.mergeWithSuperConfig == true) {
+			val pm = getParentExtMail(em)
+			if (pm != null) {
+				getAllMailTriggers(pm, m)
+			}
+		}
+		return m
+	}
+
+	def dispatch publisher (ExtMail em) '''
 		<hudson.plugins.emailext.ExtendedEmailPublisher>
-		  <recipientList>«m.to»</recipientList>
+		  <recipientList>«getTo(em)»</recipientList>
 		  <configuredTriggers>
-		    «FOR mt:m.mailTrigger»
+		    «val m = new HashMap<String, MailTrigger>()»
+		    «FOR mt:getAllMailTriggers(em, m).values»
 		    «mailTrigger(mt)»
 		    «ENDFOR»
 		  </configuredTriggers>
-		  «IF m.type == null»
+		  «IF em.type == null»
 		  <contentType>default</contentType>
 		  «ELSE»
-		  <contentType>«m.type»</contentType>
+		  <contentType>«em.type»</contentType>
 		  «ENDIF»
-		  «IF m.subject == null»
-		  <defaultSubject>«m.subject»</defaultSubject>
-		  «ELSE»
+		  «IF em.subject == null»
 		  <defaultSubject>${DEFAULT_SUBJECT}</defaultSubject>
-		  «ENDIF»
-		  «IF m.content == null»
-		  <defaultContent>«m.content»</defaultContent>
 		  «ELSE»
-		  <defaultContent>${DEFAULT_CONTENT}</defaultContent>
+		  <defaultSubject>«em.subject»</defaultSubject>
 		  «ENDIF»
+		  «IF em.content == null»
+		  <defaultContent>${DEFAULT_CONTENT}</defaultContent>
+		  «ELSE»
+		  <defaultContent>«em.content»</defaultContent>
+		  «ENDIF»
+		  <attachmentsPattern></attachmentsPattern>
 		</hudson.plugins.emailext.ExtendedEmailPublisher>
 	'''
 
-	// TODO: different trigger types 
-	// <hudson.plugins.emailext.plugins.trigger.UnstableTrigger>
-	// <hudson.plugins.emailext.plugins.trigger.FixedTrigger>
 	def mailTrigger(MailTrigger mt) '''
-		«IF mt.type.equals("Failure")»
-		<hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-		«ENDIF»
+		<hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
 		  <email>
+		    «IF mt.to == null»
+		    <recipientList>$PROJECT_DEFAULT_RECIPIENTS</recipientList>
+		    «ELSE»
 		    <recipientList>«mt.to»</recipientList>
+		    «ENDIF»
 		    «IF mt.subject == null»
 		    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
 		    «ELSE»
@@ -415,9 +475,7 @@ class JobConfigGenerator implements IGenerator {
 		    <includeCulprits>«mt.toCulprits»</includeCulprits>
 		    <sendToRecipientList>«mt.toList»</sendToRecipientList>
 		  </email>
-		«IF mt.type.equals("Failure")»
-		</hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-		«ENDIF»
+		</hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
 	'''
 
 	// TODO: claim of tests?
@@ -425,6 +483,7 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.tasks.junit.JUnitResultArchiver>
 		  <testResults>«t.testresults»</testResults>
 		  <keepLongStdio>«t.longIO»</keepLongStdio>
+		  <testDataPublishers/>
 		</hudson.tasks.junit.JUnitResultArchiver>
 	'''
 
