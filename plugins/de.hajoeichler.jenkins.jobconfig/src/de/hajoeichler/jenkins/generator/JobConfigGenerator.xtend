@@ -28,6 +28,9 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def normalize (String s) {
+		if (s == null) {
+			return s;
+		}
 		s.replaceJobName(currentConfig).escape()
 	}
 

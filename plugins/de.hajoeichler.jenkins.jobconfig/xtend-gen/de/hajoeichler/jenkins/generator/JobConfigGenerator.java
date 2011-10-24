@@ -74,9 +74,17 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public String normalize(final String s) {
-    String _replaceJobName = this.replaceJobName(s, this.currentConfig);
-    String _escape = this.escape(_replaceJobName);
-    return _escape;
+    String _xblockexpression = null;
+    {
+      boolean _operator_equals = ObjectExtensions.operator_equals(s, null);
+      if (_operator_equals) {
+        return s;
+      }
+      String _replaceJobName = this.replaceJobName(s, this.currentConfig);
+      String _escape = this.escape(_replaceJobName);
+      _xblockexpression = (_escape);
+    }
+    return _xblockexpression;
   }
   
   public String escape(final String s) {
