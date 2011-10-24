@@ -49,7 +49,6 @@ public class Main {
 
 		File dir = new File(directory);
 		File[] jobsFiles = dir.listFiles(new FilenameFilter() {
-			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".jobConfig");
 			}
