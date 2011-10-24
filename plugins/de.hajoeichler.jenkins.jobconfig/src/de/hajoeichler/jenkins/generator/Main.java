@@ -21,16 +21,17 @@ import com.google.inject.Provider;
 public class Main {
 
 	public static void main(String[] args) {
-		if (args.length==0) {
+		if (args.length == 0) {
 			System.err.println("Aborting: no path to EMF resource provided!");
 			return;
 		}
-		Injector injector = new de.hajoeichler.jenkins.JobConfigStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
+		Injector injector = new de.hajoeichler.jenkins.JobConfigStandaloneSetupGenerated()
+				.createInjectorAndDoEMFRegistration();
 		Main main = injector.getInstance(Main.class);
 		main.runGenerator(args[0]);
 	}
 
-	@Inject 
+	@Inject
 	private Provider<ResourceSet> resourceSetProvider;
 
 	@Inject
@@ -39,38 +40,37 @@ public class Main {
 	@Inject
 	private IGenerator generator;
 
-	@Inject 
+	@Inject
 	private JavaIoFileSystemAccess fileAccess;
 
 	protected void runGenerator(String directory) {
-		// load the resource
-		ResourceSet set = resourceSetProvider.get();
-		Resource resource = null;
-
+		// get all the jobConfig 
 		File dir = new File(directory);
 		File[] jobsFiles = dir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".jobConfig");
 			}
 		});
+		// load the resources
+		ResourceSet set = resourceSetProvider.get();
 		for (File file : jobsFiles) {
-			Resource r = set.getResource(URI.createURI(file.getAbsolutePath()), true);
-			if (resource == null) {
-				resource = r;
-			}
+			set.getResource(URI.createURI(file.getAbsolutePath()), true);
 		}
 
-		// validate the resource
-		List<Issue> list = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-		if (!list.isEmpty()) {
-			for (Issue issue : list) {
-				System.err.println(issue);
+		for (Resource resource : set.getResources()) {
+			// validate the resource
+			List<Issue> list = validator.validate(resource, CheckMode.ALL,
+					CancelIndicator.NullImpl);
+			if (!list.isEmpty()) {
+				for (Issue issue : list) {
+					System.err.println(issue);
+				}
+				return;
 			}
-			return;
+			// configure and start the generator
+			fileAccess.setOutputPath("target/configs/");
+			generator.doGenerate(resource, fileAccess);
 		}
-		// configure and start the generator
-		fileAccess.setOutputPath("target/configs/");
-		generator.doGenerate(resource, fileAccess);
 
 		System.out.println("Code generation finished.");
 	}
