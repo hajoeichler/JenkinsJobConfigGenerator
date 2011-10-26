@@ -300,7 +300,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def triggers(Config c) '''
 		<triggers class="vector">
-		  «val m = new HashMap<EClass, EObject>()»
+		  «val m = new LinkedHashMap<EClass, EObject>()»
 		  «FOR t:getAllTriggers(c, m).values»
 		  «trigger(t)»
 		  «ENDFOR»
@@ -327,7 +327,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def wrappers(Config c) '''
 		<buildWrappers>
-		  «val m = new HashMap<EClass, EObject>()»
+		  «val m = new LinkedHashMap<EClass, EObject>()»
 		  «FOR w:getAllWrappers(c, m).values»
 		  «wrapper(w)»
 		  «ENDFOR»
@@ -382,7 +382,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def publishers(Config c) '''
 		<publishers>
-		  «val m = new HashMap<EClass, EObject>()»
+		  «val m = new LinkedHashMap<EClass, EObject>()»
 		  «FOR p:getAllPublishers(c, m).values»
 		  «publisher(p)»
 		  «ENDFOR»
@@ -431,7 +431,7 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.plugins.emailext.ExtendedEmailPublisher>
 		  <recipientList>«getTo(em)»</recipientList>
 		  <configuredTriggers>
-		    «val m = new HashMap<String, MailTrigger>()»
+		    «val m = new LinkedHashMap<String, MailTrigger>()»
 		    «FOR mt:getAllMailTriggers(em, m).values»
 		    «mailTrigger(mt)»
 		    «ENDFOR»

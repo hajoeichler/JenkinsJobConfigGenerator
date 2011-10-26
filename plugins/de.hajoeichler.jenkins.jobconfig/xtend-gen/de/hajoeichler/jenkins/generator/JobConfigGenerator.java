@@ -35,7 +35,7 @@ import de.hajoeichler.jenkins.jobConfig.TriggerSection;
 import de.hajoeichler.jenkins.jobConfig.WrapperSection;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.emf.common.util.EList;
@@ -751,8 +751,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<triggers class=\"vector\">");
     _builder.newLine();
     _builder.append("  ");
-    HashMap<EClass,EObject> _hashMap = new HashMap<EClass,EObject>();
-    final HashMap<EClass,EObject> m = _hashMap;
+    LinkedHashMap<EClass,EObject> _linkedHashMap = new LinkedHashMap<EClass,EObject>();
+    final LinkedHashMap<EClass,EObject> m = _linkedHashMap;
     _builder.newLineIfNotEmpty();
     {
       Map<EClass,EObject> _allTriggers = this.getAllTriggers(c, m);
@@ -816,8 +816,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<buildWrappers>");
     _builder.newLine();
     _builder.append("  ");
-    HashMap<EClass,EObject> _hashMap = new HashMap<EClass,EObject>();
-    final HashMap<EClass,EObject> m = _hashMap;
+    LinkedHashMap<EClass,EObject> _linkedHashMap = new LinkedHashMap<EClass,EObject>();
+    final LinkedHashMap<EClass,EObject> m = _linkedHashMap;
     _builder.newLineIfNotEmpty();
     {
       Map<EClass,EObject> _allWrappers = this.getAllWrappers(c, m);
@@ -974,8 +974,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<publishers>");
     _builder.newLine();
     _builder.append("  ");
-    HashMap<EClass,EObject> _hashMap = new HashMap<EClass,EObject>();
-    final HashMap<EClass,EObject> m = _hashMap;
+    LinkedHashMap<EClass,EObject> _linkedHashMap = new LinkedHashMap<EClass,EObject>();
+    final LinkedHashMap<EClass,EObject> m = _linkedHashMap;
     _builder.newLineIfNotEmpty();
     {
       Map<EClass,EObject> _allPublishers = this.getAllPublishers(c, m);
@@ -1089,8 +1089,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<configuredTriggers>");
     _builder.newLine();
     _builder.append("    ");
-    HashMap<String,MailTrigger> _hashMap = new HashMap<String,MailTrigger>();
-    final HashMap<String,MailTrigger> m = _hashMap;
+    LinkedHashMap<String,MailTrigger> _linkedHashMap = new LinkedHashMap<String,MailTrigger>();
+    final LinkedHashMap<String,MailTrigger> m = _linkedHashMap;
     _builder.newLineIfNotEmpty();
     {
       Map<String,MailTrigger> _allMailTriggers = this.getAllMailTriggers(em, m);
