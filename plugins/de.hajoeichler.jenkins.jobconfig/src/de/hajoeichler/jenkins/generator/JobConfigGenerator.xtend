@@ -41,6 +41,10 @@ class JobConfigGenerator implements IGenerator {
 		r = r.replaceAll(">", "&gt;")
 		r = r.replaceAll("<", "&lt;")
 	}
+	
+	def isNotEmpty(String s) {
+		s != null && !s.empty
+	}
 
 	def replaceJobName(String s, Config c) {
 		s.replaceAll("@@jobName@@", c.name)
@@ -483,11 +487,13 @@ class JobConfigGenerator implements IGenerator {
 
 	// TODO: claim of tests?
 	def dispatch publisher (TestResult t) '''
+		«IF isNotEmpty(t.testresults)»
 		<hudson.tasks.junit.JUnitResultArchiver>
 		  <testResults>«t.testresults»</testResults>
 		  <keepLongStdio>«t.longIO»</keepLongStdio>
 		  <testDataPublishers/>
 		</hudson.tasks.junit.JUnitResultArchiver>
+		«ENDIF»
 	'''
 
 	def dispatch publisher (DownStream d) '''

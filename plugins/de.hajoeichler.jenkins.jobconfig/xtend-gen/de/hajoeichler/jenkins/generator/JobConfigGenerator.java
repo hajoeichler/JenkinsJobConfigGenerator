@@ -106,6 +106,19 @@ public class JobConfigGenerator implements IGenerator {
     return _xblockexpression;
   }
   
+  public boolean isNotEmpty(final String s) {
+    boolean _operator_and = false;
+    boolean _operator_notEquals = ObjectExtensions.operator_notEquals(s, null);
+    if (!_operator_notEquals) {
+      _operator_and = false;
+    } else {
+      boolean _isEmpty = s.isEmpty();
+      boolean _operator_not = BooleanExtensions.operator_not(_isEmpty);
+      _operator_and = BooleanExtensions.operator_and(_operator_notEquals, _operator_not);
+    }
+    return _operator_and;
+  }
+  
   public String replaceJobName(final String s, final Config c) {
     String _name = c.getName();
     String _replaceAll = s.replaceAll("@@jobName@@", _name);
@@ -1253,25 +1266,31 @@ public class JobConfigGenerator implements IGenerator {
   
   protected StringConcatenation _publisher(final TestResult t) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<hudson.tasks.junit.JUnitResultArchiver>");
-    _builder.newLine();
-    _builder.append("  ");
-    _builder.append("<testResults>");
-    String _testresults = t.getTestresults();
-    _builder.append(_testresults, "  ");
-    _builder.append("</testResults>");
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    _builder.append("<keepLongStdio>");
-    boolean _isLongIO = t.isLongIO();
-    _builder.append(_isLongIO, "  ");
-    _builder.append("</keepLongStdio>");
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    _builder.append("<testDataPublishers/>");
-    _builder.newLine();
-    _builder.append("</hudson.tasks.junit.JUnitResultArchiver>");
-    _builder.newLine();
+    {
+      String _testresults = t.getTestresults();
+      boolean _isNotEmpty = this.isNotEmpty(_testresults);
+      if (_isNotEmpty) {
+        _builder.append("<hudson.tasks.junit.JUnitResultArchiver>");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("<testResults>");
+        String _testresults_1 = t.getTestresults();
+        _builder.append(_testresults_1, "  ");
+        _builder.append("</testResults>");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("<keepLongStdio>");
+        boolean _isLongIO = t.isLongIO();
+        _builder.append(_isLongIO, "  ");
+        _builder.append("</keepLongStdio>");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("<testDataPublishers/>");
+        _builder.newLine();
+        _builder.append("</hudson.tasks.junit.JUnitResultArchiver>");
+        _builder.newLine();
+      }
+    }
     return _builder;
   }
   
