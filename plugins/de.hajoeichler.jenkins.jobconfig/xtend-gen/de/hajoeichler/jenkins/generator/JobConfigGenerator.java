@@ -9,6 +9,7 @@ import de.hajoeichler.jenkins.jobConfig.DownStream;
 import de.hajoeichler.jenkins.jobConfig.DownStreamBuild;
 import de.hajoeichler.jenkins.jobConfig.ExtMail;
 import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger;
+import de.hajoeichler.jenkins.jobConfig.GitCommitParam;
 import de.hajoeichler.jenkins.jobConfig.Group;
 import de.hajoeichler.jenkins.jobConfig.Lock;
 import de.hajoeichler.jenkins.jobConfig.LockDecl;
@@ -1348,6 +1349,13 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _triggerParam(final GitCommitParam p) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.git.GitRevisionBuildParameters/>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected StringConcatenation _triggerParam(final PropertyFileTriggerParams p) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.FileBuildParameters>");
@@ -1467,6 +1475,8 @@ public class JobConfigGenerator implements IGenerator {
   public StringConcatenation triggerParam(final EObject p) {
     if ((p instanceof CurrentTriggerParams)) {
       return _triggerParam((CurrentTriggerParams)p);
+    } else if ((p instanceof GitCommitParam)) {
+      return _triggerParam((GitCommitParam)p);
     } else if ((p instanceof PredefinedTriggerParams)) {
       return _triggerParam((PredefinedTriggerParams)p);
     } else if ((p instanceof PropertyFileTriggerParams)) {

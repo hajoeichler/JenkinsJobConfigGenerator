@@ -500,7 +500,6 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.parameterizedtrigger.BuildTrigger>
 	'''
 
-	// TODO: <hudson.plugins.git.GitRevisionBuildParameters/>
 	def downStreamBuild (DownStreamBuild b) '''
 		<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
 		  <configs>
@@ -520,6 +519,10 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch triggerParam(CurrentTriggerParams p) '''
 	'''
 
+	def dispatch triggerParam(GitCommitParam p) '''
+		<hudson.plugins.git.GitRevisionBuildParameters/>
+	'''
+
 	def dispatch triggerParam(PropertyFileTriggerParams p) '''
 		<hudson.plugins.parameterizedtrigger.FileBuildParameters>
 		  <propertiesFile>«p.propertyFile»</propertiesFile>
@@ -531,5 +534,4 @@ class JobConfigGenerator implements IGenerator {
 		  <properties>«p.predefined»</properties>
 		</hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
 	'''
-
 }
