@@ -500,6 +500,20 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.parameterizedtrigger.BuildTrigger>
 	'''
 
+	def getListOfFqNames(List<Config> builds) {
+		var s = ""
+		var first = true
+		for (c : builds) {
+			if (first) {
+				first = false
+			} else {
+				s = s + ""
+			}
+			s = s + c.fqn
+		}
+		return s
+	}
+
 	def downStreamBuild (DownStreamBuild b) '''
 		<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
 		  <configs>
@@ -507,7 +521,7 @@ class JobConfigGenerator implements IGenerator {
 		  «triggerParam(p)»
 		  «ENDFOR»
 		  </configs>
-		  <projects>«b.builds»</projects>
+		  <projects>«b.builds.fqn»</projects>
 		  <condition>«b.condition»</condition>
 		  «IF b.triggerParams.empty»
 		  <triggerWithNoParameters>true</triggerWithNoParameters>

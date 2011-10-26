@@ -1299,6 +1299,27 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  public String getListOfFqNames(final List<Config> builds) {
+    {
+      String s = "";
+      boolean first = true;
+      for (final Config c : builds) {
+        {
+          if (first) {
+            first = false;
+          } else {
+            String _operator_plus = StringExtensions.operator_plus(s, "");
+            s = _operator_plus;
+          }
+          String _fqn = this.fqn(c);
+          String _operator_plus_1 = StringExtensions.operator_plus(s, _fqn);
+          s = _operator_plus_1;
+        }
+      }
+      return s;
+    }
+  }
+  
   public StringConcatenation downStreamBuild(final DownStreamBuild b) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>");
@@ -1321,7 +1342,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<projects>");
     Config _builds = b.getBuilds();
-    _builder.append(_builds, "  ");
+    String _fqn = this.fqn(_builds);
+    _builder.append(_fqn, "  ");
     _builder.append("</projects>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
