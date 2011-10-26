@@ -19,7 +19,7 @@ IDwithMinus:
 
 DeclSpecs:
 	"declarations" "("
-	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl)+ // | WarningDecl)+
+	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl)+ // Label | WarningDecl)+
 	")";
 
 AntDecl:
