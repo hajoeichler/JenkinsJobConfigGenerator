@@ -1,5 +1,6 @@
 package de.hajoeichler.jenkins.generator;
 
+import de.hajoeichler.jenkins.jobConfig.Artifacts;
 import de.hajoeichler.jenkins.jobConfig.BooleanParam;
 import de.hajoeichler.jenkins.jobConfig.BuildSection;
 import de.hajoeichler.jenkins.jobConfig.ChoiceParam;
@@ -186,6 +187,27 @@ public class JobConfigGenerator implements IGenerator {
         Config _parentConfig_1 = c.getParentConfig();
         String _gitUrl_2 = this.getGitUrl(_parentConfig_1);
         _xifexpression_1 = _gitUrl_2;
+      }
+      _xifexpression = _xifexpression_1;
+    }
+    return _xifexpression;
+  }
+  
+  public String getRestrictTo(final Config c) {
+    String _xifexpression = null;
+    String _restrictTo = c.getRestrictTo();
+    boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_restrictTo, null);
+    if (_operator_notEquals) {
+      String _restrictTo_1 = c.getRestrictTo();
+      _xifexpression = _restrictTo_1;
+    } else {
+      String _xifexpression_1 = null;
+      Config _parentConfig = c.getParentConfig();
+      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_parentConfig, null);
+      if (_operator_notEquals_1) {
+        Config _parentConfig_1 = c.getParentConfig();
+        String _restrictTo_2 = this.getRestrictTo(_parentConfig_1);
+        _xifexpression_1 = _restrictTo_2;
       }
       _xifexpression = _xifexpression_1;
     }
@@ -424,21 +446,10 @@ public class JobConfigGenerator implements IGenerator {
         _builder.newLineIfNotEmpty();
       }
     }
-    {
-      String _restrictTo = c.getRestrictTo();
-      boolean _operator_equals_1 = ObjectExtensions.operator_equals(_restrictTo, null);
-      if (_operator_equals_1) {
-        _builder.append("  ");
-        _builder.append("<canRoam>true</canRoam>");
-        _builder.newLine();} else {
-        _builder.append("  ");
-        _builder.append("<canRoam>");
-        String _restrictTo_1 = c.getRestrictTo();
-        _builder.append(_restrictTo_1, "  ");
-        _builder.append("</canRoam>");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("  ");
+    StringConcatenation _restrictTo = this.restrictTo(c);
+    _builder.append(_restrictTo, "  ");
+    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("<disabled>");
     boolean _isDisabled = c.isDisabled();
@@ -534,6 +545,27 @@ public class JobConfigGenerator implements IGenerator {
         _builder.append("</projectUrl>");
         _builder.newLineIfNotEmpty();
         _builder.append("</com.coravy.hudson.plugins.github.GithubProjectProperty>");
+        _builder.newLine();
+      }
+    }
+    return _builder;
+  }
+  
+  public StringConcatenation restrictTo(final Config c) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _restrictTo = this.getRestrictTo(c);
+    final String r = _restrictTo;
+    _builder.newLineIfNotEmpty();
+    {
+      boolean _operator_equals = ObjectExtensions.operator_equals(r, null);
+      if (_operator_equals) {
+        _builder.append("<canRoam>true</canRoam>");
+        _builder.newLine();} else {
+        _builder.append("<assignedNode>");
+        _builder.append(r, "");
+        _builder.append("</assignedNode>");
+        _builder.newLineIfNotEmpty();
+        _builder.append("<canRoam>false</canRoam>");
         _builder.newLine();
       }
     }
@@ -861,7 +893,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("      ");
     _builder.append("<name>");
     LockDecl _lock = l.getLock();
-    _builder.append(_lock, "      ");
+    String _name = _lock.getName();
+    _builder.append(_name, "      ");
     _builder.append("</name>");
     _builder.newLineIfNotEmpty();
     _builder.append("    ");
@@ -1318,6 +1351,31 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _publisher(final Artifacts a) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.tasks.ArtifactArchiver>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<artifacts>");
+    String _artifacts = a.getArtifacts();
+    _builder.append(_artifacts, "  ");
+    _builder.append("</artifacts>");
+    _builder.newLineIfNotEmpty();
+    {
+      if (false) {
+        _builder.append("  ");
+        _builder.append("<latestOnly>true</latestOnly>");
+        _builder.newLine();} else {
+        _builder.append("  ");
+        _builder.append("<latestOnly>false</latestOnly>");
+        _builder.newLine();
+      }
+    }
+    _builder.append("</hudson.tasks.ArtifactArchiver>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public String getListOfFqNames(final List<Config> builds) {
     {
       String s = "";
@@ -1500,16 +1558,18 @@ public class JobConfigGenerator implements IGenerator {
     }
   }
   
-  public StringConcatenation publisher(final EObject d) {
-    if ((d instanceof DownStream)) {
-      return _publisher((DownStream)d);
-    } else if ((d instanceof ExtMail)) {
-      return _publisher((ExtMail)d);
-    } else if ((d instanceof TestResult)) {
-      return _publisher((TestResult)d);
+  public StringConcatenation publisher(final EObject a) {
+    if ((a instanceof Artifacts)) {
+      return _publisher((Artifacts)a);
+    } else if ((a instanceof DownStream)) {
+      return _publisher((DownStream)a);
+    } else if ((a instanceof ExtMail)) {
+      return _publisher((ExtMail)a);
+    } else if ((a instanceof TestResult)) {
+      return _publisher((TestResult)a);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(d).toString());
+        java.util.Arrays.<Object>asList(a).toString());
     }
   }
   

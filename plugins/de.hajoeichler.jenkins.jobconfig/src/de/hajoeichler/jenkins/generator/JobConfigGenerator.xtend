@@ -82,6 +82,15 @@ class JobConfigGenerator implements IGenerator {
 			getGitUrl(c.parentConfig)
 		}
 	}
+	
+	def String getRestrictTo(Config c) {
+		if (c.restrictTo != null) {
+			c.restrictTo
+		} else if (c.parentConfig != null) {
+			getRestrictTo(c.parentConfig)
+		}
+	}
+	
 
 	def OldBuildHandling getAnyOldBuildHandling (Config c) {
 		if (c.oldBuildHandling != null) {
@@ -186,11 +195,7 @@ class JobConfigGenerator implements IGenerator {
 		  «ELSE»
 		  «scm(c.getAnyScm)»
 		  «ENDIF»
-		  «IF c.restrictTo == null»
-		  <canRoam>true</canRoam>
-		  «ELSE»
-		  <canRoam>«c.restrictTo»</canRoam>
-		  «ENDIF»
+		  «restrictTo(c)»
 		  <disabled>«c.disabled»</disabled>
 		  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
 		  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -221,6 +226,16 @@ class JobConfigGenerator implements IGenerator {
 		<com.coravy.hudson.plugins.github.GithubProjectProperty>
 		  <projectUrl>«gitUrl»</projectUrl>
 		</com.coravy.hudson.plugins.github.GithubProjectProperty>
+		«ENDIF»
+	'''
+
+	def restrictTo(Config c) '''
+		«val r = getRestrictTo(c)»
+		«IF r == null»
+		<canRoam>true</canRoam>
+		«ELSE»
+		<assignedNode>«r»</assignedNode>
+		<canRoam>false</canRoam>
 		«ENDIF»
 	'''
 
@@ -342,7 +357,7 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.plugins.locksandlatches.LockWrapper>
 		  <locks>
 		    <hudson.plugins.locksandlatches.LockWrapper_-LockWaitConfig>
-		      <name>«l.lock»</name>
+		      <name>«l.lock.name»</name>
 		    </hudson.plugins.locksandlatches.LockWrapper_-LockWaitConfig>
 		  </locks>
 		</hudson.plugins.locksandlatches.LockWrapper>
@@ -504,6 +519,18 @@ class JobConfigGenerator implements IGenerator {
 		  «ENDFOR»
 		  </configs>
 		</hudson.plugins.parameterizedtrigger.BuildTrigger>
+	'''
+
+	// TODO: support for only latest artifact
+	def dispatch publisher (Artifacts a) '''
+		<hudson.tasks.ArtifactArchiver>
+		  <artifacts>«a.artifacts»</artifacts>
+		  «IF false»
+		  <latestOnly>true</latestOnly>
+		  «ELSE»
+		  <latestOnly>false</latestOnly>
+		  «ENDIF»
+		</hudson.tasks.ArtifactArchiver>
 	'''
 
 	def getListOfFqNames(List<Config> builds) {
