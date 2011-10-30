@@ -776,7 +776,10 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</module>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("<canUseUpdate>true</canUseUpdate>");
+    _builder.append("<canUseUpdate>false</canUseUpdate>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<useHeadIfNotFound>false</useHeadIfNotFound>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<flatten>false</flatten>");

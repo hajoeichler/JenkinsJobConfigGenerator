@@ -82,7 +82,7 @@ class JobConfigGenerator implements IGenerator {
 			getGitUrl(c.parentConfig)
 		}
 	}
-	
+
 	def String getRestrictTo(Config c) {
 		if (c.restrictTo != null) {
 			c.restrictTo
@@ -310,7 +310,8 @@ class JobConfigGenerator implements IGenerator {
 		<scm class="hudson.scm.CVSSCM">
 		  <cvsroot>«cvs.root»</cvsroot>
 		  <module>«cvs.modules»</module>
-		  <canUseUpdate>true</canUseUpdate>
+		  <canUseUpdate>false</canUseUpdate>
+		  <useHeadIfNotFound>false</useHeadIfNotFound>
 		  <flatten>false</flatten>
 		  <isTag>false</isTag>
 		  <excludedRegions></excludedRegions>
