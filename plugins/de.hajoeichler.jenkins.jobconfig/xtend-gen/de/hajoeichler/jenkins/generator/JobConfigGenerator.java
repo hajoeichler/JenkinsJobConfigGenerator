@@ -1397,6 +1397,35 @@ public class JobConfigGenerator implements IGenerator {
     }
   }
   
+  public String translateCondition(final String c) {
+    String _xblockexpression = null;
+    {
+      boolean _equals = "Stable".equals(c);
+      if (_equals) {
+        return "SUCCESS";
+      }
+      boolean _equals_1 = "Unstable".equals(c);
+      if (_equals_1) {
+        return "UNSTABLE";
+      }
+      boolean _equals_2 = "Not-Failed".equals(c);
+      if (_equals_2) {
+        return "UNSTABLE_OR_BETTER";
+      }
+      boolean _equals_3 = "Failed".equals(c);
+      if (_equals_3) {
+        return "FAILED";
+      }
+      String _xifexpression = null;
+      boolean _equals_4 = "Complete".equals(c);
+      if (_equals_4) {
+        return "ALWAYS";
+      }
+      _xblockexpression = (_xifexpression);
+    }
+    return _xblockexpression;
+  }
+  
   public StringConcatenation downStreamBuild(final DownStreamBuild b) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>");
@@ -1426,7 +1455,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<condition>");
     String _condition = b.getCondition();
-    _builder.append(_condition, "  ");
+    String _translateCondition = this.translateCondition(_condition);
+    _builder.append(_translateCondition, "  ");
     _builder.append("</condition>");
     _builder.newLineIfNotEmpty();
     {

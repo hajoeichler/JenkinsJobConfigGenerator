@@ -547,6 +547,24 @@ class JobConfigGenerator implements IGenerator {
 		return s
 	}
 
+	def translateCondition(String c) {
+		if ("Stable".equals(c)) {
+			return "SUCCESS"
+		}
+		if ("Unstable".equals(c)) {
+			return "UNSTABLE"
+		}
+		if ("Not-Failed".equals(c)) {
+			return "UNSTABLE_OR_BETTER"
+		}
+		if ("Failed".equals(c)) {
+			return "FAILED"
+		}
+		if ("Complete".equals(c)) {
+			return "ALWAYS"
+		}
+	}
+
 	def downStreamBuild (DownStreamBuild b) '''
 		<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
 		  <configs>
@@ -555,7 +573,7 @@ class JobConfigGenerator implements IGenerator {
 		  «ENDFOR»
 		  </configs>
 		  <projects>«b.builds.fqn»</projects>
-		  <condition>«b.condition»</condition>
+		  <condition>«b.condition.translateCondition»</condition>
 		  «IF b.triggerParams.empty»
 		  <triggerWithNoParameters>true</triggerWithNoParameters>
 		  «ENDIF»
