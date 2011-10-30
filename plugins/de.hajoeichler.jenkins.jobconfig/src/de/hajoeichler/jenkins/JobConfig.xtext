@@ -99,7 +99,7 @@ ScmGit: // 3rdParty
 	excludedRegions=STRING)? ")";
 
 ScmCVS:
-	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING ")";
+	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")?  ")";
 
 TriggerSection:
 	"trigger" "(" buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger)+ ")";
