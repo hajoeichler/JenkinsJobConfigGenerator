@@ -204,7 +204,7 @@ PublisherSection:
 	")";
 
 Artifacts:
-	"artifacts" artifacts=STRING;
+	"artifacts" artifacts=STRING (onlyLatest?="onlyLatest")?;
 
 TestResult:
 	"testresults" testresults=STRING (longIO?="longIO")?;
