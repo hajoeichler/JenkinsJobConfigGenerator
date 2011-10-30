@@ -371,6 +371,46 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.build__timeout.BuildTimeoutWrapper>
 	'''
 
+	def dispatch wrapper(Release r) '''
+	<hudson.plugins.release.ReleaseWrapper>
+	  <releaseVersionTemplate></releaseVersionTemplate>
+	  <doNotKeepLog>«r.notKeepForever»</doNotKeepLog>
+	  <parameterDefinitions>
+	  «IF r.paramSection != null»
+	  «FOR p:r.paramSection.parameters»
+	  «param(p, p.type)»
+	  «ENDFOR»
+	  «ENDIF»
+	  </parameterDefinitions>
+	  <preBuildSteps>
+	  «IF r.preBuildSection != null»
+	  «FOR b:r.preBuildSection.builds»
+	  «build(b)»
+	  «ENDFOR»
+	  «ENDIF»
+	  </preBuildSteps>
+	  <postBuildSteps/>
+	  «IF r.finalBuildSection != null»
+	  «FOR b:r.finalBuildSection.builds»
+	  «build(b)»
+	  «ENDFOR»
+	  «ENDIF»
+	  <postSuccessfulBuildSteps/>
+	  «IF r.successBuildSection != null»
+	  «FOR b:r.successBuildSection.builds»
+	  «build(b)»
+	  «ENDFOR»
+	  «ENDIF»
+	  <postFailedBuildSteps>
+	  «IF r.failedBuildSection != null»
+	  «FOR b:r.failedBuildSection.builds»
+	  «build(b)»
+	  «ENDFOR»
+	  «ENDIF»
+	  </postFailedBuildSteps>
+	</hudson.plugins.release.ReleaseWrapper>
+	'''
+
 	def builders(Config c) '''
 		<builders>
 		  «val l = new ArrayList<EObject>()»

@@ -25,6 +25,7 @@ import de.hajoeichler.jenkins.jobConfig.PollScmTrigger;
 import de.hajoeichler.jenkins.jobConfig.PredefinedTriggerParams;
 import de.hajoeichler.jenkins.jobConfig.PropertyFileTriggerParams;
 import de.hajoeichler.jenkins.jobConfig.PublisherSection;
+import de.hajoeichler.jenkins.jobConfig.Release;
 import de.hajoeichler.jenkins.jobConfig.Scm;
 import de.hajoeichler.jenkins.jobConfig.ScmCVS;
 import de.hajoeichler.jenkins.jobConfig.ScmGit;
@@ -929,6 +930,129 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _wrapper(final Release r) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.release.ReleaseWrapper>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<releaseVersionTemplate></releaseVersionTemplate>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<doNotKeepLog>");
+    boolean _isNotKeepForever = r.isNotKeepForever();
+    _builder.append(_isNotKeepForever, "  ");
+    _builder.append("</doNotKeepLog>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<parameterDefinitions>");
+    _builder.newLine();
+    {
+      ParameterSection _paramSection = r.getParamSection();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_paramSection, null);
+      if (_operator_notEquals) {
+        {
+          ParameterSection _paramSection_1 = r.getParamSection();
+          EList<Parameter> _parameters = _paramSection_1.getParameters();
+          for(final Parameter p : _parameters) {
+            _builder.append("  ");
+            ParameterType _type = p.getType();
+            StringConcatenation _param = this.param(p, _type);
+            _builder.append(_param, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.append("  ");
+    _builder.append("</parameterDefinitions>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<preBuildSteps>");
+    _builder.newLine();
+    {
+      BuildSection _preBuildSection = r.getPreBuildSection();
+      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_preBuildSection, null);
+      if (_operator_notEquals_1) {
+        {
+          BuildSection _preBuildSection_1 = r.getPreBuildSection();
+          EList<EObject> _builds = _preBuildSection_1.getBuilds();
+          for(final EObject b : _builds) {
+            _builder.append("  ");
+            StringConcatenation _build = this.build(b);
+            _builder.append(_build, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.append("  ");
+    _builder.append("</preBuildSteps>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<postBuildSteps/>");
+    _builder.newLine();
+    {
+      BuildSection _finalBuildSection = r.getFinalBuildSection();
+      boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_finalBuildSection, null);
+      if (_operator_notEquals_2) {
+        {
+          BuildSection _finalBuildSection_1 = r.getFinalBuildSection();
+          EList<EObject> _builds_1 = _finalBuildSection_1.getBuilds();
+          for(final EObject b_1 : _builds_1) {
+            _builder.append("  ");
+            StringConcatenation _build_1 = this.build(b_1);
+            _builder.append(_build_1, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.append("  ");
+    _builder.append("<postSuccessfulBuildSteps/>");
+    _builder.newLine();
+    {
+      BuildSection _successBuildSection = r.getSuccessBuildSection();
+      boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(_successBuildSection, null);
+      if (_operator_notEquals_3) {
+        {
+          BuildSection _successBuildSection_1 = r.getSuccessBuildSection();
+          EList<EObject> _builds_2 = _successBuildSection_1.getBuilds();
+          for(final EObject b_2 : _builds_2) {
+            _builder.append("  ");
+            StringConcatenation _build_2 = this.build(b_2);
+            _builder.append(_build_2, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.append("  ");
+    _builder.append("<postFailedBuildSteps>");
+    _builder.newLine();
+    {
+      BuildSection _failedBuildSection = r.getFailedBuildSection();
+      boolean _operator_notEquals_4 = ObjectExtensions.operator_notEquals(_failedBuildSection, null);
+      if (_operator_notEquals_4) {
+        {
+          BuildSection _failedBuildSection_1 = r.getFailedBuildSection();
+          EList<EObject> _builds_3 = _failedBuildSection_1.getBuilds();
+          for(final EObject b_3 : _builds_3) {
+            _builder.append("  ");
+            StringConcatenation _build_3 = this.build(b_3);
+            _builder.append(_build_3, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.append("  ");
+    _builder.append("</postFailedBuildSteps>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.release.ReleaseWrapper>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public StringConcatenation builders(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<builders>");
@@ -1572,6 +1696,8 @@ public class JobConfigGenerator implements IGenerator {
   public StringConcatenation wrapper(final EObject l) {
     if ((l instanceof Lock)) {
       return _wrapper((Lock)l);
+    } else if ((l instanceof Release)) {
+      return _wrapper((Release)l);
     } else if ((l instanceof Timeout)) {
       return _wrapper((Timeout)l);
     } else {
