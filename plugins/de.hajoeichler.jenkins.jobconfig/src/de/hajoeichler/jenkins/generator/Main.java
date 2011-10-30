@@ -1,7 +1,14 @@
 package de.hajoeichler.jenkins.generator;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -44,7 +51,7 @@ public class Main {
 	private JavaIoFileSystemAccess fileAccess;
 
 	protected void runGenerator(String directory) {
-		// get all the jobConfig 
+		// get all the jobConfig
 		File dir = new File(directory);
 		File[] jobsFiles = dir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
@@ -72,6 +79,56 @@ public class Main {
 			generator.doGenerate(resource, fileAccess);
 		}
 
+		try {
+			cutLeadingSpacesInMultiLineStrings();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		System.out.println("Code generation finished.");
+	}
+
+	private void cutLeadingSpacesInMultiLineStrings()
+			throws FileNotFoundException, IOException {
+		File target = new File("target/configs/");
+		File[] configDirs = target.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File arg0) {
+				if (!arg0.isDirectory()) {
+					return false;
+				}
+				File[] files = arg0.listFiles(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return "config.xml".equals(name);
+					}
+				});
+				return files.length == 1;
+			}
+		});
+		for (File configDir : configDirs) {
+			File configFile = new File(configDir, "config.xml");
+			BufferedReader reader = new BufferedReader(new FileReader(
+					configFile));
+			StringBuilder fileContent = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (!line.matches("^\\p{Blank}*<.*")) {
+					fileContent.append(line.replaceAll("^\\p{Blank}*", ""));
+				} else {
+					fileContent.append(line);
+				}
+				fileContent.append("\n");
+			}
+			reader.close();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(
+					configFile));
+			writer.write(fileContent.toString());
+			writer.close();
+		}
 	}
 }
