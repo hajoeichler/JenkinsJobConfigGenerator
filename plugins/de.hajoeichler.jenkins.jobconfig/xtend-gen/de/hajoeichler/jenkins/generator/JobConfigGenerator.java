@@ -239,24 +239,30 @@ public class JobConfigGenerator implements IGenerator {
     return _xifexpression;
   }
   
-  public List<ParameterSection> getAllParameterSections(final Config c) {
+  public Map<String,Parameter> getAllParameters(final Config c, final Map<String,Parameter> m) {
     {
-      ArrayList<ParameterSection> _arrayList = new ArrayList<ParameterSection>();
-      final ArrayList<ParameterSection> l = _arrayList;
-      Config _parentConfig = c.getParentConfig();
-      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_parentConfig, null);
-      if (_operator_notEquals) {
-        Config _parentConfig_1 = c.getParentConfig();
-        List<ParameterSection> _allParameterSections = this.getAllParameterSections(_parentConfig_1);
-        l.addAll(_allParameterSections);
-      }
       ParameterSection _paramSection = c.getParamSection();
-      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_paramSection, null);
-      if (_operator_notEquals_1) {
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_paramSection, null);
+      if (_operator_notEquals) {
         ParameterSection _paramSection_1 = c.getParamSection();
-        l.add(_paramSection_1);
+        EList<Parameter> _parameters = _paramSection_1.getParameters();
+        for (final Parameter p : _parameters) {
+          String _name = p.getName();
+          boolean _containsKey = m.containsKey(_name);
+          boolean _operator_not = BooleanExtensions.operator_not(_containsKey);
+          if (_operator_not) {
+            String _name_1 = p.getName();
+            m.put(_name_1, p);
+          }
+        }
       }
-      return l;
+      Config _parentConfig = c.getParentConfig();
+      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_parentConfig, null);
+      if (_operator_notEquals_1) {
+        Config _parentConfig_1 = c.getParentConfig();
+        this.getAllParameters(_parentConfig_1, m);
+      }
+      return m;
     }
   }
   
@@ -424,15 +430,10 @@ public class JobConfigGenerator implements IGenerator {
     StringConcatenation _gitHub = this.gitHub(c);
     _builder.append(_gitHub, "    ");
     _builder.newLineIfNotEmpty();
-    {
-      List<ParameterSection> _allParameterSections = this.getAllParameterSections(c);
-      for(final ParameterSection ps : _allParameterSections) {
-        _builder.append("    ");
-        StringConcatenation _parameterSection = this.parameterSection(ps);
-        _builder.append(_parameterSection, "    ");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("    ");
+    StringConcatenation _parameters = this.parameters(c);
+    _builder.append(_parameters, "    ");
+    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("</properties>");
     _builder.newLine();
@@ -576,27 +577,39 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation parameterSection(final ParameterSection ps) {
+  public StringConcatenation parameters(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<hudson.model.ParametersDefinitionProperty>");
-    _builder.newLine();
-    _builder.append("  ");
-    _builder.append("<parameterDefinitions>");
-    _builder.newLine();
+    LinkedHashMap<String,Parameter> _linkedHashMap = new LinkedHashMap<String,Parameter>();
+    final LinkedHashMap<String,Parameter> m = _linkedHashMap;
+    _builder.newLineIfNotEmpty();
+    Map<String,Parameter> _allParameters = this.getAllParameters(c, m);
+    Collection<Parameter> _values = _allParameters.values();
+    final Collection<Parameter> v = _values;
+    _builder.newLineIfNotEmpty();
     {
-      EList<Parameter> _parameters = ps.getParameters();
-      for(final Parameter p : _parameters) {
+      boolean _isEmpty = v.isEmpty();
+      boolean _operator_equals = ObjectExtensions.operator_equals(((Boolean)_isEmpty), ((Boolean)false));
+      if (_operator_equals) {
+        _builder.append("<hudson.model.ParametersDefinitionProperty>");
+        _builder.newLine();
         _builder.append("  ");
-        ParameterType _type = p.getType();
-        StringConcatenation _param = this.param(p, _type);
-        _builder.append(_param, "  ");
-        _builder.newLineIfNotEmpty();
+        _builder.append("<parameterDefinitions>");
+        _builder.newLine();
+        {
+          for(final Parameter p : v) {
+            _builder.append("  ");
+            ParameterType _type = p.getType();
+            StringConcatenation _param = this.param(p, _type);
+            _builder.append(_param, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        _builder.append("</parameterDefinitions>");
+        _builder.newLine();
+        _builder.append("</hudson.model.ParametersDefinitionProperty>");
+        _builder.newLine();
       }
     }
-    _builder.append("</parameterDefinitions>");
-    _builder.newLine();
-    _builder.append("</hudson.model.ParametersDefinitionProperty>");
-    _builder.newLine();
     return _builder;
   }
   

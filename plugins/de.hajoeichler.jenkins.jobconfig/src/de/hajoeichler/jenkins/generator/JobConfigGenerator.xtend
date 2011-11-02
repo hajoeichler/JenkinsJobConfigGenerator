@@ -100,15 +100,18 @@ class JobConfigGenerator implements IGenerator {
 		}
 	}
 
-	def List<ParameterSection> getAllParameterSections (Config c) {
-		val l = new ArrayList<ParameterSection>()
-		if (c.parentConfig != null) {
-			l.addAll(getAllParameterSections(c.parentConfig))
-		}
+	def getAllParameters (Config c, Map<String, Parameter> m) {
 		if (c.paramSection != null) {
-			l.add(c.paramSection)
+			for (p : c.paramSection.parameters) {
+				if (!m.containsKey(p.name)) {
+					m.put(p.name, p)
+				}
+			}
 		}
-		return l
+		if (c.parentConfig != null) {
+			getAllParameters(c.parentConfig, m)
+		}
+		return m
 	}
 
 	def Scm getAnyScm(Config c) {
@@ -186,9 +189,7 @@ class JobConfigGenerator implements IGenerator {
 		  <keepDependencies>false</keepDependencies>
 		  <properties>
 		    «gitHub(c)»
-		    «FOR ps:c.getAllParameterSections»
-		    «parameterSection(ps)»
-		    «ENDFOR»
+		    «parameters(c)»
 		  </properties>
 		  «IF c.getAnyScm == null»
 		  <scm class="hudson.scm.NullSCM"/>
@@ -239,14 +240,18 @@ class JobConfigGenerator implements IGenerator {
 		«ENDIF»
 	'''
 
-	def parameterSection(ParameterSection ps) '''
+	def parameters(Config c) '''
+		«val m = new LinkedHashMap<String, Parameter>()»
+		«val v = getAllParameters(c, m).values»
+		«IF v.empty == false»
 		<hudson.model.ParametersDefinitionProperty>
 		  <parameterDefinitions>
-		  «FOR p:ps.parameters»
+		  «FOR p:v»
 		  «param(p, p.type)»
 		  «ENDFOR»
 		</parameterDefinitions>
 		</hudson.model.ParametersDefinitionProperty>
+		«ENDIF»
 	'''
 
 	def dispatch param(Parameter p, StringParam s) '''
