@@ -253,7 +253,7 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.model.StringParameterDefinition>
 		  <name>«p.name»</name>
 		  <description>«p.description»</description>
-		  <defaultValue>«s.value»</defaultValue>
+		  <defaultValue>«s.value.normalize»</defaultValue>
 		</hudson.model.StringParameterDefinition>
 	'''
 
@@ -425,7 +425,7 @@ class JobConfigGenerator implements IGenerator {
 		  <targets>«m.mavenGoals»</targets>
 		  <mavenName>«m.version.name»</mavenName>
 		  «IF m.mavenPOM != null»
-		  <pom>«m.mavenPOM»</pom>
+		  <pom>«m.mavenPOM.normalize»</pom>
 		  «ENDIF»
 		  «IF m.mavenProperties != null»
 		  <properties>«m.mavenProperties»</properties>
@@ -438,6 +438,56 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.tasks.Shell>
 		  <command>«s.shellScript.normalize»</command>
 		</hudson.tasks.Shell>
+	'''
+
+	def dispatch build (SystemGroovy sg) '''
+		<hudson.plugins.groovy.SystemGroovy>
+		  <scriptSource class="hudson.plugins.groovy.StringScriptSource">
+		    <command>«sg.groovyScript.normalize»</command>
+		  </scriptSource>
+		  <bindings></bindings>
+		  <classpath></classpath>
+		</hudson.plugins.groovy.SystemGroovy>
+	'''
+
+	def dispatch build (TriggerBuilderSection tbs) '''
+		<hudson.plugins.parameterizedtrigger.TriggerBuilder>
+		  <configs>
+		  «FOR tb:tbs.triggeredBuilds»
+		  «triggeredBuild(tb)»
+		  «ENDFOR»
+		  </configs>
+		</hudson.plugins.parameterizedtrigger.TriggerBuilder>
+	'''
+
+	def triggeredBuild(TriggeredBuild tb) '''
+		<hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+		  <configs>
+		    «FOR p:tb.triggerParams»
+		    «triggerParam(p)»
+		    «ENDFOR»
+		  </configs>
+		  <projects>«tb.builds.fqn»</projects>
+		  <condition>ALWAYS</condition>
+		  <triggerWithNoParameters>false</triggerWithNoParameters>
+		  <block>
+		    <buildStepFailureThreshold>
+		      <name>UNSTABLE</name>
+		      <ordinal>1</ordinal>
+		      <color>YELLOW</color>
+		    </buildStepFailureThreshold>
+		    <unstableThreshold>
+		      <name>UNSTABLE</name>
+		      <ordinal>1</ordinal>
+		      <color>YELLOW</color>
+		    </unstableThreshold>
+		    <failureThreshold>
+		      <name>FAILURE</name>
+		      <ordinal>2</ordinal>
+		      <color>RED</color>
+		    </failureThreshold>
+		  </block>
+		</hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
 	'''
 
 	def publishers(Config c) '''
@@ -460,8 +510,8 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def ExtMail getParentExtMail(ExtMail em) {
-		val c = getMyConfig(em)
-		if (c.parentConfig != null) {
+		var c = getMyConfig(em)
+		while (c.parentConfig != null) {
 			if (c.parentConfig.publisherSection != null) {
 				for (p : c.parentConfig.publisherSection.publishers) {
 					if (p instanceof ExtMail) {
@@ -469,7 +519,9 @@ class JobConfigGenerator implements IGenerator {
 					}
 				}
 			}
+			c = c.parentConfig;
 		}
+		return null
 	}
 
 	def getAllMailTriggers (ExtMail em, Map<String, MailTrigger> m) {

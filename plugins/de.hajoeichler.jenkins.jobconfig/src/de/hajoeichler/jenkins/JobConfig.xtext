@@ -200,7 +200,7 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream)+ // | Claim | Cobertura | Rcov | HTMLReport )+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream)+ // Warnings | Claim | Cobertura | Rcov | HTMLReport )+
 	")";
 
 Artifacts:

@@ -31,10 +31,13 @@ import de.hajoeichler.jenkins.jobConfig.ScmCVS;
 import de.hajoeichler.jenkins.jobConfig.ScmGit;
 import de.hajoeichler.jenkins.jobConfig.Shell;
 import de.hajoeichler.jenkins.jobConfig.StringParam;
+import de.hajoeichler.jenkins.jobConfig.SystemGroovy;
 import de.hajoeichler.jenkins.jobConfig.TestResult;
 import de.hajoeichler.jenkins.jobConfig.Timeout;
 import de.hajoeichler.jenkins.jobConfig.TimerTrigger;
+import de.hajoeichler.jenkins.jobConfig.TriggerBuilderSection;
 import de.hajoeichler.jenkins.jobConfig.TriggerSection;
+import de.hajoeichler.jenkins.jobConfig.TriggeredBuild;
 import de.hajoeichler.jenkins.jobConfig.WrapperSection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -616,7 +619,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<defaultValue>");
     String _value = s.getValue();
-    _builder.append(_value, "  ");
+    String _normalize = this.normalize(_value);
+    _builder.append(_normalize, "  ");
     _builder.append("</defaultValue>");
     _builder.newLineIfNotEmpty();
     _builder.append("</hudson.model.StringParameterDefinition>");
@@ -1099,7 +1103,8 @@ public class JobConfigGenerator implements IGenerator {
         _builder.append("  ");
         _builder.append("<pom>");
         String _mavenPOM_1 = m.getMavenPOM();
-        _builder.append(_mavenPOM_1, "  ");
+        String _normalize = this.normalize(_mavenPOM_1);
+        _builder.append(_normalize, "  ");
         _builder.append("</pom>");
         _builder.newLineIfNotEmpty();
       }
@@ -1139,6 +1144,146 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</command>");
     _builder.newLineIfNotEmpty();
     _builder.append("</hudson.tasks.Shell>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  protected StringConcatenation _build(final SystemGroovy sg) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.groovy.SystemGroovy>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<scriptSource class=\"hudson.plugins.groovy.StringScriptSource\">");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<command>");
+    String _groovyScript = sg.getGroovyScript();
+    String _normalize = this.normalize(_groovyScript);
+    _builder.append(_normalize, "    ");
+    _builder.append("</command>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("</scriptSource>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<bindings></bindings>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<classpath></classpath>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.groovy.SystemGroovy>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  protected StringConcatenation _build(final TriggerBuilderSection tbs) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.parameterizedtrigger.TriggerBuilder>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<configs>");
+    _builder.newLine();
+    {
+      EList<TriggeredBuild> _triggeredBuilds = tbs.getTriggeredBuilds();
+      for(final TriggeredBuild tb : _triggeredBuilds) {
+        _builder.append("  ");
+        StringConcatenation _triggeredBuild = this.triggeredBuild(tb);
+        _builder.append(_triggeredBuild, "  ");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.append("  ");
+    _builder.append("</configs>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.parameterizedtrigger.TriggerBuilder>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public StringConcatenation triggeredBuild(final TriggeredBuild tb) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<configs>");
+    _builder.newLine();
+    {
+      EList<EObject> _triggerParams = tb.getTriggerParams();
+      for(final EObject p : _triggerParams) {
+        _builder.append("    ");
+        StringConcatenation _triggerParam = this.triggerParam(p);
+        _builder.append(_triggerParam, "    ");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.append("  ");
+    _builder.append("</configs>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<projects>");
+    Config _builds = tb.getBuilds();
+    String _fqn = this.fqn(_builds);
+    _builder.append(_fqn, "  ");
+    _builder.append("</projects>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<condition>ALWAYS</condition>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<triggerWithNoParameters>false</triggerWithNoParameters>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<block>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<buildStepFailureThreshold>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<name>UNSTABLE</name>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<ordinal>1</ordinal>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<color>YELLOW</color>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</buildStepFailureThreshold>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableThreshold>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<name>UNSTABLE</name>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<ordinal>1</ordinal>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<color>YELLOW</color>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</unstableThreshold>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failureThreshold>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<name>FAILURE</name>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<ordinal>2</ordinal>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<color>RED</color>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</failureThreshold>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</block>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>");
     _builder.newLine();
     return _builder;
   }
@@ -1192,33 +1337,36 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public ExtMail getParentExtMail(final ExtMail em) {
-    ExtMail _xblockexpression = null;
     {
       Config _myConfig = this.getMyConfig(em);
-      final Config c = _myConfig;
-      ExtMail _xifexpression = null;
+      Config c = _myConfig;
       Config _parentConfig = c.getParentConfig();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_parentConfig, null);
-      if (_operator_notEquals) {
-        ExtMail _xifexpression_1 = null;
-        Config _parentConfig_1 = c.getParentConfig();
-        PublisherSection _publisherSection = _parentConfig_1.getPublisherSection();
-        boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_publisherSection, null);
-        if (_operator_notEquals_1) {
-          Config _parentConfig_2 = c.getParentConfig();
-          PublisherSection _publisherSection_1 = _parentConfig_2.getPublisherSection();
-          EList<EObject> _publishers = _publisherSection_1.getPublishers();
-          for (final EObject p : _publishers) {
-            if ((p instanceof de.hajoeichler.jenkins.jobConfig.ExtMail)) {
-              return ((ExtMail) p);
+      Boolean _xwhileexpression = _operator_notEquals;
+      while (_xwhileexpression) {
+        {
+          Config _parentConfig_1 = c.getParentConfig();
+          PublisherSection _publisherSection = _parentConfig_1.getPublisherSection();
+          boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_publisherSection, null);
+          if (_operator_notEquals_1) {
+            Config _parentConfig_2 = c.getParentConfig();
+            PublisherSection _publisherSection_1 = _parentConfig_2.getPublisherSection();
+            EList<EObject> _publishers = _publisherSection_1.getPublishers();
+            for (final EObject p : _publishers) {
+              if ((p instanceof de.hajoeichler.jenkins.jobConfig.ExtMail)) {
+                return ((ExtMail) p);
+              }
             }
           }
+          Config _parentConfig_3 = c.getParentConfig();
+          c = _parentConfig_3;
         }
-        _xifexpression = _xifexpression_1;
+        Config _parentConfig_4 = c.getParentConfig();
+        boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_parentConfig_4, null);
+        _xwhileexpression = _operator_notEquals_2;
       }
-      _xblockexpression = (_xifexpression);
+      return null;
     }
-    return _xblockexpression;
   }
   
   public Map<String,MailTrigger> getAllMailTriggers(final ExtMail em, final Map<String,MailTrigger> m) {
@@ -1714,6 +1862,10 @@ public class JobConfigGenerator implements IGenerator {
       return _build((Maven)m);
     } else if ((m instanceof Shell)) {
       return _build((Shell)m);
+    } else if ((m instanceof SystemGroovy)) {
+      return _build((SystemGroovy)m);
+    } else if ((m instanceof TriggerBuilderSection)) {
+      return _build((TriggerBuilderSection)m);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         java.util.Arrays.<Object>asList(m).toString());
