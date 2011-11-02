@@ -96,13 +96,11 @@ public class Main {
 			throws FileNotFoundException, IOException {
 		File target = new File("target/configs/");
 		File[] configDirs = target.listFiles(new FileFilter() {
-			@Override
 			public boolean accept(File arg0) {
 				if (!arg0.isDirectory()) {
 					return false;
 				}
 				File[] files = arg0.listFiles(new FilenameFilter() {
-					@Override
 					public boolean accept(File dir, String name) {
 						return "config.xml".equals(name);
 					}
