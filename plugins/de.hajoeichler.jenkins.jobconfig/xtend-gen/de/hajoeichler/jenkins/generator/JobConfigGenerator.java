@@ -1557,21 +1557,33 @@ public class JobConfigGenerator implements IGenerator {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("<configs>");
-    _builder.newLine();
     {
       EList<EObject> _triggerParams = b.getTriggerParams();
-      for(final EObject p : _triggerParams) {
+      boolean _isEmpty = _triggerParams.isEmpty();
+      if (_isEmpty) {
         _builder.append("  ");
-        StringConcatenation _triggerParam = this.triggerParam(p);
-        _builder.append(_triggerParam, "  ");
-        _builder.newLineIfNotEmpty();
+        _builder.append("<configs class=\"java.util.Collections$EmptyList\"/>");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("<triggerWithNoParameters>true</triggerWithNoParameters>");
+        _builder.newLine();} else {
+        _builder.append("  ");
+        _builder.append("<configs>");
+        _builder.newLine();
+        {
+          EList<EObject> _triggerParams_1 = b.getTriggerParams();
+          for(final EObject p : _triggerParams_1) {
+            _builder.append("  ");
+            StringConcatenation _triggerParam = this.triggerParam(p);
+            _builder.append(_triggerParam, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        _builder.append("  ");
+        _builder.append("</configs>");
+        _builder.newLine();
       }
     }
-    _builder.append("  ");
-    _builder.append("</configs>");
-    _builder.newLine();
     _builder.append("  ");
     _builder.append("<projects>");
     Config _builds = b.getBuilds();
@@ -1586,15 +1598,6 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_translateCondition, "  ");
     _builder.append("</condition>");
     _builder.newLineIfNotEmpty();
-    {
-      EList<EObject> _triggerParams_1 = b.getTriggerParams();
-      boolean _isEmpty = _triggerParams_1.isEmpty();
-      if (_isEmpty) {
-        _builder.append("  ");
-        _builder.append("<triggerWithNoParameters>true</triggerWithNoParameters>");
-        _builder.newLine();
-      }
-    }
     _builder.append("</hudson.plugins.parameterizedtrigger.BuildTriggerConfig>");
     _builder.newLine();
     return _builder;

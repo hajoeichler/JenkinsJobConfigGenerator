@@ -608,16 +608,18 @@ class JobConfigGenerator implements IGenerator {
 
 	def downStreamBuild (DownStreamBuild b) '''
 		<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+		  «IF b.triggerParams.empty»
+		  <configs class="java.util.Collections$EmptyList"/>
+		  <triggerWithNoParameters>true</triggerWithNoParameters>
+		  «ELSE»
 		  <configs>
 		  «FOR p:b.triggerParams»
 		  «triggerParam(p)»
 		  «ENDFOR»
 		  </configs>
+		  «ENDIF»
 		  <projects>«b.builds.fqn»</projects>
 		  <condition>«b.condition.translateCondition»</condition>
-		  «IF b.triggerParams.empty»
-		  <triggerWithNoParameters>true</triggerWithNoParameters>
-		  «ENDIF»
 		</hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
 	'''
 
