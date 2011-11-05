@@ -394,18 +394,20 @@ class JobConfigGenerator implements IGenerator {
 	  «ENDFOR»
 	  «ENDIF»
 	  </preBuildSteps>
-	  <postBuildSteps/>
+	  <postBuildSteps>
 	  «IF r.finalBuildSection != null»
 	  «FOR b:r.finalBuildSection.builds»
 	  «build(b)»
 	  «ENDFOR»
 	  «ENDIF»
-	  <postSuccessfulBuildSteps/>
+	  </postBuildSteps>
+	  <postSuccessfulBuildSteps>
 	  «IF r.successBuildSection != null»
 	  «FOR b:r.successBuildSection.builds»
 	  «build(b)»
 	  «ENDFOR»
 	  «ENDIF»
+	  </postSuccessfulBuildSteps>
 	  <postFailedBuildSteps>
 	  «IF r.failedBuildSection != null»
 	  «FOR b:r.failedBuildSection.builds»

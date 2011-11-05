@@ -1006,7 +1006,7 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</preBuildSteps>");
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("<postBuildSteps/>");
+    _builder.append("<postBuildSteps>");
     _builder.newLine();
     {
       BuildSection _finalBuildSection = r.getFinalBuildSection();
@@ -1025,7 +1025,10 @@ public class JobConfigGenerator implements IGenerator {
       }
     }
     _builder.append("  ");
-    _builder.append("<postSuccessfulBuildSteps/>");
+    _builder.append("</postBuildSteps>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<postSuccessfulBuildSteps>");
     _builder.newLine();
     {
       BuildSection _successBuildSection = r.getSuccessBuildSection();
@@ -1043,6 +1046,9 @@ public class JobConfigGenerator implements IGenerator {
         }
       }
     }
+    _builder.append("  ");
+    _builder.append("</postSuccessfulBuildSteps>");
+    _builder.newLine();
     _builder.append("  ");
     _builder.append("<postFailedBuildSteps>");
     _builder.newLine();
