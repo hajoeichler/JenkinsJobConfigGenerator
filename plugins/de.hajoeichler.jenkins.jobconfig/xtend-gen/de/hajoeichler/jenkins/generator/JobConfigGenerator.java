@@ -597,13 +597,14 @@ public class JobConfigGenerator implements IGenerator {
         _builder.newLine();
         {
           for(final Parameter p : v) {
-            _builder.append("  ");
+            _builder.append("    ");
             ParameterType _type = p.getType();
             StringConcatenation _param = this.param(p, _type);
-            _builder.append(_param, "  ");
+            _builder.append(_param, "    ");
             _builder.newLineIfNotEmpty();
           }
         }
+        _builder.append("  ");
         _builder.append("</parameterDefinitions>");
         _builder.newLine();
         _builder.append("</hudson.model.ParametersDefinitionProperty>");
@@ -961,6 +962,9 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</doNotKeepLog>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
+    _builder.append("<overrideBuildParameters>false</overrideBuildParameters>");
+    _builder.newLine();
+    _builder.append("  ");
     _builder.append("<parameterDefinitions>");
     _builder.newLine();
     {
@@ -971,10 +975,10 @@ public class JobConfigGenerator implements IGenerator {
           ParameterSection _paramSection_1 = r.getParamSection();
           EList<Parameter> _parameters = _paramSection_1.getParameters();
           for(final Parameter p : _parameters) {
-            _builder.append("  ");
+            _builder.append("    ");
             ParameterType _type = p.getType();
             StringConcatenation _param = this.param(p, _type);
-            _builder.append(_param, "  ");
+            _builder.append(_param, "    ");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -994,9 +998,9 @@ public class JobConfigGenerator implements IGenerator {
           BuildSection _preBuildSection_1 = r.getPreBuildSection();
           EList<EObject> _builds = _preBuildSection_1.getBuilds();
           for(final EObject b : _builds) {
-            _builder.append("  ");
+            _builder.append("    ");
             StringConcatenation _build = this.build(b);
-            _builder.append(_build, "  ");
+            _builder.append(_build, "    ");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -1016,9 +1020,9 @@ public class JobConfigGenerator implements IGenerator {
           BuildSection _finalBuildSection_1 = r.getFinalBuildSection();
           EList<EObject> _builds_1 = _finalBuildSection_1.getBuilds();
           for(final EObject b_1 : _builds_1) {
-            _builder.append("  ");
+            _builder.append("    ");
             StringConcatenation _build_1 = this.build(b_1);
-            _builder.append(_build_1, "  ");
+            _builder.append(_build_1, "    ");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -1038,9 +1042,9 @@ public class JobConfigGenerator implements IGenerator {
           BuildSection _successBuildSection_1 = r.getSuccessBuildSection();
           EList<EObject> _builds_2 = _successBuildSection_1.getBuilds();
           for(final EObject b_2 : _builds_2) {
-            _builder.append("  ");
+            _builder.append("    ");
             StringConcatenation _build_2 = this.build(b_2);
-            _builder.append(_build_2, "  ");
+            _builder.append(_build_2, "    ");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -1060,9 +1064,9 @@ public class JobConfigGenerator implements IGenerator {
           BuildSection _failedBuildSection_1 = r.getFailedBuildSection();
           EList<EObject> _builds_3 = _failedBuildSection_1.getBuilds();
           for(final EObject b_3 : _builds_3) {
-            _builder.append("  ");
+            _builder.append("    ");
             StringConcatenation _build_3 = this.build(b_3);
-            _builder.append(_build_3, "  ");
+            _builder.append(_build_3, "    ");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -1205,9 +1209,9 @@ public class JobConfigGenerator implements IGenerator {
     {
       EList<TriggeredBuild> _triggeredBuilds = tbs.getTriggeredBuilds();
       for(final TriggeredBuild tb : _triggeredBuilds) {
-        _builder.append("  ");
+        _builder.append("    ");
         StringConcatenation _triggeredBuild = this.triggeredBuild(tb);
-        _builder.append(_triggeredBuild, "  ");
+        _builder.append(_triggeredBuild, "    ");
         _builder.newLineIfNotEmpty();
       }
     }
@@ -1741,8 +1745,9 @@ public class JobConfigGenerator implements IGenerator {
           EList<EObject> _triggerParams_1 = b.getTriggerParams();
           for(final EObject p : _triggerParams_1) {
             _builder.append("  ");
+            _builder.append("  ");
             StringConcatenation _triggerParam = this.triggerParam(p);
-            _builder.append(_triggerParam, "  ");
+            _builder.append(_triggerParam, "    ");
             _builder.newLineIfNotEmpty();
           }
         }

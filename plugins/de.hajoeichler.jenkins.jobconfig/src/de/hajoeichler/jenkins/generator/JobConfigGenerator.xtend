@@ -246,10 +246,10 @@ class JobConfigGenerator implements IGenerator {
 		«IF v.empty == false»
 		<hudson.model.ParametersDefinitionProperty>
 		  <parameterDefinitions>
-		  «FOR p:v»
-		  «param(p, p.type)»
-		  «ENDFOR»
-		</parameterDefinitions>
+		    «FOR p:v»
+		    «param(p, p.type)»
+		    «ENDFOR»
+		  </parameterDefinitions>
 		</hudson.model.ParametersDefinitionProperty>
 		«ENDIF»
 	'''
@@ -380,40 +380,41 @@ class JobConfigGenerator implements IGenerator {
 	<hudson.plugins.release.ReleaseWrapper>
 	  <releaseVersionTemplate></releaseVersionTemplate>
 	  <doNotKeepLog>«r.notKeepForever»</doNotKeepLog>
+	  <overrideBuildParameters>false</overrideBuildParameters>
 	  <parameterDefinitions>
-	  «IF r.paramSection != null»
-	  «FOR p:r.paramSection.parameters»
-	  «param(p, p.type)»
-	  «ENDFOR»
-	  «ENDIF»
+	    «IF r.paramSection != null»
+	    «FOR p:r.paramSection.parameters»
+	    «param(p, p.type)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </parameterDefinitions>
 	  <preBuildSteps>
-	  «IF r.preBuildSection != null»
-	  «FOR b:r.preBuildSection.builds»
-	  «build(b)»
-	  «ENDFOR»
-	  «ENDIF»
+	    «IF r.preBuildSection != null»
+	    «FOR b:r.preBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </preBuildSteps>
 	  <postBuildSteps>
-	  «IF r.finalBuildSection != null»
-	  «FOR b:r.finalBuildSection.builds»
-	  «build(b)»
-	  «ENDFOR»
-	  «ENDIF»
+	    «IF r.finalBuildSection != null»
+	    «FOR b:r.finalBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </postBuildSteps>
 	  <postSuccessfulBuildSteps>
-	  «IF r.successBuildSection != null»
-	  «FOR b:r.successBuildSection.builds»
-	  «build(b)»
-	  «ENDFOR»
-	  «ENDIF»
+	    «IF r.successBuildSection != null»
+	    «FOR b:r.successBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </postSuccessfulBuildSteps>
 	  <postFailedBuildSteps>
-	  «IF r.failedBuildSection != null»
-	  «FOR b:r.failedBuildSection.builds»
-	  «build(b)»
-	  «ENDFOR»
-	  «ENDIF»
+	    «IF r.failedBuildSection != null»
+	    «FOR b:r.failedBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </postFailedBuildSteps>
 	</hudson.plugins.release.ReleaseWrapper>
 	'''
@@ -460,9 +461,9 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch build (TriggerBuilderSection tbs) '''
 		<hudson.plugins.parameterizedtrigger.TriggerBuilder>
 		  <configs>
-		  «FOR tb:tbs.triggeredBuilds»
-		  «triggeredBuild(tb)»
-		  «ENDFOR»
+		    «FOR tb:tbs.triggeredBuilds»
+		    «triggeredBuild(tb)»
+		    «ENDFOR»
 		  </configs>
 		</hudson.plugins.parameterizedtrigger.TriggerBuilder>
 	'''
@@ -672,9 +673,9 @@ class JobConfigGenerator implements IGenerator {
 		  <triggerWithNoParameters>true</triggerWithNoParameters>
 		  «ELSE»
 		  <configs>
-		  «FOR p:b.triggerParams»
-		  «triggerParam(p)»
-		  «ENDFOR»
+		    «FOR p:b.triggerParams»
+		    «triggerParam(p)»
+		    «ENDFOR»
 		  </configs>
 		  «ENDIF»
 		  <projects>«b.builds.fqn»</projects>
