@@ -12,10 +12,10 @@ Import:
 	'import' importedNamespace=FqnWithWildCard;
 
 FqnWithWildCard:
-	IDwithMinus ('.*')?;
+	ID ('.*')?;
 
-IDwithMinus:
-	ID ("-" (ID)?)*;
+terminal ID:
+	'^'? ('a'..'z' | 'A'..'Z' | '_' | '-') ('a'..'z' | 'A'..'Z' | '_' | '-' | '0'..'9')*;
 
 DeclSpecs:
 	"declarations" "("
@@ -23,27 +23,27 @@ DeclSpecs:
 	")";
 
 AntDecl:
-	"ant" name=IDwithMinus;
+	"ant" name=ID;
 
 MavenDecl:
-	"maven" name=IDwithMinus;
+	"maven" name=ID;
 
 LockDecl:
-	"lock" name=IDwithMinus;
+	"lock" name=ID;
 
 MSBuildDecl:
-	"msBuild" name=IDwithMinus;
+	"msBuild" name=ID;
 
 JenkinsUrl:
-	"url" url=IDwithMinus;
+	"url" url=ID;
 
 Group:
-	"group" name=IDwithMinus "("
+	"group" name=ID "("
 	(configs+=Config)*
 	")";
 
 Config:
-	(abstract?="abstract")? "job" name=IDwithMinus ("extends" parentConfig=[Config])? "("
+	(abstract?="abstract")? "job" name=ID ("extends" parentConfig=[Config])? "("
 	(disabled?="isDisabled")?
 	(oldBuildHandling=OldBuildHandling)?
 	(executeConcurrent?="executeConcurrent")?
@@ -74,7 +74,7 @@ ParameterSection:
 	")";
 
 Parameter:
-	name=IDwithMinus "("
+	name=ID "("
 	type=ParameterType
 	("description" description=STRING)?
 	")";
@@ -99,7 +99,7 @@ ScmGit: // 3rdParty
 	excludedRegions=STRING)? ")";
 
 ScmCVS:
-	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")?  ")";
+	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? ")";
 
 TriggerSection:
 	"trigger" "(" buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger)+ ")";
