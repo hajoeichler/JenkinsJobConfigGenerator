@@ -237,7 +237,7 @@ DownStream:
 DownStreamBuild:
 	builds=[Config]
 	"when" condition=("Stable" | "Unstable" | "Not-Failed" | "Failed" | "Complete")
-	(triggerParams+=(CurrentTriggerParams | PropertyFileTriggerParams | PredefinedTriggerParams | GitCommitParam)+)?;
+	triggerParams+=(CurrentTriggerParams | PropertyFileTriggerParams | PredefinedTriggerParams | GitCommitParam)*;
 
 GitCommitParam:
 	passThroughGitCommit?="passThroughGitCommit";
