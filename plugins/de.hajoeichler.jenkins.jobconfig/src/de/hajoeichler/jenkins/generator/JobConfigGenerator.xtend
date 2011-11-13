@@ -615,9 +615,9 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch publisher (DownStream d) '''
 		<hudson.plugins.parameterizedtrigger.BuildTrigger>
 		  <configs>
-		  «FOR b:d.builds»
-		  «downStreamBuild(b)»
-		  «ENDFOR»
+		    «FOR b:d.builds»
+		    «downStreamBuild(b)»
+		    «ENDFOR»
 		  </configs>
 		</hudson.plugins.parameterizedtrigger.BuildTrigger>
 	'''

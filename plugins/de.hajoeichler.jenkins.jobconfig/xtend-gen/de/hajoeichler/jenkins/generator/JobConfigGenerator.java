@@ -1635,9 +1635,9 @@ public class JobConfigGenerator implements IGenerator {
     {
       EList<DownStreamBuild> _builds = d.getBuilds();
       for(final DownStreamBuild b : _builds) {
-        _builder.append("  ");
+        _builder.append("    ");
         StringConcatenation _downStreamBuild = this.downStreamBuild(b);
-        _builder.append(_downStreamBuild, "  ");
+        _builder.append(_downStreamBuild, "    ");
         _builder.newLineIfNotEmpty();
       }
     }
