@@ -50,6 +50,6 @@ public class JobConfigJavaValidator extends AbstractJobConfigJavaValidator {
 				return;
 			}
 		}
-		warning("The URL does not point to a valid job name.", feature);
+		//warning("The URL does not point to a valid job name.", feature);
 	}
 }
