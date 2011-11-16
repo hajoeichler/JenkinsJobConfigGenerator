@@ -231,7 +231,7 @@ MailTrigger:
 
 DownStream:
 	"downstream" "("
-	builds+=DownStreamBuild
+	builds+=DownStreamBuild*
 	")";
 
 DownStreamBuild:
