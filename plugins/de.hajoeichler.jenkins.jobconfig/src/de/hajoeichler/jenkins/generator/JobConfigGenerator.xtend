@@ -263,6 +263,16 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch param(Parameter p, BooleanParam b) '''
+		<hudson.model.BooleanParameterDefinition>
+		  <name>«p.name»</name>
+		  <description>«p.description»</description>
+		  «IF b.checked»
+		  <defaultValue>true</defaultValue>
+		  «ENDIF»
+		  «IF b.notChecked»
+		  <defaultValue>false</defaultValue>
+		  «ENDIF»
+		</hudson.model.BooleanParameterDefinition>
 	'''
 
 	def dispatch param(Parameter p, ChoiceParam c) '''

@@ -645,6 +645,38 @@ public class JobConfigGenerator implements IGenerator {
   
   protected StringConcatenation _param(final Parameter p, final BooleanParam b) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.model.BooleanParameterDefinition>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<name>");
+    String _name = p.getName();
+    _builder.append(_name, "  ");
+    _builder.append("</name>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<description>");
+    String _description = p.getDescription();
+    _builder.append(_description, "  ");
+    _builder.append("</description>");
+    _builder.newLineIfNotEmpty();
+    {
+      boolean _isChecked = b.isChecked();
+      if (_isChecked) {
+        _builder.append("  ");
+        _builder.append("<defaultValue>true</defaultValue>");
+        _builder.newLine();
+      }
+    }
+    {
+      boolean _isNotChecked = b.isNotChecked();
+      if (_isNotChecked) {
+        _builder.append("  ");
+        _builder.append("<defaultValue>false</defaultValue>");
+        _builder.newLine();
+      }
+    }
+    _builder.append("</hudson.model.BooleanParameterDefinition>");
+    _builder.newLine();
     return _builder;
   }
   
