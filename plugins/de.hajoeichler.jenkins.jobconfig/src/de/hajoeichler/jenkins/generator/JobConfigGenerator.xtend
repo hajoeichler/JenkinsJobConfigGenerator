@@ -448,6 +448,12 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.tasks.Shell>
 	'''
 
+	def dispatch build (Batch b) '''
+		<hudson.tasks.BatchFile>
+		  <command>«b.batchScript»</command>
+		</hudson.tasks.BatchFile>
+	'''
+
 	def dispatch build (SystemGroovy sg) '''
 		<hudson.plugins.groovy.SystemGroovy>
 		  <scriptSource class="hudson.plugins.groovy.StringScriptSource">
@@ -622,7 +628,6 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.parameterizedtrigger.BuildTrigger>
 	'''
 
-	// TODO: support for only latest artifact
 	def dispatch publisher (Artifacts a) '''
 		<hudson.tasks.ArtifactArchiver>
 		  <artifacts>«a.artifacts»</artifacts>

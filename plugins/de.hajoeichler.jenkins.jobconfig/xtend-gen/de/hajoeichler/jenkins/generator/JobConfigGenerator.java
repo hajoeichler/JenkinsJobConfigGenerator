@@ -1,6 +1,7 @@
 package de.hajoeichler.jenkins.generator;
 
 import de.hajoeichler.jenkins.jobConfig.Artifacts;
+import de.hajoeichler.jenkins.jobConfig.Batch;
 import de.hajoeichler.jenkins.jobConfig.BooleanParam;
 import de.hajoeichler.jenkins.jobConfig.BuildSection;
 import de.hajoeichler.jenkins.jobConfig.ChoiceParam;
@@ -1171,6 +1172,21 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _build(final Batch b) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.tasks.BatchFile>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<command>");
+    String _batchScript = b.getBatchScript();
+    _builder.append(_batchScript, "  ");
+    _builder.append("</command>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("</hudson.tasks.BatchFile>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected StringConcatenation _build(final SystemGroovy sg) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.groovy.SystemGroovy>");
@@ -1881,18 +1897,20 @@ public class JobConfigGenerator implements IGenerator {
     }
   }
   
-  public StringConcatenation build(final EObject m) {
-    if ((m instanceof Maven)) {
-      return _build((Maven)m);
-    } else if ((m instanceof Shell)) {
-      return _build((Shell)m);
-    } else if ((m instanceof SystemGroovy)) {
-      return _build((SystemGroovy)m);
-    } else if ((m instanceof TriggerBuilderSection)) {
-      return _build((TriggerBuilderSection)m);
+  public StringConcatenation build(final EObject b) {
+    if ((b instanceof Batch)) {
+      return _build((Batch)b);
+    } else if ((b instanceof Maven)) {
+      return _build((Maven)b);
+    } else if ((b instanceof Shell)) {
+      return _build((Shell)b);
+    } else if ((b instanceof SystemGroovy)) {
+      return _build((SystemGroovy)b);
+    } else if ((b instanceof TriggerBuilderSection)) {
+      return _build((TriggerBuilderSection)b);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(m).toString());
+        java.util.Arrays.<Object>asList(b).toString());
     }
   }
   
