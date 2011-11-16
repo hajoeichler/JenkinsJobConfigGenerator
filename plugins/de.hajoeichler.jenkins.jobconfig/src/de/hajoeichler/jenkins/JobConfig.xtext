@@ -86,7 +86,7 @@ StringParam:
 	"String" value=STRING;
 
 BooleanParam:
-	"Boolean" (checked?="isChecked")?;
+	"Boolean" ((checked?="trueByDefault") | (notChecked?="falseByDefault"));
 
 ChoiceParam:
 	"Choice" choices=STRING;
