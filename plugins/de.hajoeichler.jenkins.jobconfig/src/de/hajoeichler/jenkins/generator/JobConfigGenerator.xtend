@@ -649,6 +649,20 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.tasks.ArtifactArchiver>
 	'''
 
+	def dispatch publisher (HTMLPublisher h) '''
+		<htmlpublisher.HtmlPublisher>
+		  <reportTargets>
+		    <htmlpublisher.HtmlPublisherTarget>
+		      <reportName>«h.name»</reportName>
+		      <reportDir>«h.dir»</reportDir>
+		      <reportFiles>«h.files»</reportFiles>
+		      <keepAll>«h.keepPast»</keepAll>
+		      <wrapperName>htmlpublisher-wrapper.html</wrapperName>
+		    </htmlpublisher.HtmlPublisherTarget>
+		  </reportTargets>
+		</htmlpublisher.HtmlPublisher>
+	'''
+
 	def getListOfFqNames(List<Config> builds) {
 		var s = ""
 		var first = true

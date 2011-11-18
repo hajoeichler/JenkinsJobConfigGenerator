@@ -200,7 +200,7 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream)+ // Warnings | Claim | Cobertura | Rcov | HTMLReport )+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher)+ // Warnings | Claim | Cobertura | Rcov | HTMLReport )+
 	")";
 
 Artifacts:
@@ -208,6 +208,10 @@ Artifacts:
 
 TestResult:
 	"testresults" testresults=STRING (longIO?="longIO")?;
+
+	// TODO: support multiple
+HTMLPublisher:
+	"htmlpublisher" name=STRING "dir" dir=STRING "files" files=STRING (keepPast?='keepPast')?;
 
 ExtMail:
 	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("

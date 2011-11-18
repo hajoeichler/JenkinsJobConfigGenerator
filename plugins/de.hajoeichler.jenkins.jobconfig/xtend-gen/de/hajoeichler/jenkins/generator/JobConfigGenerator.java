@@ -13,6 +13,7 @@ import de.hajoeichler.jenkins.jobConfig.ExtMail;
 import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger;
 import de.hajoeichler.jenkins.jobConfig.GitCommitParam;
 import de.hajoeichler.jenkins.jobConfig.Group;
+import de.hajoeichler.jenkins.jobConfig.HTMLPublisher;
 import de.hajoeichler.jenkins.jobConfig.Lock;
 import de.hajoeichler.jenkins.jobConfig.LockDecl;
 import de.hajoeichler.jenkins.jobConfig.MailTrigger;
@@ -1722,6 +1723,54 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _publisher(final HTMLPublisher h) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<htmlpublisher.HtmlPublisher>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<reportTargets>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<htmlpublisher.HtmlPublisherTarget>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<reportName>");
+    String _name = h.getName();
+    _builder.append(_name, "      ");
+    _builder.append("</reportName>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("      ");
+    _builder.append("<reportDir>");
+    String _dir = h.getDir();
+    _builder.append(_dir, "      ");
+    _builder.append("</reportDir>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("      ");
+    _builder.append("<reportFiles>");
+    String _files = h.getFiles();
+    _builder.append(_files, "      ");
+    _builder.append("</reportFiles>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("      ");
+    _builder.append("<keepAll>");
+    boolean _isKeepPast = h.isKeepPast();
+    _builder.append(_isKeepPast, "      ");
+    _builder.append("</keepAll>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("      ");
+    _builder.append("<wrapperName>htmlpublisher-wrapper.html</wrapperName>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</htmlpublisher.HtmlPublisherTarget>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</reportTargets>");
+    _builder.newLine();
+    _builder.append("</htmlpublisher.HtmlPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public String getListOfFqNames(final List<Config> builds) {
     {
       String s = "";
@@ -1953,6 +2002,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((DownStream)a);
     } else if ((a instanceof ExtMail)) {
       return _publisher((ExtMail)a);
+    } else if ((a instanceof HTMLPublisher)) {
+      return _publisher((HTMLPublisher)a);
     } else if ((a instanceof TestResult)) {
       return _publisher((TestResult)a);
     } else {
