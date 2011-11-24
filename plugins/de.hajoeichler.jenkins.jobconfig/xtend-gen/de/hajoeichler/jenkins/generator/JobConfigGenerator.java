@@ -40,6 +40,8 @@ import de.hajoeichler.jenkins.jobConfig.TimerTrigger;
 import de.hajoeichler.jenkins.jobConfig.TriggerBuilderSection;
 import de.hajoeichler.jenkins.jobConfig.TriggerSection;
 import de.hajoeichler.jenkins.jobConfig.TriggeredBuild;
+import de.hajoeichler.jenkins.jobConfig.Warnings;
+import de.hajoeichler.jenkins.jobConfig.WarningsDecl;
 import de.hajoeichler.jenkins.jobConfig.WrapperSection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1771,6 +1773,111 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _publisher(final Warnings w) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.warnings.WarningsPublisher>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<healthy></healthy>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<unHealthy></unHealthy>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<thresholdLimit>low</thresholdLimit>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<pluginName>[WARNINGS] </pluginName>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<defaultEncoding></defaultEncoding>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<canRunOnFailed>false</canRunOnFailed>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<useDeltaValues>false</useDeltaValues>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<thresholds>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableTotalAll>");
+    int _unstableTotalAll = w.getUnstableTotalAll();
+    _builder.append(_unstableTotalAll, "    ");
+    _builder.append("</unstableTotalAll>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("<unstableTotalHigh></unstableTotalHigh>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableTotalNormal></unstableTotalNormal>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableTotalLow></unstableTotalLow>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableNewAll></unstableNewAll>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableNewHigh></unstableNewHigh>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableNewNormal></unstableNewNormal>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<unstableNewLow></unstableNewLow>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedTotalAll></failedTotalAll>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedTotalHigh></failedTotalHigh>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedTotalNormal></failedTotalNormal>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedTotalLow></failedTotalLow>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedNewAll></failedNewAll>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedNewHigh></failedNewHigh>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedNewNormal></failedNewNormal>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<failedNewLow></failedNewLow>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</thresholds>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<shouldDetectModules>false</shouldDetectModules>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<parserConfigurations/>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<consoleLogParsers>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<string>");
+    WarningsDecl _parser = w.getParser();
+    _builder.append(_parser, "    ");
+    _builder.append("</string>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("</consoleLogParsers>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.warnings.WarningsPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public String getListOfFqNames(final List<Config> builds) {
     {
       String s = "";
@@ -2006,6 +2113,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((HTMLPublisher)a);
     } else if ((a instanceof TestResult)) {
       return _publisher((TestResult)a);
+    } else if ((a instanceof Warnings)) {
+      return _publisher((Warnings)a);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         java.util.Arrays.<Object>asList(a).toString());

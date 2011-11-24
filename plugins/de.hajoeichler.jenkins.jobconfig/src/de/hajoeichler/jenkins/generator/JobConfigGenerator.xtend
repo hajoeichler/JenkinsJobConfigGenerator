@@ -663,6 +663,41 @@ class JobConfigGenerator implements IGenerator {
 		</htmlpublisher.HtmlPublisher>
 	'''
 
+	def dispatch publisher (Warnings w) '''
+		<hudson.plugins.warnings.WarningsPublisher>
+		  <healthy></healthy>
+		  <unHealthy></unHealthy>
+		  <thresholdLimit>low</thresholdLimit>
+		  <pluginName>[WARNINGS] </pluginName>
+		  <defaultEncoding></defaultEncoding>
+		  <canRunOnFailed>false</canRunOnFailed>
+		  <useDeltaValues>false</useDeltaValues>
+		  <thresholds>
+		    <unstableTotalAll>«w.unstableTotalAll»</unstableTotalAll>
+		    <unstableTotalHigh></unstableTotalHigh>
+		    <unstableTotalNormal></unstableTotalNormal>
+		    <unstableTotalLow></unstableTotalLow>
+		    <unstableNewAll></unstableNewAll>
+		    <unstableNewHigh></unstableNewHigh>
+		    <unstableNewNormal></unstableNewNormal>
+		    <unstableNewLow></unstableNewLow>
+		    <failedTotalAll></failedTotalAll>
+		    <failedTotalHigh></failedTotalHigh>
+		    <failedTotalNormal></failedTotalNormal>
+		    <failedTotalLow></failedTotalLow>
+		    <failedNewAll></failedNewAll>
+		    <failedNewHigh></failedNewHigh>
+		    <failedNewNormal></failedNewNormal>
+		    <failedNewLow></failedNewLow>
+		  </thresholds>
+		  <shouldDetectModules>false</shouldDetectModules>
+		  <parserConfigurations/>
+		  <consoleLogParsers>
+		    <string>«w.parser»</string>
+		  </consoleLogParsers>
+		</hudson.plugins.warnings.WarningsPublisher>
+	'''
+
 	def getListOfFqNames(List<Config> builds) {
 		var s = ""
 		var first = true
