@@ -19,7 +19,7 @@ terminal ID:
 
 DeclSpecs:
 	"declarations" "("
-	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl)+ // Label | WarningDecl)+
+	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl | WarningsDecl)+ // Label | )+
 	")";
 
 AntDecl:
@@ -33,6 +33,9 @@ LockDecl:
 
 MSBuildDecl:
 	"msBuild" name=ID;
+
+WarningsDecl:
+	"warnings" name=ID;
 
 JenkinsUrl:
 	"url" url=ID;
@@ -200,7 +203,7 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher)+ // Warnings | Claim | Cobertura | Rcov | HTMLReport )+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings)+ // Claim | Cobertura | Rcov | HTMLReport )+
 	")";
 
 Artifacts:
@@ -212,6 +215,10 @@ TestResult:
 	// TODO: support multiple
 HTMLPublisher:
 	"htmlpublisher" name=STRING "dir" dir=STRING "files" files=STRING (keepPast?='keepPast')?;
+
+Warnings:
+	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)?
+;
 
 ExtMail:
 	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("
