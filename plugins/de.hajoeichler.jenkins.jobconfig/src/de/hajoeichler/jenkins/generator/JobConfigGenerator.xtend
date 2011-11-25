@@ -693,7 +693,7 @@ class JobConfigGenerator implements IGenerator {
 		  <shouldDetectModules>false</shouldDetectModules>
 		  <parserConfigurations/>
 		  <consoleLogParsers>
-		    <string>«w.parser»</string>
+		    <string>«w.parser.name»</string>
 		  </consoleLogParsers>
 		</hudson.plugins.warnings.WarningsPublisher>
 	'''

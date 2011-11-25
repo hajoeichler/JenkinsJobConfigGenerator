@@ -1867,7 +1867,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("    ");
     _builder.append("<string>");
     WarningsDecl _parser = w.getParser();
-    _builder.append(_parser, "    ");
+    String _name = _parser.getName();
+    _builder.append(_name, "    ");
     _builder.append("</string>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
