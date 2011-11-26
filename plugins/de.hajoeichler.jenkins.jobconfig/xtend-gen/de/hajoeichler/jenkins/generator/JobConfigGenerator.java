@@ -55,6 +55,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.xbase.lib.BooleanExtensions;
+import org.eclipse.xtext.xbase.lib.ComparableExtensions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
@@ -1801,12 +1802,21 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<thresholds>");
     _builder.newLine();
-    _builder.append("    ");
-    _builder.append("<unstableTotalAll>");
-    int _unstableTotalAll = w.getUnstableTotalAll();
-    _builder.append(_unstableTotalAll, "    ");
-    _builder.append("</unstableTotalAll>");
-    _builder.newLineIfNotEmpty();
+    {
+      int _unstableTotalAll = w.getUnstableTotalAll();
+      boolean _operator_greaterThan = ComparableExtensions.<Integer>operator_greaterThan(((Integer)_unstableTotalAll), ((Integer)0));
+      if (_operator_greaterThan) {
+        _builder.append("    ");
+        _builder.append("<unstableTotalAll>");
+        int _unstableTotalAll_1 = w.getUnstableTotalAll();
+        _builder.append(_unstableTotalAll_1, "    ");
+        _builder.append("</unstableTotalAll>");
+        _builder.newLineIfNotEmpty();} else {
+        _builder.append("    ");
+        _builder.append("<unstableTotalAll></unstableTotalAll>");
+        _builder.newLine();
+      }
+    }
     _builder.append("    ");
     _builder.append("<unstableTotalHigh></unstableTotalHigh>");
     _builder.newLine();

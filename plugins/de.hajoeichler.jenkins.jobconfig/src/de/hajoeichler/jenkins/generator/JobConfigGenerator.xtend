@@ -673,7 +673,11 @@ class JobConfigGenerator implements IGenerator {
 		  <canRunOnFailed>false</canRunOnFailed>
 		  <useDeltaValues>false</useDeltaValues>
 		  <thresholds>
+		    «IF w.unstableTotalAll > 0»
 		    <unstableTotalAll>«w.unstableTotalAll»</unstableTotalAll>
+		    «ELSE»
+		    <unstableTotalAll></unstableTotalAll>
+		    «ENDIF»
 		    <unstableTotalHigh></unstableTotalHigh>
 		    <unstableTotalNormal></unstableTotalNormal>
 		    <unstableTotalLow></unstableTotalLow>
