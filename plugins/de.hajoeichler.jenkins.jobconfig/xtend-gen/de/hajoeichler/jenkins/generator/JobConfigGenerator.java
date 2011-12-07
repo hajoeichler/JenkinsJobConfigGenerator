@@ -1522,7 +1522,7 @@ public class JobConfigGenerator implements IGenerator {
       boolean _operator_equals_1 = ObjectExtensions.operator_equals(_subject, null);
       if (_operator_equals_1) {
         _builder.append("  ");
-        _builder.append("<defaultSubject>${DEFAULT_SUBJECT}</defaultSubject>");
+        _builder.append("<defaultSubject>$DEFAULT_SUBJECT</defaultSubject>");
         _builder.newLine();} else {
         _builder.append("  ");
         _builder.append("<defaultSubject>");
@@ -1537,7 +1537,7 @@ public class JobConfigGenerator implements IGenerator {
       boolean _operator_equals_2 = ObjectExtensions.operator_equals(_content, null);
       if (_operator_equals_2) {
         _builder.append("  ");
-        _builder.append("<defaultContent>${DEFAULT_CONTENT}</defaultContent>");
+        _builder.append("<defaultContent>$DEFAULT_CONTENT</defaultContent>");
         _builder.newLine();} else {
         _builder.append("  ");
         _builder.append("<defaultContent>");
@@ -1571,7 +1571,7 @@ public class JobConfigGenerator implements IGenerator {
       boolean _operator_equals = ObjectExtensions.operator_equals(_to, null);
       if (_operator_equals) {
         _builder.append("    ");
-        _builder.append("<recipientList>$PROJECT_DEFAULT_RECIPIENTS</recipientList>");
+        _builder.append("<recipientList></recipientList>");
         _builder.newLine();} else {
         _builder.append("    ");
         _builder.append("<recipientList>");

@@ -578,12 +578,12 @@ class JobConfigGenerator implements IGenerator {
 		  <contentType>«em.type»</contentType>
 		  «ENDIF»
 		  «IF em.subject == null»
-		  <defaultSubject>${DEFAULT_SUBJECT}</defaultSubject>
+		  <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
 		  «ELSE»
 		  <defaultSubject>«em.subject»</defaultSubject>
 		  «ENDIF»
 		  «IF em.content == null»
-		  <defaultContent>${DEFAULT_CONTENT}</defaultContent>
+		  <defaultContent>$DEFAULT_CONTENT</defaultContent>
 		  «ELSE»
 		  <defaultContent>«em.content»</defaultContent>
 		  «ENDIF»
@@ -595,7 +595,7 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
 		  <email>
 		    «IF mt.to == null»
-		    <recipientList>$PROJECT_DEFAULT_RECIPIENTS</recipientList>
+		    <recipientList></recipientList>
 		    «ELSE»
 		    <recipientList>«mt.to»</recipientList>
 		    «ENDIF»
