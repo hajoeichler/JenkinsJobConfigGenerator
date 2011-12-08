@@ -1,10 +1,12 @@
 package de.hajoeichler.jenkins.generator;
 
 import de.hajoeichler.jenkins.jobConfig.Artifacts;
+import de.hajoeichler.jenkins.jobConfig.AxisDecl;
 import de.hajoeichler.jenkins.jobConfig.Batch;
 import de.hajoeichler.jenkins.jobConfig.BooleanParam;
 import de.hajoeichler.jenkins.jobConfig.BuildSection;
 import de.hajoeichler.jenkins.jobConfig.ChoiceParam;
+import de.hajoeichler.jenkins.jobConfig.Cobertura;
 import de.hajoeichler.jenkins.jobConfig.Config;
 import de.hajoeichler.jenkins.jobConfig.CurrentTriggerParams;
 import de.hajoeichler.jenkins.jobConfig.DownStream;
@@ -17,6 +19,8 @@ import de.hajoeichler.jenkins.jobConfig.HTMLPublisher;
 import de.hajoeichler.jenkins.jobConfig.Lock;
 import de.hajoeichler.jenkins.jobConfig.LockDecl;
 import de.hajoeichler.jenkins.jobConfig.MailTrigger;
+import de.hajoeichler.jenkins.jobConfig.Matrix;
+import de.hajoeichler.jenkins.jobConfig.MatrixDecl;
 import de.hajoeichler.jenkins.jobConfig.Maven;
 import de.hajoeichler.jenkins.jobConfig.MavenDecl;
 import de.hajoeichler.jenkins.jobConfig.OldBuildHandling;
@@ -179,6 +183,12 @@ public class JobConfigGenerator implements IGenerator {
       _xblockexpression = (_xifexpression);
     }
     return _xblockexpression;
+  }
+  
+  public boolean isMatrixJob(final Config c) {
+    Matrix _matrix = c.getMatrix();
+    boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_matrix, null);
+    return _operator_notEquals;
   }
   
   public String getGitUrl(final Config c) {
@@ -397,8 +407,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
     _builder.newLine();
     {
-      boolean _isIsMatixJob = c.isIsMatixJob();
-      if (_isIsMatixJob) {
+      boolean _isMatrixJob = this.isMatrixJob(c);
+      if (_isMatrixJob) {
         _builder.append("<matrix-project>");
         _builder.newLine();} else {
         _builder.append("<project>");
@@ -482,6 +492,15 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_isConcurrentBuild, "  ");
     _builder.append("</concurrentBuild>");
     _builder.newLineIfNotEmpty();
+    {
+      boolean _isMatrixJob_1 = this.isMatrixJob(c);
+      if (_isMatrixJob_1) {
+        _builder.append("  ");
+        StringConcatenation _matrix = this.matrix(c);
+        _builder.append(_matrix, "  ");
+        _builder.newLineIfNotEmpty();
+      }
+    }
     _builder.append("  ");
     StringConcatenation _builders = this.builders(c);
     _builder.append(_builders, "  ");
@@ -495,8 +514,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_wrappers, "  ");
     _builder.newLineIfNotEmpty();
     {
-      boolean _isIsMatixJob_1 = c.isIsMatixJob();
-      if (_isIsMatixJob_1) {
+      boolean _isMatrixJob_2 = this.isMatrixJob(c);
+      if (_isMatrixJob_2) {
         _builder.append("</matrix-project>");
         _builder.newLine();} else {
         _builder.append("</project>");
@@ -1114,6 +1133,50 @@ public class JobConfigGenerator implements IGenerator {
     _builder.newLine();
     _builder.append("</hudson.plugins.release.ReleaseWrapper>");
     _builder.newLine();
+    return _builder;
+  }
+  
+  public StringConcatenation matrix(final Config c) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      Matrix _matrix = c.getMatrix();
+      MatrixDecl _matrix_1 = _matrix.getMatrix();
+      EList<AxisDecl> _axes = _matrix_1.getAxes();
+      for(final AxisDecl a : _axes) {
+        _builder.append("<axes>");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("<hudson.matrix.LabelAxis>");
+        _builder.newLine();
+        _builder.append("    ");
+        _builder.append("<name>");
+        String _label = a.getLabel();
+        _builder.append(_label, "    ");
+        _builder.append("</name>");
+        _builder.newLineIfNotEmpty();
+        _builder.append("    ");
+        _builder.append("<values>");
+        _builder.newLine();
+        {
+          EList<String> _values = a.getValues();
+          for(final String v : _values) {
+            _builder.append("      ");
+            _builder.append("<string>");
+            _builder.append(v, "      ");
+            _builder.append("</string>");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        _builder.append("    ");
+        _builder.append("</values>");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("</hudson.matrix.LabelAxis>");
+        _builder.newLine();
+        _builder.append("</axes>");
+        _builder.newLine();
+      }
+    }
     return _builder;
   }
   
@@ -1889,6 +1952,102 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _publisher(final Cobertura c) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.cobertura.CoberturaPublisher>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<coberturaReportFile>");
+    String _xmlreport = c.getXmlreport();
+    _builder.append(_xmlreport, "  ");
+    _builder.append("</coberturaReportFile>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<onlyStable>");
+    boolean _isOnlyStable = c.isOnlyStable();
+    _builder.append(_isOnlyStable, "  ");
+    _builder.append("</onlyStable>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<healthyTarget>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<targets class=\"enum-map\" enum-type=\"hudson.plugins.cobertura.targets.CoverageMetric\">");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<entry>");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("<hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("<int>80</int>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("</entry>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</targets>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</healthyTarget>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<unhealthyTarget>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<targets class=\"enum-map\" enum-type=\"hudson.plugins.cobertura.targets.CoverageMetric\">");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<entry>");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("<hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("<int>0</int>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("</entry>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</targets>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</unhealthyTarget>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<failingTarget>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<targets class=\"enum-map\" enum-type=\"hudson.plugins.cobertura.targets.CoverageMetric\">");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<entry>");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("<hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("<int>0</int>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("</entry>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</targets>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</failingTarget>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<sourceEncoding>UTF_8</sourceEncoding>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.cobertura.CoberturaPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public String getListOfFqNames(final List<Config> builds) {
     {
       String s = "";
@@ -2116,6 +2275,8 @@ public class JobConfigGenerator implements IGenerator {
   public StringConcatenation publisher(final EObject a) {
     if ((a instanceof Artifacts)) {
       return _publisher((Artifacts)a);
+    } else if ((a instanceof Cobertura)) {
+      return _publisher((Cobertura)a);
     } else if ((a instanceof DownStream)) {
       return _publisher((DownStream)a);
     } else if ((a instanceof ExtMail)) {

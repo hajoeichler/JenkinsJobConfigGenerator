@@ -41,7 +41,7 @@ class JobConfigGenerator implements IGenerator {
 		r = r.replaceAll(">", "&gt;")
 		r = r.replaceAll("<", "&lt;")
 	}
-	
+
 	def isNotEmpty(String s) {
 		s != null && !s.empty
 	}
@@ -73,6 +73,10 @@ class JobConfigGenerator implements IGenerator {
 		if (any.eContainer != null) {
 			return getMyConfig(any.eContainer)
 		}
+	}
+
+	def isMatrixJob(Config c) {
+		return c.matrix != null
 	}
 
 	def String getGitUrl(Config c) {
@@ -176,7 +180,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def content(Config c) '''
 		<?xml version='1.0' encoding='UTF-8'?>
-		«IF c.isMatixJob»
+		«IF c.isMatrixJob»
 		<matrix-project>
 		«ELSE»
 		<project>
@@ -202,10 +206,13 @@ class JobConfigGenerator implements IGenerator {
 		  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
 		  «triggers(c)»
 		  <concurrentBuild>«c.concurrentBuild»</concurrentBuild>
+		  «IF c.isMatrixJob»
+		  «matrix(c)»
+		  «ENDIF»
 		  «builders(c)»
 		  «publishers(c)»
 		  «wrappers(c)»
-		«IF c.isMatixJob»
+		«IF c.isMatrixJob»
 		</matrix-project>
 		«ELSE»
 		</project>
@@ -427,6 +434,21 @@ class JobConfigGenerator implements IGenerator {
 	    «ENDIF»
 	  </postFailedBuildSteps>
 	</hudson.plugins.release.ReleaseWrapper>
+	'''
+
+	def matrix(Config c) '''
+		«FOR a:c.matrix.matrix.axes»
+		<axes>
+		  <hudson.matrix.LabelAxis>
+		    <name>«a.label»</name>
+		    <values>
+		      «FOR v:a.values»
+		      <string>«v»</string>
+		      «ENDFOR»
+		    </values>
+		  </hudson.matrix.LabelAxis>
+		</axes>
+		«ENDFOR»
 	'''
 
 	def builders(Config c) '''
@@ -700,6 +722,38 @@ class JobConfigGenerator implements IGenerator {
 		    <string>«w.parser.name»</string>
 		  </consoleLogParsers>
 		</hudson.plugins.warnings.WarningsPublisher>
+	'''
+
+	def dispatch publisher (Cobertura c) '''
+		<hudson.plugins.cobertura.CoberturaPublisher>
+		  <coberturaReportFile>«c.xmlreport»</coberturaReportFile>
+		  <onlyStable>«c.onlyStable»</onlyStable>
+		  <healthyTarget>
+		    <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
+		      <entry>
+		        <hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>
+		        <int>80</int>
+		      </entry>
+		    </targets>
+		  </healthyTarget>
+		  <unhealthyTarget>
+		    <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
+		      <entry>
+		        <hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>
+		        <int>0</int>
+		      </entry>
+		    </targets>
+		  </unhealthyTarget>
+		  <failingTarget>
+		    <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
+		      <entry>
+		        <hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>
+		        <int>0</int>
+		      </entry>
+		    </targets>
+		  </failingTarget>
+		  <sourceEncoding>UTF_8</sourceEncoding>
+		</hudson.plugins.cobertura.CoberturaPublisher>
 	'''
 
 	def getListOfFqNames(List<Config> builds) {

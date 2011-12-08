@@ -19,7 +19,7 @@ terminal ID:
 
 DeclSpecs:
 	"declarations" "("
-	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl | WarningsDecl)+ // Label | )+
+	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl | WarningsDecl | MatrixDecl)+ // Label | )+
 	")";
 
 AntDecl:
@@ -37,8 +37,15 @@ MSBuildDecl:
 WarningsDecl:
 	"warnings" name=ID;
 
-JenkinsUrl:
-	"url" url=ID;
+MatrixDecl:
+	"matrix" name=ID "("
+	(runSequentially?="runSequentially")?
+	axes+=AxisDecl+
+	")";
+
+AxisDecl:
+	"axis" ("label" label=STRING
+	"values" values+=STRING+);
 
 Group:
 	"group" name=ID "("
@@ -51,7 +58,7 @@ Config:
 	(oldBuildHandling=OldBuildHandling)?
 	(executeConcurrent?="executeConcurrent")?
 	("description" description=STRING)?
-	(isMatixJob?="isMatrixJob")?
+	(matrix=Matrix)?
 	("restrictRunning" restrictTo=STRING)?
 	('gitUrl' gitUrl=STRING)? // 3rdParty
 	(concurrentBuild?="concurrentBuild")?
@@ -62,6 +69,9 @@ Config:
 	(buildSection=BuildSection)?
 	(publisherSection=PublisherSection)?
 	")";
+
+Matrix:
+	"matrix" matrix=[MatrixDecl];
 
 OldBuildHandling:
 	"oldBuilds" "("
@@ -203,7 +213,7 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings)+ // Claim | Cobertura | Rcov | HTMLReport )+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura)+ // Claim | Rcov)+
 	")";
 
 Artifacts:
@@ -217,8 +227,10 @@ HTMLPublisher:
 	"htmlpublisher" name=STRING "dir" dir=STRING "files" files=STRING (keepPast?='keepPast')?;
 
 Warnings:
-	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)?
-;
+	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)?;
+
+Cobertura:
+	"cobertura" xmlreport=STRING (onlyStable?="onlyStable")?;
 
 ExtMail:
 	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("
