@@ -165,6 +165,7 @@ Maven:
 
 Ant:
 	"ant" version=[AntDecl] "("
+	("buildFile" buildFile=STRING)?
 	("targets" targets=STRING)?
 	")";
 
@@ -213,7 +214,7 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura)+ // Claim | Rcov)+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov)+
 	")";
 
 Artifacts:
@@ -231,6 +232,13 @@ Warnings:
 
 Cobertura:
 	"cobertura" xmlreport=STRING (onlyStable?="onlyStable")?;
+
+Rcov:
+	"rcov" reportDir=STRING
+;
+Claim:
+	(canClaim?="canClaim")
+;
 
 ExtMail:
 	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("

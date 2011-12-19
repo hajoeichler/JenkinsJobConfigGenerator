@@ -486,6 +486,14 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.tasks.BatchFile>
 	'''
 
+	def dispatch build (Ant a) '''
+		<hudson.tasks.Ant>
+		  <targets></targets>
+		  <antName>«a.version.name»</antName>
+		  <buildFile>«a.buildFile»</buildFile>
+		</hudson.tasks.Ant>
+	'''
+
 	def dispatch build (SystemGroovy sg) '''
 		<hudson.plugins.groovy.SystemGroovy>
 		  <scriptSource class="hudson.plugins.groovy.StringScriptSource">

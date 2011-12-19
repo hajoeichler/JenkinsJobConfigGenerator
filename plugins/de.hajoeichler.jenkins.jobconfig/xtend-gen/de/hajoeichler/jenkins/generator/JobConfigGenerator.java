@@ -1,5 +1,7 @@
 package de.hajoeichler.jenkins.generator;
 
+import de.hajoeichler.jenkins.jobConfig.Ant;
+import de.hajoeichler.jenkins.jobConfig.AntDecl;
 import de.hajoeichler.jenkins.jobConfig.Artifacts;
 import de.hajoeichler.jenkins.jobConfig.AxisDecl;
 import de.hajoeichler.jenkins.jobConfig.Batch;
@@ -1286,6 +1288,31 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _build(final Ant a) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.tasks.Ant>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<targets></targets>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<antName>");
+    AntDecl _version = a.getVersion();
+    String _name = _version.getName();
+    _builder.append(_name, "  ");
+    _builder.append("</antName>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<buildFile>");
+    String _buildFile = a.getBuildFile();
+    _builder.append(_buildFile, "  ");
+    _builder.append("</buildFile>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("</hudson.tasks.Ant>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected StringConcatenation _build(final SystemGroovy sg) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.groovy.SystemGroovy>");
@@ -2255,20 +2282,22 @@ public class JobConfigGenerator implements IGenerator {
     }
   }
   
-  public StringConcatenation build(final EObject b) {
-    if ((b instanceof Batch)) {
-      return _build((Batch)b);
-    } else if ((b instanceof Maven)) {
-      return _build((Maven)b);
-    } else if ((b instanceof Shell)) {
-      return _build((Shell)b);
-    } else if ((b instanceof SystemGroovy)) {
-      return _build((SystemGroovy)b);
-    } else if ((b instanceof TriggerBuilderSection)) {
-      return _build((TriggerBuilderSection)b);
+  public StringConcatenation build(final EObject a) {
+    if ((a instanceof Ant)) {
+      return _build((Ant)a);
+    } else if ((a instanceof Batch)) {
+      return _build((Batch)a);
+    } else if ((a instanceof Maven)) {
+      return _build((Maven)a);
+    } else if ((a instanceof Shell)) {
+      return _build((Shell)a);
+    } else if ((a instanceof SystemGroovy)) {
+      return _build((SystemGroovy)a);
+    } else if ((a instanceof TriggerBuilderSection)) {
+      return _build((TriggerBuilderSection)a);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(b).toString());
+        java.util.Arrays.<Object>asList(a).toString());
     }
   }
   
