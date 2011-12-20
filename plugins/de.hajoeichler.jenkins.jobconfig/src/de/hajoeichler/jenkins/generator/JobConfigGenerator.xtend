@@ -732,6 +732,10 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.warnings.WarningsPublisher>
 	'''
 
+	def dispatch publisher (Claim c) '''
+		<hudson.plugins.claim.ClaimPublisher/>
+	'''
+
 	def dispatch publisher (Cobertura c) '''
 		<hudson.plugins.cobertura.CoberturaPublisher>
 		  <coberturaReportFile>«c.xmlreport»</coberturaReportFile>

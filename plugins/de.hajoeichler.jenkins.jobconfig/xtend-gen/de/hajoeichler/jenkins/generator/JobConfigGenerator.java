@@ -8,6 +8,7 @@ import de.hajoeichler.jenkins.jobConfig.Batch;
 import de.hajoeichler.jenkins.jobConfig.BooleanParam;
 import de.hajoeichler.jenkins.jobConfig.BuildSection;
 import de.hajoeichler.jenkins.jobConfig.ChoiceParam;
+import de.hajoeichler.jenkins.jobConfig.Claim;
 import de.hajoeichler.jenkins.jobConfig.Cobertura;
 import de.hajoeichler.jenkins.jobConfig.Config;
 import de.hajoeichler.jenkins.jobConfig.CurrentTriggerParams;
@@ -1979,6 +1980,13 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _publisher(final Claim c) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.claim.ClaimPublisher/>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected StringConcatenation _publisher(final Cobertura c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.cobertura.CoberturaPublisher>");
@@ -2304,6 +2312,8 @@ public class JobConfigGenerator implements IGenerator {
   public StringConcatenation publisher(final EObject a) {
     if ((a instanceof Artifacts)) {
       return _publisher((Artifacts)a);
+    } else if ((a instanceof Claim)) {
+      return _publisher((Claim)a);
     } else if ((a instanceof Cobertura)) {
       return _publisher((Cobertura)a);
     } else if ((a instanceof DownStream)) {
