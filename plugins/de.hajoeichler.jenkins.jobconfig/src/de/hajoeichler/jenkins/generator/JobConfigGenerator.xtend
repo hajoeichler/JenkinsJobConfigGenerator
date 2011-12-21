@@ -393,6 +393,10 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.build__timeout.BuildTimeoutWrapper>
 	'''
 
+	def dispatch wrapper(ExclusiveExecution e) '''
+		<hudson.plugins.execution.exclusive.ExclusiveBuildWrapper/>
+	'''
+
 	def dispatch wrapper(Release r) '''
 	<hudson.plugins.release.ReleaseWrapper>
 	  <releaseVersionTemplate></releaseVersionTemplate>

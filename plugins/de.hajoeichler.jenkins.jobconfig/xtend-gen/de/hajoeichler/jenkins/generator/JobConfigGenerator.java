@@ -14,6 +14,7 @@ import de.hajoeichler.jenkins.jobConfig.Config;
 import de.hajoeichler.jenkins.jobConfig.CurrentTriggerParams;
 import de.hajoeichler.jenkins.jobConfig.DownStream;
 import de.hajoeichler.jenkins.jobConfig.DownStreamBuild;
+import de.hajoeichler.jenkins.jobConfig.ExclusiveExecution;
 import de.hajoeichler.jenkins.jobConfig.ExtMail;
 import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger;
 import de.hajoeichler.jenkins.jobConfig.GitCommitParam;
@@ -1003,6 +1004,13 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<failBuild>true</failBuild>");
     _builder.newLine();
     _builder.append("</hudson.plugins.build__timeout.BuildTimeoutWrapper>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  protected StringConcatenation _wrapper(final ExclusiveExecution e) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.execution.exclusive.ExclusiveBuildWrapper/>");
     _builder.newLine();
     return _builder;
   }
@@ -2277,16 +2285,18 @@ public class JobConfigGenerator implements IGenerator {
     }
   }
   
-  public StringConcatenation wrapper(final EObject l) {
-    if ((l instanceof Lock)) {
-      return _wrapper((Lock)l);
-    } else if ((l instanceof Release)) {
-      return _wrapper((Release)l);
-    } else if ((l instanceof Timeout)) {
-      return _wrapper((Timeout)l);
+  public StringConcatenation wrapper(final EObject e) {
+    if ((e instanceof ExclusiveExecution)) {
+      return _wrapper((ExclusiveExecution)e);
+    } else if ((e instanceof Lock)) {
+      return _wrapper((Lock)e);
+    } else if ((e instanceof Release)) {
+      return _wrapper((Release)e);
+    } else if ((e instanceof Timeout)) {
+      return _wrapper((Timeout)e);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(l).toString());
+        java.util.Arrays.<Object>asList(e).toString());
     }
   }
   

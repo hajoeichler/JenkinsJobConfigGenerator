@@ -128,7 +128,7 @@ FirstStartTrigger: // 3rdParty
 
 WrapperSection:
 	"wrappers" "("
-	wrappers+=(AnsiColor | Release | Timeout | Lock)+ // Android
+	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution )+ // Android
 	")";
 
 AnsiColor: // 3rdParty
@@ -149,6 +149,10 @@ Timeout: // 3rdParty
 
 Lock: // 3rdParty
 	"lock" lock=[LockDecl];
+
+ExclusiveExecution:
+	(exclusiveExecution?='exclusiveExecution')
+;
 
 BuildSection:
 	"builds" "("
