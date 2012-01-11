@@ -56,6 +56,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -190,7 +192,7 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public boolean isMatrixJob(final Config c) {
-    Matrix _matrix = c.getMatrix();
+    StringConcatenation _matrix = this.matrix(c);
     boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_matrix, null);
     return _operator_notEquals;
   }
@@ -1147,13 +1149,43 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  public void getMatrixes(final Config c, final Map<String,List<String>> r) {
+    EList<Matrix> _matrixes = c.getMatrixes();
+    for (final Matrix m : _matrixes) {
+      MatrixDecl _matrix = m.getMatrix();
+      EList<AxisDecl> _axes = _matrix.getAxes();
+      for (final AxisDecl a : _axes) {
+        {
+          String _label = a.getLabel();
+          boolean _containsKey = r.containsKey(_label);
+          boolean _operator_not = BooleanExtensions.operator_not(_containsKey);
+          if (_operator_not) {
+            String _label_1 = a.getLabel();
+            ArrayList<String> _arrayList = new ArrayList<String>();
+            r.put(_label_1, _arrayList);
+          }
+          String _label_2 = a.getLabel();
+          List<String> _get = r.get(_label_2);
+          final List<String> l = _get;
+          EList<String> _values = a.getValues();
+          for (final String v : _values) {
+            l.add(v);
+          }
+        }
+      }
+    }
+  }
+  
   public StringConcatenation matrix(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
+    LinkedHashMap<String,List<String>> _linkedHashMap = new LinkedHashMap<String,List<String>>();
+    final LinkedHashMap<String,List<String>> r = _linkedHashMap;
+    _builder.newLineIfNotEmpty();
+    this.getMatrixes(c, r);
+    _builder.newLineIfNotEmpty();
     {
-      Matrix _matrix = c.getMatrix();
-      MatrixDecl _matrix_1 = _matrix.getMatrix();
-      EList<AxisDecl> _axes = _matrix_1.getAxes();
-      for(final AxisDecl a : _axes) {
+      Set<Entry<String,List<String>>> _entrySet = r.entrySet();
+      for(final Entry<String,List<String>> e : _entrySet) {
         _builder.append("<axes>");
         _builder.newLine();
         _builder.append("  ");
@@ -1161,16 +1193,16 @@ public class JobConfigGenerator implements IGenerator {
         _builder.newLine();
         _builder.append("    ");
         _builder.append("<name>");
-        String _label = a.getLabel();
-        _builder.append(_label, "    ");
+        String _key = e.getKey();
+        _builder.append(_key, "    ");
         _builder.append("</name>");
         _builder.newLineIfNotEmpty();
         _builder.append("    ");
         _builder.append("<values>");
         _builder.newLine();
         {
-          EList<String> _values = a.getValues();
-          for(final String v : _values) {
+          List<String> _value = e.getValue();
+          for(final String v : _value) {
             _builder.append("      ");
             _builder.append("<string>");
             _builder.append(v, "      ");

@@ -440,13 +440,29 @@ class JobConfigGenerator implements IGenerator {
 	</hudson.plugins.release.ReleaseWrapper>
 	'''
 
+	def getMatrixes(Config c, Map<String, List<String>> r) {
+		for (m : c.matrixes) {
+			for (a : m.matrix.axes) {
+				if (!r.containsKey(a.label)) {
+					r.put(a.label, new ArrayList());
+				}
+				val l = r.get(a.label);
+				for (v : a.values) {
+					l.add(v);
+				}
+			}
+		}
+	}
+
 	def matrix(Config c) '''
-		«FOR a:c.matrix.matrix.axes»
+		«val r = new LinkedHashMap<String, List<String>>()»
+		«getMatrixes(c, r)»
+		«FOR e:r.entrySet»
 		<axes>
 		  <hudson.matrix.LabelAxis>
-		    <name>«a.label»</name>
+		    <name>«e.key»</name>
 		    <values>
-		      «FOR v:a.values»
+		      «FOR v:e.value»
 		      <string>«v»</string>
 		      «ENDFOR»
 		    </values>
