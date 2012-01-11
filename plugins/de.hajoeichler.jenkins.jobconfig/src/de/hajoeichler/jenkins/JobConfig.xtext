@@ -58,7 +58,7 @@ Config:
 	(oldBuildHandling=OldBuildHandling)?
 	(executeConcurrent?="executeConcurrent")?
 	("description" description=STRING)?
-	(matrix=Matrix)?
+	(matrixes+=Matrix)*
 	("restrictRunning" restrictTo=STRING)?
 	('gitUrl' gitUrl=STRING)? // 3rdParty
 	(concurrentBuild?="concurrentBuild")?
