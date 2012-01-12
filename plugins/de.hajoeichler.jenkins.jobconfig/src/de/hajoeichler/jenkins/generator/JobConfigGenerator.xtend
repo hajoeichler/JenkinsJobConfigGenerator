@@ -76,7 +76,7 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def isMatrixJob(Config c) {
-		return c.matrix != null
+		return !c.matrixes.empty
 	}
 
 	def String getGitUrl(Config c) {

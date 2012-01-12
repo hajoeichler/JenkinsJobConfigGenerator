@@ -192,9 +192,10 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public boolean isMatrixJob(final Config c) {
-    StringConcatenation _matrix = this.matrix(c);
-    boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_matrix, null);
-    return _operator_notEquals;
+    EList<Matrix> _matrixes = c.getMatrixes();
+    boolean _isEmpty = _matrixes.isEmpty();
+    boolean _operator_not = BooleanExtensions.operator_not(_isEmpty);
+    return _operator_not;
   }
   
   public String getGitUrl(final Config c) {
