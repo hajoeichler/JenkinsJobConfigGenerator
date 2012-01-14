@@ -397,6 +397,12 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.plugins.execution.exclusive.ExclusiveBuildWrapper/>
 	'''
 
+	def dispatch wrapper(MatrixTieParent m) '''
+		<matrixtieparent.BuildWrapperMtp>
+		  <labelName>«m.matrixParent»</labelName>
+		</matrixtieparent.BuildWrapperMtp>
+	'''
+
 	def dispatch wrapper(Release r) '''
 	<hudson.plugins.release.ReleaseWrapper>
 	  <releaseVersionTemplate></releaseVersionTemplate>

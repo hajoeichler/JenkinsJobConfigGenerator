@@ -25,6 +25,7 @@ import de.hajoeichler.jenkins.jobConfig.LockDecl;
 import de.hajoeichler.jenkins.jobConfig.MailTrigger;
 import de.hajoeichler.jenkins.jobConfig.Matrix;
 import de.hajoeichler.jenkins.jobConfig.MatrixDecl;
+import de.hajoeichler.jenkins.jobConfig.MatrixTieParent;
 import de.hajoeichler.jenkins.jobConfig.Maven;
 import de.hajoeichler.jenkins.jobConfig.MavenDecl;
 import de.hajoeichler.jenkins.jobConfig.OldBuildHandling;
@@ -1014,6 +1015,21 @@ public class JobConfigGenerator implements IGenerator {
   protected StringConcatenation _wrapper(final ExclusiveExecution e) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.execution.exclusive.ExclusiveBuildWrapper/>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  protected StringConcatenation _wrapper(final MatrixTieParent m) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<matrixtieparent.BuildWrapperMtp>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<labelName>");
+    String _matrixParent = m.getMatrixParent();
+    _builder.append(_matrixParent, "  ");
+    _builder.append("</labelName>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("</matrixtieparent.BuildWrapperMtp>");
     _builder.newLine();
     return _builder;
   }
@@ -2323,6 +2339,8 @@ public class JobConfigGenerator implements IGenerator {
       return _wrapper((ExclusiveExecution)e);
     } else if ((e instanceof Lock)) {
       return _wrapper((Lock)e);
+    } else if ((e instanceof MatrixTieParent)) {
+      return _wrapper((MatrixTieParent)e);
     } else if ((e instanceof Release)) {
       return _wrapper((Release)e);
     } else if ((e instanceof Timeout)) {

@@ -1,4 +1,4 @@
-grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals //with de.hajoeichler.jenkins.ExtMail
+grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals
 generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
 
 Model:
@@ -128,7 +128,7 @@ FirstStartTrigger: // 3rdParty
 
 WrapperSection:
 	"wrappers" "("
-	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution )+ // Android
+	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent )+ // Android, TCP Port
 	")";
 
 AnsiColor: // 3rdParty
@@ -152,6 +152,10 @@ Lock: // 3rdParty
 
 ExclusiveExecution:
 	(exclusiveExecution?='exclusiveExecution')
+;
+
+MatrixTieParent:
+	"tie matrix parent to" matrixParent=STRING
 ;
 
 BuildSection:
