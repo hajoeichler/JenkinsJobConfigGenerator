@@ -508,7 +508,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch build (Batch b) '''
 		<hudson.tasks.BatchFile>
-		  <command>«b.batchScript»</command>
+		  <command>«b.batchScript.normalize»</command>
 		</hudson.tasks.BatchFile>
 	'''
 

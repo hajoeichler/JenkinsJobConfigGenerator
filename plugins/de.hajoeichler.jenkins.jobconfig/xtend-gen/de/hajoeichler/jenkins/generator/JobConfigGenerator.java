@@ -1338,7 +1338,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<command>");
     String _batchScript = b.getBatchScript();
-    _builder.append(_batchScript, "  ");
+    String _normalize = this.normalize(_batchScript);
+    _builder.append(_normalize, "  ");
     _builder.append("</command>");
     _builder.newLineIfNotEmpty();
     _builder.append("</hudson.tasks.BatchFile>");
