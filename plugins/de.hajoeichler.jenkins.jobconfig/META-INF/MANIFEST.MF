@@ -24,6 +24,7 @@ Import-Package: org.apache.log4j,
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: de.hajoeichler.jenkins,
  de.hajoeichler.jenkins.formatting;x-friends:="de.hajoeichler.jenkins.jobconfig.tests",
+ de.hajoeichler.jenkins.generator,
  de.hajoeichler.jenkins.jobConfig,
  de.hajoeichler.jenkins.jobConfig.impl,
  de.hajoeichler.jenkins.jobConfig.util,

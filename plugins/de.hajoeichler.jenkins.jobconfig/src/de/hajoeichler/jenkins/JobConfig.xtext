@@ -105,11 +105,16 @@ ChoiceParam:
 	"Choice" choices=STRING;
 
 Scm:
-	ScmGit | ScmCVS;
+	ScmGit | ScmSVN | ScmCVS;
 
 ScmGit: // 3rdParty
 	"git" "(" "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")? ("excludedRegions"
 	excludedRegions=STRING)? ")";
+
+ScmSVN:
+	"svn" "(" "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser" browser=STRING)?
+	")"
+;
 
 ScmCVS:
 	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? ")";
@@ -222,7 +227,7 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov)+
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov)+ // FindBugs
 	")";
 
 Artifacts:

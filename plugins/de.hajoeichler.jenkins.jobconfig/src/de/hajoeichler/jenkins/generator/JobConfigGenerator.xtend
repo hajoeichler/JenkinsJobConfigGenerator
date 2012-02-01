@@ -328,6 +328,23 @@ class JobConfigGenerator implements IGenerator {
 		</scm>
 	'''
 
+	def dispatch scm(ScmSVN svn) '''
+		  <scm class="hudson.scm.SubversionSCM">
+		    <locations>
+		      <hudson.scm.SubversionSCM_-ModuleLocation>
+		        <remote>«svn.url»</remote>
+		        <local>«svn.localDir»</local>
+		      </hudson.scm.SubversionSCM_-ModuleLocation>
+		    </locations>
+		    <excludedRegions></excludedRegions>
+		    <includedRegions></includedRegions>
+		    <excludedUsers></excludedUsers>
+		    <excludedRevprop></excludedRevprop>
+		    <excludedCommitMessages></excludedCommitMessages>
+		    <workspaceUpdater class="hudson.scm.subversion.UpdateUpdater"/>
+		  </scm>
+	'''
+
 	def dispatch scm(ScmCVS cvs) '''
 		<scm class="hudson.scm.CVSSCM">
 		  <cvsroot>«cvs.root»</cvsroot>

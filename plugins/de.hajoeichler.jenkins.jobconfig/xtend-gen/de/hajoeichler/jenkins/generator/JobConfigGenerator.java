@@ -40,6 +40,7 @@ import de.hajoeichler.jenkins.jobConfig.Release;
 import de.hajoeichler.jenkins.jobConfig.Scm;
 import de.hajoeichler.jenkins.jobConfig.ScmCVS;
 import de.hajoeichler.jenkins.jobConfig.ScmGit;
+import de.hajoeichler.jenkins.jobConfig.ScmSVN;
 import de.hajoeichler.jenkins.jobConfig.Shell;
 import de.hajoeichler.jenkins.jobConfig.StringParam;
 import de.hajoeichler.jenkins.jobConfig.SystemGroovy;
@@ -836,6 +837,57 @@ public class JobConfigGenerator implements IGenerator {
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<scmName></scmName>");
+    _builder.newLine();
+    _builder.append("</scm>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  protected StringConcatenation _scm(final ScmSVN svn) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<scm class=\"hudson.scm.SubversionSCM\">");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<locations>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<hudson.scm.SubversionSCM_-ModuleLocation>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<remote>");
+    String _url = svn.getUrl();
+    _builder.append(_url, "      ");
+    _builder.append("</remote>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("      ");
+    _builder.append("<local>");
+    String _localDir = svn.getLocalDir();
+    _builder.append(_localDir, "      ");
+    _builder.append("</local>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("</hudson.scm.SubversionSCM_-ModuleLocation>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</locations>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<excludedRegions></excludedRegions>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<includedRegions></includedRegions>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<excludedUsers></excludedUsers>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<excludedRevprop></excludedRevprop>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<excludedCommitMessages></excludedCommitMessages>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<workspaceUpdater class=\"hudson.scm.subversion.UpdateUpdater\"/>");
     _builder.newLine();
     _builder.append("</scm>");
     _builder.newLine();
@@ -2316,6 +2368,8 @@ public class JobConfigGenerator implements IGenerator {
       return _scm((ScmCVS)cvs);
     } else if ((cvs instanceof ScmGit)) {
       return _scm((ScmGit)cvs);
+    } else if ((cvs instanceof ScmSVN)) {
+      return _scm((ScmSVN)cvs);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         java.util.Arrays.<Object>asList(cvs).toString());
