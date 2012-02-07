@@ -856,13 +856,15 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("      ");
     _builder.append("<remote>");
     String _url = svn.getUrl();
-    _builder.append(_url, "      ");
+    String _normalize = this.normalize(_url);
+    _builder.append(_normalize, "      ");
     _builder.append("</remote>");
     _builder.newLineIfNotEmpty();
     _builder.append("      ");
     _builder.append("<local>");
     String _localDir = svn.getLocalDir();
-    _builder.append(_localDir, "      ");
+    String _normalize_1 = this.normalize(_localDir);
+    _builder.append(_normalize_1, "      ");
     _builder.append("</local>");
     _builder.newLineIfNotEmpty();
     _builder.append("    ");
@@ -1909,7 +1911,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<artifacts>");
     String _artifacts = a.getArtifacts();
-    _builder.append(_artifacts, "  ");
+    String _normalize = this.normalize(_artifacts);
+    _builder.append(_normalize, "  ");
     _builder.append("</artifacts>");
     _builder.newLineIfNotEmpty();
     {

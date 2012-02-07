@@ -332,8 +332,8 @@ class JobConfigGenerator implements IGenerator {
 		  <scm class="hudson.scm.SubversionSCM">
 		    <locations>
 		      <hudson.scm.SubversionSCM_-ModuleLocation>
-		        <remote>«svn.url»</remote>
-		        <local>«svn.localDir»</local>
+		        <remote>«svn.url.normalize»</remote>
+		        <local>«svn.localDir.normalize»</local>
 		      </hudson.scm.SubversionSCM_-ModuleLocation>
 		    </locations>
 		    <excludedRegions></excludedRegions>
@@ -713,7 +713,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch publisher (Artifacts a) '''
 		<hudson.tasks.ArtifactArchiver>
-		  <artifacts>«a.artifacts»</artifacts>
+		  <artifacts>«a.artifacts.normalize»</artifacts>
 		  «IF false»
 		  <latestOnly>true</latestOnly>
 		  «ELSE»
