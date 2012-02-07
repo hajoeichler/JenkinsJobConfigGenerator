@@ -13,7 +13,7 @@
   <modules>
     <module>de.hajoeichler.jenkins.jobconfig.platform</module>
     <module>de.hajoeichler.jenkins.jobconfig</module>
-  <!-- <module>de.hajoeichler.jenkins.jobconfig.tests</module> -->
+    <module>de.hajoeichler.jenkins.jobconfig.tests</module>
     <module>de.hajoeichler.jenkins.jobconfig.ui</module>
   </modules>
   <build>
@@ -34,7 +34,7 @@
             <artifact>
               <groupId>de.hajoeichler</groupId>
               <artifactId>de.hajoeichler.jenkins.jobconfig.platform</artifactId>
-              <version>0.0.1-SNAPSHOT</version>
+              <version>0.0.2-SNAPSHOT</version>
               <classifier>indigo</classifier>
             </artifact>
           </target>
