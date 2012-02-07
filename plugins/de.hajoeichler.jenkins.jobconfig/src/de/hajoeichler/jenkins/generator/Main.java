@@ -66,7 +66,7 @@ public class Main {
 		// load the resources
 		ResourceSet set = resourceSetProvider.get();
 		for (File file : jobsFiles) {
-			set.getResource(URI.createURI(file.getAbsolutePath()), true);
+			set.getResource(URI.createURI("file://" + file.getAbsolutePath()), true);
 		}
 
 		for (Resource resource : set.getResources()) {
