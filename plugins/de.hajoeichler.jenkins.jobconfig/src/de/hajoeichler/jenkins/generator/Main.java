@@ -50,14 +50,19 @@ public class Main {
 	@Inject
 	private JavaIoFileSystemAccess fileAccess;
 
-	protected void runGenerator(String directory) {
+	protected void runGenerator(String configParameter) {
 		// get all the jobConfig
-		File dir = new File(directory);
-		File[] jobsFiles = dir.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".jobConfig");
-			}
-		});
+		File dir = new File(configParameter);
+		File[] jobsFiles = new File[0];
+		if (dir.isDirectory()) {
+			jobsFiles = dir.listFiles(new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					return name.endsWith(".jobConfig");
+				}
+			});
+		} else {
+			jobsFiles = new File[] { dir };
+		}
 		// load the resources
 		ResourceSet set = resourceSetProvider.get();
 		for (File file : jobsFiles) {
