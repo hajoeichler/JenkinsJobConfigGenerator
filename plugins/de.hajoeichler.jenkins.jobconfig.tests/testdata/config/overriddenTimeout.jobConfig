@@ -1,0 +1,13 @@
+group test- (
+	abstract job base (
+		wrappers (
+			timeout 1
+		)
+	)
+	job overriddenTimeout extends base (
+		wrappers (
+			timeout 2
+			failBuild
+		)
+	)
+)

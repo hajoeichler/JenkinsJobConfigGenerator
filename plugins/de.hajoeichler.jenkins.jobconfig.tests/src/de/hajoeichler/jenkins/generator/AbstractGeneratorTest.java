@@ -9,9 +9,9 @@ import junitx.framework.FileAssert;
 public class AbstractGeneratorTest {
 
 	protected void assertSingleConfig(String configFile, String jobName) {
-		Main.main(new String[] { "./testdata/config/" + configFile });
+		Main.main(new String[] { "./testdata/config/" + configFile + ".jobConfig" });
 		File configsDir = new File("./target/configs/" + jobName);
-		assertTrue("We expect a folder with the name of job.",
+		assertTrue("We expect a folder with the name of job: " + configsDir.getAbsolutePath(),
 				configsDir.isDirectory() && configsDir.exists());
 		File configXml = new File(configsDir, "config.xml");
 		assertTrue("We expect a config.xml.",
@@ -19,6 +19,6 @@ public class AbstractGeneratorTest {
 
 		FileAssert.assertEquals(
 				new File("./testdata/config/"
-						+ configFile.replace(".jobConfig", ".xml")), configXml);
+						+ configFile + ".xml"), configXml);
 	}
 }
