@@ -87,7 +87,7 @@ ParameterSection:
 	")";
 
 Parameter:
-	name=ID "("
+	name=STRING "("
 	type=ParameterType
 	("description" description=STRING)?
 	")";

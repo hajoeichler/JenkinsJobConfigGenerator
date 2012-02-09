@@ -232,7 +232,7 @@ class JobConfigGenerator implements IGenerator {
 		«val gitUrl = getGitUrl(c)»
 		«IF gitUrl != null»
 		<com.coravy.hudson.plugins.github.GithubProjectProperty>
-		  <projectUrl>«gitUrl»</projectUrl>
+		  <projectUrl>«gitUrl.normalize»</projectUrl>
 		</com.coravy.hudson.plugins.github.GithubProjectProperty>
 		«ENDIF»
 	'''
@@ -292,7 +292,7 @@ class JobConfigGenerator implements IGenerator {
 		    <hudson.plugins.git.UserRemoteConfig>
 		      <name>origin</name>
 		      <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-		      <url>«git.url»</url>
+		      <url>«git.url.normalize»</url>
 		    </hudson.plugins.git.UserRemoteConfig>
 		  </userRemoteConfigs>
 		  <branches>

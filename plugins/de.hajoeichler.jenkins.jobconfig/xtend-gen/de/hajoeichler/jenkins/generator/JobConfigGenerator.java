@@ -579,7 +579,8 @@ public class JobConfigGenerator implements IGenerator {
         _builder.newLine();
         _builder.append("  ");
         _builder.append("<projectUrl>");
-        _builder.append(gitUrl, "  ");
+        String _normalize = this.normalize(gitUrl);
+        _builder.append(_normalize, "  ");
         _builder.append("</projectUrl>");
         _builder.newLineIfNotEmpty();
         _builder.append("</com.coravy.hudson.plugins.github.GithubProjectProperty>");
@@ -739,7 +740,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("      ");
     _builder.append("<url>");
     String _url = git.getUrl();
-    _builder.append(_url, "      ");
+    String _normalize = this.normalize(_url);
+    _builder.append(_normalize, "      ");
     _builder.append("</url>");
     _builder.newLineIfNotEmpty();
     _builder.append("    ");
@@ -819,8 +821,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<excludedRegions>");
     String _excludedRegions = git.getExcludedRegions();
-    String _normalize = this.normalize(_excludedRegions);
-    _builder.append(_normalize, "  ");
+    String _normalize_1 = this.normalize(_excludedRegions);
+    _builder.append(_normalize_1, "  ");
     _builder.append("</excludedRegions>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
