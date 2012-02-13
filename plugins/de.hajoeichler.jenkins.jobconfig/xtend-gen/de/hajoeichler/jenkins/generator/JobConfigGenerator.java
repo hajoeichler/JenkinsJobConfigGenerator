@@ -36,6 +36,7 @@ import de.hajoeichler.jenkins.jobConfig.PollScmTrigger;
 import de.hajoeichler.jenkins.jobConfig.PredefinedTriggerParams;
 import de.hajoeichler.jenkins.jobConfig.PropertyFileTriggerParams;
 import de.hajoeichler.jenkins.jobConfig.PublisherSection;
+import de.hajoeichler.jenkins.jobConfig.Rcov;
 import de.hajoeichler.jenkins.jobConfig.Release;
 import de.hajoeichler.jenkins.jobConfig.Scm;
 import de.hajoeichler.jenkins.jobConfig.ScmCVS;
@@ -2198,6 +2199,63 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected CharSequence _publisher(final Rcov r) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.rubyMetrics.rcov.RcovPublisher>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<reportDir>");
+    String _reportDir = r.getReportDir();
+    _builder.append(_reportDir, "  ");
+    _builder.append("</reportDir>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<targets>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<hudson.plugins.rubyMetrics.rcov.model.MetricTarget>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<metric>TOTAL_COVERAGE</metric>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<healthy>80</healthy>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<unhealthy>0</unhealthy>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<unstable>0</unstable>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</hudson.plugins.rubyMetrics.rcov.model.MetricTarget>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<hudson.plugins.rubyMetrics.rcov.model.MetricTarget>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<metric>CODE_COVERAGE</metric>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<healthy>80</healthy>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<unhealthy>0</unhealthy>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<unstable>0</unstable>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</hudson.plugins.rubyMetrics.rcov.model.MetricTarget>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</targets>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.rubyMetrics.rcov.RcovPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public String getListOfFqNames(final List<Config> builds) {
       String s = "";
       boolean first = true;
@@ -2439,6 +2497,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((ExtMail)a);
     } else if (a instanceof HTMLPublisher) {
       return _publisher((HTMLPublisher)a);
+    } else if (a instanceof Rcov) {
+      return _publisher((Rcov)a);
     } else if (a instanceof TestResult) {
       return _publisher((TestResult)a);
     } else if (a instanceof Warnings) {

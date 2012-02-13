@@ -51,6 +51,7 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 
 import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
+import de.hajoeichler.jenkins.jobConfig.Rcov
 
 class JobConfigGenerator implements IGenerator {
 
@@ -847,6 +848,26 @@ class JobConfigGenerator implements IGenerator {
 		  </failingTarget>
 		  <sourceEncoding>UTF_8</sourceEncoding>
 		</hudson.plugins.cobertura.CoberturaPublisher>
+	'''
+
+	def dispatch publisher (Rcov r) '''
+		<hudson.plugins.rubyMetrics.rcov.RcovPublisher>
+		  <reportDir>«r.reportDir»</reportDir>
+		  <targets>
+		    <hudson.plugins.rubyMetrics.rcov.model.MetricTarget>
+		      <metric>TOTAL_COVERAGE</metric>
+		      <healthy>80</healthy>
+		      <unhealthy>0</unhealthy>
+		      <unstable>0</unstable>
+		    </hudson.plugins.rubyMetrics.rcov.model.MetricTarget>
+		    <hudson.plugins.rubyMetrics.rcov.model.MetricTarget>
+		      <metric>CODE_COVERAGE</metric>
+		      <healthy>80</healthy>
+		      <unhealthy>0</unhealthy>
+		      <unstable>0</unstable>
+		    </hudson.plugins.rubyMetrics.rcov.model.MetricTarget>
+		  </targets>
+		</hudson.plugins.rubyMetrics.rcov.RcovPublisher>
 	'''
 
 	def getListOfFqNames(List<Config> builds) {
