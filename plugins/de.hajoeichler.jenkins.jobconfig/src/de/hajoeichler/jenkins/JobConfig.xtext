@@ -1,4 +1,5 @@
 grammar de.hajoeichler.jenkins.JobConfig with org.eclipse.xtext.common.Terminals
+
 generate jobConfig "http://www.hajoeichler.de/jenkins/JobConfig"
 
 Model:
@@ -112,9 +113,7 @@ ScmGit: // 3rdParty
 	excludedRegions=STRING)? ")";
 
 ScmSVN:
-	"svn" "(" "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser" browser=STRING)?
-	")"
-;
+	"svn" "(" "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser" browser=STRING)? ")";
 
 ScmCVS:
 	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? ")";
@@ -133,7 +132,7 @@ FirstStartTrigger: // 3rdParty
 
 WrapperSection:
 	"wrappers" "("
-	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent )+ // Android, TCP Port
+	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent)+ // Android, TCP Port
 	")";
 
 AnsiColor: // 3rdParty
@@ -156,12 +155,10 @@ Lock: // 3rdParty
 	"lock" lock=[LockDecl];
 
 ExclusiveExecution:
-	(exclusiveExecution?='exclusiveExecution')
-;
+	(exclusiveExecution?='exclusiveExecution');
 
 MatrixTieParent:
-	"tie matrix parent to" matrixParent=STRING
-;
+	"tie matrix parent to" matrixParent=STRING;
 
 BuildSection:
 	"builds" "("
@@ -247,11 +244,10 @@ Cobertura:
 	"cobertura" xmlreport=STRING (onlyStable?="onlyStable")?;
 
 Rcov:
-	"rcov" reportDir=STRING
-;
+	"rcov" reportDir=STRING;
+
 Claim:
-	(canClaim?="canClaim")
-;
+	(canClaim?="canClaim");
 
 ExtMail:
 	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("
