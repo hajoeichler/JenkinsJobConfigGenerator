@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="indigo" sequenceNumber="0">
+<target name="indigo" sequenceNumber="4">
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
-<unit id="org.eclipse.xtext.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.xpand.sdk.feature.group" version="0.0.0"/>
 <unit id="org.junit4" version="0.0.0"/>
 <repository location="http://download.eclipse.org/releases/indigo/"/>
+</location>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="1.2.1.v201112070431"/>
+<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.2.0.v201112071250"/>
+<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.2.0.v201112070431"/>
+<unit id="org.eclipse.xtext.xtend2.m2e.feature.group" version="2.2.1.v201112130541"/>
+<unit id="org.eclipse.xtext.xtend2.sdk.feature.group" version="2.2.1.v201112130541"/>
+<unit id="org.eclipse.xtext.xbase.feature.group" version="2.2.1.v201112130541"/>
+<unit id="org.eclipse.xtext.runtime.feature.group" version="2.2.1.v201112130541"/>
+<unit id="org.eclipse.xtext.sdk.feature.group" version="2.2.1.v201112130541"/>
+<repository location="http://download.itemis.com/updates/releases"/>
 </location>
 </locations>
 </target>

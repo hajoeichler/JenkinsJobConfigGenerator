@@ -54,6 +54,7 @@ import de.hajoeichler.jenkins.jobConfig.Warnings;
 import de.hajoeichler.jenkins.jobConfig.WarningsDecl;
 import de.hajoeichler.jenkins.jobConfig.WrapperSection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -64,19 +65,18 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.xbase.lib.BooleanExtensions;
-import org.eclipse.xtext.xbase.lib.ComparableExtensions;
+import org.eclipse.xtext.xbase.lib.IntegerExtensions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
 import org.eclipse.xtext.xtend2.lib.ResourceExtensions;
-import org.eclipse.xtext.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
 public class JobConfigGenerator implements IGenerator {
-  
   private Config currentConfig;
   
   public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
@@ -89,7 +89,7 @@ public class JobConfigGenerator implements IGenerator {
         {
           this.currentConfig = config;
           String _fileName = this.fileName(config);
-          StringConcatenation _content = this.content(config);
+          CharSequence _content = this.content(config);
           fsa.generateFile(_fileName, _content);
         }
       }
@@ -161,7 +161,7 @@ public class JobConfigGenerator implements IGenerator {
   protected String _fqn(final Config c) {
     String _xifexpression = null;
     EObject _eContainer = c.eContainer();
-    if ((_eContainer instanceof de.hajoeichler.jenkins.jobConfig.Group)) {
+    if ((_eContainer instanceof Group)) {
       EObject _eContainer_1 = c.eContainer();
       String _fqn = this.fqn(((Group) _eContainer_1));
       String _name = c.getName();
@@ -177,7 +177,7 @@ public class JobConfigGenerator implements IGenerator {
   public Config getMyConfig(final EObject any) {
     Config _xblockexpression = null;
     {
-      if ((any instanceof de.hajoeichler.jenkins.jobConfig.Config)) {
+      if ((any instanceof Config)) {
         return ((Config) any);
       }
       Config _xifexpression = null;
@@ -264,7 +264,6 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public Map<String,Parameter> getAllParameters(final Config c, final Map<String,Parameter> m) {
-    {
       ParameterSection _paramSection = c.getParamSection();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_paramSection, null);
       if (_operator_notEquals) {
@@ -287,7 +286,6 @@ public class JobConfigGenerator implements IGenerator {
         this.getAllParameters(_parentConfig_1, m);
       }
       return m;
-    }
   }
   
   public Scm getAnyScm(final Config c) {
@@ -312,7 +310,6 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public Map<EClass,EObject> getAllTriggers(final Config c, final Map<EClass,EObject> m) {
-    {
       TriggerSection _trigger = c.getTrigger();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_trigger, null);
       if (_operator_notEquals) {
@@ -335,11 +332,9 @@ public class JobConfigGenerator implements IGenerator {
         this.getAllTriggers(_parentConfig_1, m);
       }
       return m;
-    }
   }
   
   public Map<EClass,EObject> getAllWrappers(final Config c, final Map<EClass,EObject> m) {
-    {
       WrapperSection _wrapper = c.getWrapper();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_wrapper, null);
       if (_operator_notEquals) {
@@ -362,11 +357,9 @@ public class JobConfigGenerator implements IGenerator {
         this.getAllWrappers(_parentConfig_1, m);
       }
       return m;
-    }
   }
   
   public List<EObject> getAllBuilders(final Config c, final List<EObject> l) {
-    {
       Config _parentConfig = c.getParentConfig();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_parentConfig, null);
       if (_operator_notEquals) {
@@ -381,11 +374,9 @@ public class JobConfigGenerator implements IGenerator {
         l.addAll(_builds);
       }
       return l;
-    }
   }
   
   public Map<EClass,EObject> getAllPublishers(final Config c, final Map<EClass,EObject> m) {
-    {
       PublisherSection _publisherSection = c.getPublisherSection();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_publisherSection, null);
       if (_operator_notEquals) {
@@ -408,10 +399,9 @@ public class JobConfigGenerator implements IGenerator {
         this.getAllPublishers(_parentConfig_1, m);
       }
       return m;
-    }
   }
   
-  public StringConcatenation content(final Config c) {
+  public CharSequence content(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<?xml version=\'1.0\' encoding=\'UTF-8\'?>");
     _builder.newLine();
@@ -419,7 +409,8 @@ public class JobConfigGenerator implements IGenerator {
       boolean _isMatrixJob = this.isMatrixJob(c);
       if (_isMatrixJob) {
         _builder.append("<matrix-project>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("<project>");
         _builder.newLine();
       }
@@ -439,7 +430,7 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_notEquals) {
         _builder.append("  ");
         OldBuildHandling _anyOldBuildHandling_1 = this.getAnyOldBuildHandling(c);
-        StringConcatenation _logRotator = this.logRotator(_anyOldBuildHandling_1);
+        CharSequence _logRotator = this.logRotator(_anyOldBuildHandling_1);
         _builder.append(_logRotator, "  ");
         _builder.newLineIfNotEmpty();
       }
@@ -451,11 +442,11 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<properties>");
     _builder.newLine();
     _builder.append("    ");
-    StringConcatenation _gitHub = this.gitHub(c);
+    CharSequence _gitHub = this.gitHub(c);
     _builder.append(_gitHub, "    ");
     _builder.newLineIfNotEmpty();
     _builder.append("    ");
-    StringConcatenation _parameters = this.parameters(c);
+    CharSequence _parameters = this.parameters(c);
     _builder.append(_parameters, "    ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -467,16 +458,17 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_equals) {
         _builder.append("  ");
         _builder.append("<scm class=\"hudson.scm.NullSCM\"/>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("  ");
         Scm _anyScm_1 = this.getAnyScm(c);
-        StringConcatenation _scm = this.scm(_anyScm_1);
+        CharSequence _scm = this.scm(_anyScm_1);
         _builder.append(_scm, "  ");
         _builder.newLineIfNotEmpty();
       }
     }
     _builder.append("  ");
-    StringConcatenation _restrictTo = this.restrictTo(c);
+    CharSequence _restrictTo = this.restrictTo(c);
     _builder.append(_restrictTo, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -492,7 +484,7 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>");
     _builder.newLine();
     _builder.append("  ");
-    StringConcatenation _triggers = this.triggers(c);
+    CharSequence _triggers = this.triggers(c);
     _builder.append(_triggers, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -505,28 +497,29 @@ public class JobConfigGenerator implements IGenerator {
       boolean _isMatrixJob_1 = this.isMatrixJob(c);
       if (_isMatrixJob_1) {
         _builder.append("  ");
-        StringConcatenation _matrix = this.matrix(c);
+        CharSequence _matrix = this.matrix(c);
         _builder.append(_matrix, "  ");
         _builder.newLineIfNotEmpty();
       }
     }
     _builder.append("  ");
-    StringConcatenation _builders = this.builders(c);
+    CharSequence _builders = this.builders(c);
     _builder.append(_builders, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    StringConcatenation _publishers = this.publishers(c);
+    CharSequence _publishers = this.publishers(c);
     _builder.append(_publishers, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    StringConcatenation _wrappers = this.wrappers(c);
+    CharSequence _wrappers = this.wrappers(c);
     _builder.append(_wrappers, "  ");
     _builder.newLineIfNotEmpty();
     {
       boolean _isMatrixJob_2 = this.isMatrixJob(c);
       if (_isMatrixJob_2) {
         _builder.append("</matrix-project>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("</project>");
         _builder.newLine();
       }
@@ -534,7 +527,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation logRotator(final OldBuildHandling obh) {
+  public CharSequence logRotator(final OldBuildHandling obh) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<logRotator>");
     _builder.newLine();
@@ -567,7 +560,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation gitHub(final Config c) {
+  public CharSequence gitHub(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     String _gitUrl = this.getGitUrl(c);
     final String gitUrl = _gitUrl;
@@ -590,7 +583,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation restrictTo(final Config c) {
+  public CharSequence restrictTo(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     String _restrictTo = this.getRestrictTo(c);
     final String r = _restrictTo;
@@ -599,7 +592,8 @@ public class JobConfigGenerator implements IGenerator {
       boolean _operator_equals = ObjectExtensions.operator_equals(r, null);
       if (_operator_equals) {
         _builder.append("<canRoam>true</canRoam>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("<assignedNode>");
         _builder.append(r, "");
         _builder.append("</assignedNode>");
@@ -611,7 +605,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation parameters(final Config c) {
+  public CharSequence parameters(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     LinkedHashMap<String,Parameter> _linkedHashMap = new LinkedHashMap<String,Parameter>();
     final LinkedHashMap<String,Parameter> m = _linkedHashMap;
@@ -622,7 +616,7 @@ public class JobConfigGenerator implements IGenerator {
     _builder.newLineIfNotEmpty();
     {
       boolean _isEmpty = v.isEmpty();
-      boolean _operator_equals = ObjectExtensions.operator_equals(((Boolean)_isEmpty), ((Boolean)false));
+      boolean _operator_equals = BooleanExtensions.operator_equals(_isEmpty, false);
       if (_operator_equals) {
         _builder.append("<hudson.model.ParametersDefinitionProperty>");
         _builder.newLine();
@@ -633,7 +627,7 @@ public class JobConfigGenerator implements IGenerator {
           for(final Parameter p : v) {
             _builder.append("    ");
             ParameterType _type = p.getType();
-            StringConcatenation _param = this.param(p, _type);
+            CharSequence _param = this.param(p, _type);
             _builder.append(_param, "    ");
             _builder.newLineIfNotEmpty();
           }
@@ -648,7 +642,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _param(final Parameter p, final StringParam s) {
+  protected CharSequence _param(final Parameter p, final StringParam s) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.model.StringParameterDefinition>");
     _builder.newLine();
@@ -676,7 +670,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _param(final Parameter p, final BooleanParam b) {
+  protected CharSequence _param(final Parameter p, final BooleanParam b) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.model.BooleanParameterDefinition>");
     _builder.newLine();
@@ -713,12 +707,12 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _param(final Parameter p, final ChoiceParam c) {
+  protected CharSequence _param(final Parameter p, final ChoiceParam c) {
     StringConcatenation _builder = new StringConcatenation();
     return _builder;
   }
   
-  protected StringConcatenation _scm(final ScmGit git) {
+  protected CharSequence _scm(final ScmGit git) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<scm class=\"hudson.plugins.git.GitSCM\">");
     _builder.newLine();
@@ -765,7 +759,8 @@ public class JobConfigGenerator implements IGenerator {
         String _branch_1 = git.getBranch();
         _builder.append(_branch_1, "      ");
         _builder.append("</name>");
-        _builder.newLineIfNotEmpty();} else {
+        _builder.newLineIfNotEmpty();
+      } else {
         _builder.append("      ");
         _builder.append("<name>origin/master</name>");
         _builder.newLine();
@@ -794,7 +789,8 @@ public class JobConfigGenerator implements IGenerator {
       if (_isWipeOutWorkspace) {
         _builder.append("  ");
         _builder.append("<wipeOutWorkspace>true</wipeOutWorkspace>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("  ");
         _builder.append("<wipeOutWorkspace>false</wipeOutWorkspace>");
         _builder.newLine();
@@ -845,7 +841,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _scm(final ScmSVN svn) {
+  protected CharSequence _scm(final ScmSVN svn) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<scm class=\"hudson.scm.SubversionSCM\">");
     _builder.newLine();
@@ -898,7 +894,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _scm(final ScmCVS cvs) {
+  protected CharSequence _scm(final ScmCVS cvs) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<scm class=\"hudson.scm.CVSSCM\">");
     _builder.newLine();
@@ -934,7 +930,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation triggers(final Config c) {
+  public CharSequence triggers(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<triggers class=\"vector\">");
     _builder.newLine();
@@ -947,7 +943,7 @@ public class JobConfigGenerator implements IGenerator {
       Collection<EObject> _values = _allTriggers.values();
       for(final EObject t : _values) {
         _builder.append("  ");
-        StringConcatenation _trigger = this.trigger(t);
+        CharSequence _trigger = this.trigger(t);
         _builder.append(_trigger, "  ");
         _builder.newLineIfNotEmpty();
       }
@@ -957,7 +953,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _trigger(final TimerTrigger t) {
+  protected CharSequence _trigger(final TimerTrigger t) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.triggers.TimerTrigger>");
     _builder.newLine();
@@ -972,7 +968,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _trigger(final PollScmTrigger t) {
+  protected CharSequence _trigger(final PollScmTrigger t) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.triggers.SCMTrigger>");
     _builder.newLine();
@@ -987,7 +983,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _trigger(final FirstStartTrigger t) {
+  protected CharSequence _trigger(final FirstStartTrigger t) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger>");
     _builder.newLine();
@@ -999,7 +995,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation wrappers(final Config c) {
+  public CharSequence wrappers(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<buildWrappers>");
     _builder.newLine();
@@ -1012,7 +1008,7 @@ public class JobConfigGenerator implements IGenerator {
       Collection<EObject> _values = _allWrappers.values();
       for(final EObject w : _values) {
         _builder.append("  ");
-        StringConcatenation _wrapper = this.wrapper(w);
+        CharSequence _wrapper = this.wrapper(w);
         _builder.append(_wrapper, "  ");
         _builder.newLineIfNotEmpty();
       }
@@ -1022,7 +1018,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _wrapper(final Lock l) {
+  protected CharSequence _wrapper(final Lock l) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.locksandlatches.LockWrapper>");
     _builder.newLine();
@@ -1050,7 +1046,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _wrapper(final Timeout t) {
+  protected CharSequence _wrapper(final Timeout t) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.build__timeout.BuildTimeoutWrapper>");
     _builder.newLine();
@@ -1068,14 +1064,14 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _wrapper(final ExclusiveExecution e) {
+  protected CharSequence _wrapper(final ExclusiveExecution e) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.execution.exclusive.ExclusiveBuildWrapper/>");
     _builder.newLine();
     return _builder;
   }
   
-  protected StringConcatenation _wrapper(final MatrixTieParent m) {
+  protected CharSequence _wrapper(final MatrixTieParent m) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<matrixtieparent.BuildWrapperMtp>");
     _builder.newLine();
@@ -1090,7 +1086,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _wrapper(final Release r) {
+  protected CharSequence _wrapper(final Release r) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.release.ReleaseWrapper>");
     _builder.newLine();
@@ -1119,7 +1115,7 @@ public class JobConfigGenerator implements IGenerator {
           for(final Parameter p : _parameters) {
             _builder.append("    ");
             ParameterType _type = p.getType();
-            StringConcatenation _param = this.param(p, _type);
+            CharSequence _param = this.param(p, _type);
             _builder.append(_param, "    ");
             _builder.newLineIfNotEmpty();
           }
@@ -1141,7 +1137,7 @@ public class JobConfigGenerator implements IGenerator {
           EList<EObject> _builds = _preBuildSection_1.getBuilds();
           for(final EObject b : _builds) {
             _builder.append("    ");
-            StringConcatenation _build = this.build(b);
+            CharSequence _build = this.build(b);
             _builder.append(_build, "    ");
             _builder.newLineIfNotEmpty();
           }
@@ -1163,7 +1159,7 @@ public class JobConfigGenerator implements IGenerator {
           EList<EObject> _builds_1 = _finalBuildSection_1.getBuilds();
           for(final EObject b_1 : _builds_1) {
             _builder.append("    ");
-            StringConcatenation _build_1 = this.build(b_1);
+            CharSequence _build_1 = this.build(b_1);
             _builder.append(_build_1, "    ");
             _builder.newLineIfNotEmpty();
           }
@@ -1185,7 +1181,7 @@ public class JobConfigGenerator implements IGenerator {
           EList<EObject> _builds_2 = _successBuildSection_1.getBuilds();
           for(final EObject b_2 : _builds_2) {
             _builder.append("    ");
-            StringConcatenation _build_2 = this.build(b_2);
+            CharSequence _build_2 = this.build(b_2);
             _builder.append(_build_2, "    ");
             _builder.newLineIfNotEmpty();
           }
@@ -1207,7 +1203,7 @@ public class JobConfigGenerator implements IGenerator {
           EList<EObject> _builds_3 = _failedBuildSection_1.getBuilds();
           for(final EObject b_3 : _builds_3) {
             _builder.append("    ");
-            StringConcatenation _build_3 = this.build(b_3);
+            CharSequence _build_3 = this.build(b_3);
             _builder.append(_build_3, "    ");
             _builder.newLineIfNotEmpty();
           }
@@ -1249,7 +1245,7 @@ public class JobConfigGenerator implements IGenerator {
     }
   }
   
-  public StringConcatenation matrix(final Config c) {
+  public CharSequence matrix(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     LinkedHashMap<String,List<String>> _linkedHashMap = new LinkedHashMap<String,List<String>>();
     final LinkedHashMap<String,List<String>> r = _linkedHashMap;
@@ -1296,7 +1292,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation builders(final Config c) {
+  public CharSequence builders(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<builders>");
     _builder.newLine();
@@ -1308,7 +1304,7 @@ public class JobConfigGenerator implements IGenerator {
       List<EObject> _allBuilders = this.getAllBuilders(c, l);
       for(final EObject b : _allBuilders) {
         _builder.append("  ");
-        StringConcatenation _build = this.build(b);
+        CharSequence _build = this.build(b);
         _builder.append(_build, "  ");
         _builder.newLineIfNotEmpty();
       }
@@ -1318,7 +1314,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _build(final Maven m) {
+  protected CharSequence _build(final Maven m) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.tasks.Maven>");
     _builder.newLine();
@@ -1371,7 +1367,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _build(final Shell s) {
+  protected CharSequence _build(final Shell s) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.tasks.Shell>");
     _builder.newLine();
@@ -1387,7 +1383,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _build(final Batch b) {
+  protected CharSequence _build(final Batch b) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.tasks.BatchFile>");
     _builder.newLine();
@@ -1403,7 +1399,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _build(final Ant a) {
+  protected CharSequence _build(final Ant a) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.tasks.Ant>");
     _builder.newLine();
@@ -1428,7 +1424,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _build(final SystemGroovy sg) {
+  protected CharSequence _build(final SystemGroovy sg) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.groovy.SystemGroovy>");
     _builder.newLine();
@@ -1456,7 +1452,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _build(final TriggerBuilderSection tbs) {
+  protected CharSequence _build(final TriggerBuilderSection tbs) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.TriggerBuilder>");
     _builder.newLine();
@@ -1467,7 +1463,7 @@ public class JobConfigGenerator implements IGenerator {
       EList<TriggeredBuild> _triggeredBuilds = tbs.getTriggeredBuilds();
       for(final TriggeredBuild tb : _triggeredBuilds) {
         _builder.append("    ");
-        StringConcatenation _triggeredBuild = this.triggeredBuild(tb);
+        CharSequence _triggeredBuild = this.triggeredBuild(tb);
         _builder.append(_triggeredBuild, "    ");
         _builder.newLineIfNotEmpty();
       }
@@ -1480,7 +1476,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation triggeredBuild(final TriggeredBuild tb) {
+  public CharSequence triggeredBuild(final TriggeredBuild tb) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>");
     _builder.newLine();
@@ -1491,7 +1487,7 @@ public class JobConfigGenerator implements IGenerator {
       EList<EObject> _triggerParams = tb.getTriggerParams();
       for(final EObject p : _triggerParams) {
         _builder.append("    ");
-        StringConcatenation _triggerParam = this.triggerParam(p);
+        CharSequence _triggerParam = this.triggerParam(p);
         _builder.append(_triggerParam, "    ");
         _builder.newLineIfNotEmpty();
       }
@@ -1568,7 +1564,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation publishers(final Config c) {
+  public CharSequence publishers(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<publishers>");
     _builder.newLine();
@@ -1581,7 +1577,7 @@ public class JobConfigGenerator implements IGenerator {
       Collection<EObject> _values = _allPublishers.values();
       for(final EObject p : _values) {
         _builder.append("  ");
-        StringConcatenation _publisher = this.publisher(p);
+        CharSequence _publisher = this.publisher(p);
         _builder.append(_publisher, "  ");
         _builder.newLineIfNotEmpty();
       }
@@ -1595,7 +1591,7 @@ public class JobConfigGenerator implements IGenerator {
     String _xblockexpression = null;
     {
       boolean _isMergeWithSuperConfig = em.isMergeWithSuperConfig();
-      boolean _operator_equals = ObjectExtensions.operator_equals(((Boolean)_isMergeWithSuperConfig), ((Boolean)true));
+      boolean _operator_equals = BooleanExtensions.operator_equals(_isMergeWithSuperConfig, true);
       if (_operator_equals) {
         {
           ExtMail _parentExtMail = this.getParentExtMail(em);
@@ -1617,13 +1613,12 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public ExtMail getParentExtMail(final ExtMail em) {
-    {
       Config _myConfig = this.getMyConfig(em);
       Config c = _myConfig;
       Config _parentConfig = c.getParentConfig();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_parentConfig, null);
-      Boolean _xwhileexpression = _operator_notEquals;
-      while (_xwhileexpression) {
+      boolean _while = _operator_notEquals;
+      while (_while) {
         {
           Config _parentConfig_1 = c.getParentConfig();
           PublisherSection _publisherSection = _parentConfig_1.getPublisherSection();
@@ -1633,7 +1628,7 @@ public class JobConfigGenerator implements IGenerator {
             PublisherSection _publisherSection_1 = _parentConfig_2.getPublisherSection();
             EList<EObject> _publishers = _publisherSection_1.getPublishers();
             for (final EObject p : _publishers) {
-              if ((p instanceof de.hajoeichler.jenkins.jobConfig.ExtMail)) {
+              if ((p instanceof ExtMail)) {
                 return ((ExtMail) p);
               }
             }
@@ -1643,14 +1638,12 @@ public class JobConfigGenerator implements IGenerator {
         }
         Config _parentConfig_4 = c.getParentConfig();
         boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_parentConfig_4, null);
-        _xwhileexpression = _operator_notEquals_2;
+        _while = _operator_notEquals_2;
       }
       return null;
-    }
   }
   
   public Map<String,MailTrigger> getAllMailTriggers(final ExtMail em, final Map<String,MailTrigger> m) {
-    {
       EList<MailTrigger> _mailTrigger = em.getMailTrigger();
       for (final MailTrigger mt : _mailTrigger) {
         String _type = mt.getType();
@@ -1662,7 +1655,7 @@ public class JobConfigGenerator implements IGenerator {
         }
       }
       boolean _isMergeWithSuperConfig = em.isMergeWithSuperConfig();
-      boolean _operator_equals = ObjectExtensions.operator_equals(((Boolean)_isMergeWithSuperConfig), ((Boolean)true));
+      boolean _operator_equals = BooleanExtensions.operator_equals(_isMergeWithSuperConfig, true);
       if (_operator_equals) {
         {
           ExtMail _parentExtMail = this.getParentExtMail(em);
@@ -1674,10 +1667,9 @@ public class JobConfigGenerator implements IGenerator {
         }
       }
       return m;
-    }
   }
   
-  protected StringConcatenation _publisher(final ExtMail em) {
+  protected CharSequence _publisher(final ExtMail em) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.emailext.ExtendedEmailPublisher>");
     _builder.newLine();
@@ -1699,7 +1691,7 @@ public class JobConfigGenerator implements IGenerator {
       Collection<MailTrigger> _values = _allMailTriggers.values();
       for(final MailTrigger mt : _values) {
         _builder.append("    ");
-        StringConcatenation _mailTrigger = this.mailTrigger(mt);
+        CharSequence _mailTrigger = this.mailTrigger(mt);
         _builder.append(_mailTrigger, "    ");
         _builder.newLineIfNotEmpty();
       }
@@ -1713,7 +1705,8 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_equals) {
         _builder.append("  ");
         _builder.append("<contentType>default</contentType>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("  ");
         _builder.append("<contentType>");
         String _type_1 = em.getType();
@@ -1728,7 +1721,8 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_equals_1) {
         _builder.append("  ");
         _builder.append("<defaultSubject>$DEFAULT_SUBJECT</defaultSubject>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("  ");
         _builder.append("<defaultSubject>");
         String _subject_1 = em.getSubject();
@@ -1743,7 +1737,8 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_equals_2) {
         _builder.append("  ");
         _builder.append("<defaultContent>$DEFAULT_CONTENT</defaultContent>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("  ");
         _builder.append("<defaultContent>");
         String _content_1 = em.getContent();
@@ -1760,7 +1755,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  public StringConcatenation mailTrigger(final MailTrigger mt) {
+  public CharSequence mailTrigger(final MailTrigger mt) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.emailext.plugins.trigger.");
     String _type = mt.getType();
@@ -1777,7 +1772,8 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_equals) {
         _builder.append("    ");
         _builder.append("<recipientList></recipientList>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("    ");
         _builder.append("<recipientList>");
         String _to_1 = mt.getTo();
@@ -1792,7 +1788,8 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_equals_1) {
         _builder.append("    ");
         _builder.append("<subject>$PROJECT_DEFAULT_SUBJECT</subject>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("    ");
         _builder.append("<subject>");
         String _subject_1 = mt.getSubject();
@@ -1807,7 +1804,8 @@ public class JobConfigGenerator implements IGenerator {
       if (_operator_equals_2) {
         _builder.append("    ");
         _builder.append("<body>$PROJECT_DEFAULT_CONTENT</body>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("    ");
         _builder.append("<body>");
         String _content_1 = mt.getContent();
@@ -1852,7 +1850,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _publisher(final TestResult t) {
+  protected CharSequence _publisher(final TestResult t) {
     StringConcatenation _builder = new StringConcatenation();
     {
       String _testresults = t.getTestresults();
@@ -1882,7 +1880,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _publisher(final DownStream d) {
+  protected CharSequence _publisher(final DownStream d) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.BuildTrigger>");
     _builder.newLine();
@@ -1893,7 +1891,7 @@ public class JobConfigGenerator implements IGenerator {
       EList<DownStreamBuild> _builds = d.getBuilds();
       for(final DownStreamBuild b : _builds) {
         _builder.append("    ");
-        StringConcatenation _downStreamBuild = this.downStreamBuild(b);
+        CharSequence _downStreamBuild = this.downStreamBuild(b);
         _builder.append(_downStreamBuild, "    ");
         _builder.newLineIfNotEmpty();
       }
@@ -1906,7 +1904,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _publisher(final Artifacts a) {
+  protected CharSequence _publisher(final Artifacts a) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.tasks.ArtifactArchiver>");
     _builder.newLine();
@@ -1921,7 +1919,8 @@ public class JobConfigGenerator implements IGenerator {
       if (false) {
         _builder.append("  ");
         _builder.append("<latestOnly>true</latestOnly>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("  ");
         _builder.append("<latestOnly>false</latestOnly>");
         _builder.newLine();
@@ -1932,7 +1931,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _publisher(final HTMLPublisher h) {
+  protected CharSequence _publisher(final HTMLPublisher h) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<htmlpublisher.HtmlPublisher>");
     _builder.newLine();
@@ -1980,7 +1979,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _publisher(final Warnings w) {
+  protected CharSequence _publisher(final Warnings w) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.warnings.WarningsPublisher>");
     _builder.newLine();
@@ -2010,14 +2009,15 @@ public class JobConfigGenerator implements IGenerator {
     _builder.newLine();
     {
       int _unstableTotalAll = w.getUnstableTotalAll();
-      boolean _operator_greaterThan = ComparableExtensions.<Integer>operator_greaterThan(((Integer)_unstableTotalAll), ((Integer)0));
+      boolean _operator_greaterThan = IntegerExtensions.operator_greaterThan(_unstableTotalAll, 0);
       if (_operator_greaterThan) {
         _builder.append("    ");
         _builder.append("<unstableTotalAll>");
         int _unstableTotalAll_1 = w.getUnstableTotalAll();
         _builder.append(_unstableTotalAll_1, "    ");
         _builder.append("</unstableTotalAll>");
-        _builder.newLineIfNotEmpty();} else {
+        _builder.newLineIfNotEmpty();
+      } else {
         _builder.append("    ");
         _builder.append("<unstableTotalAll></unstableTotalAll>");
         _builder.newLine();
@@ -2095,14 +2095,14 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _publisher(final Claim c) {
+  protected CharSequence _publisher(final Claim c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.claim.ClaimPublisher/>");
     _builder.newLine();
     return _builder;
   }
   
-  protected StringConcatenation _publisher(final Cobertura c) {
+  protected CharSequence _publisher(final Cobertura c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.cobertura.CoberturaPublisher>");
     _builder.newLine();
@@ -2199,7 +2199,6 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public String getListOfFqNames(final List<Config> builds) {
-    {
       String s = "";
       boolean first = true;
       for (final Config c : builds) {
@@ -2216,7 +2215,6 @@ public class JobConfigGenerator implements IGenerator {
         }
       }
       return s;
-    }
   }
   
   public String translateCondition(final String c) {
@@ -2248,7 +2246,7 @@ public class JobConfigGenerator implements IGenerator {
     return _xblockexpression;
   }
   
-  public StringConcatenation downStreamBuild(final DownStreamBuild b) {
+  public CharSequence downStreamBuild(final DownStreamBuild b) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>");
     _builder.newLine();
@@ -2261,7 +2259,8 @@ public class JobConfigGenerator implements IGenerator {
         _builder.newLine();
         _builder.append("  ");
         _builder.append("<triggerWithNoParameters>true</triggerWithNoParameters>");
-        _builder.newLine();} else {
+        _builder.newLine();
+      } else {
         _builder.append("  ");
         _builder.append("<configs>");
         _builder.newLine();
@@ -2270,7 +2269,7 @@ public class JobConfigGenerator implements IGenerator {
           for(final EObject p : _triggerParams_1) {
             _builder.append("  ");
             _builder.append("  ");
-            StringConcatenation _triggerParam = this.triggerParam(p);
+            CharSequence _triggerParam = this.triggerParam(p);
             _builder.append(_triggerParam, "    ");
             _builder.newLineIfNotEmpty();
           }
@@ -2299,19 +2298,19 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _triggerParam(final CurrentTriggerParams p) {
+  protected CharSequence _triggerParam(final CurrentTriggerParams p) {
     StringConcatenation _builder = new StringConcatenation();
     return _builder;
   }
   
-  protected StringConcatenation _triggerParam(final GitCommitParam p) {
+  protected CharSequence _triggerParam(final GitCommitParam p) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.git.GitRevisionBuildParameters/>");
     _builder.newLine();
     return _builder;
   }
   
-  protected StringConcatenation _triggerParam(final PropertyFileTriggerParams p) {
+  protected CharSequence _triggerParam(final PropertyFileTriggerParams p) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.FileBuildParameters>");
     _builder.newLine();
@@ -2326,7 +2325,7 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _triggerParam(final PredefinedTriggerParams p) {
+  protected CharSequence _triggerParam(final PredefinedTriggerParams p) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>");
     _builder.newLine();
@@ -2342,129 +2341,126 @@ public class JobConfigGenerator implements IGenerator {
   }
   
   public String fqn(final EObject c) {
-    if ((c instanceof Config)) {
+    if (c instanceof Config) {
       return _fqn((Config)c);
-    } else if ((c instanceof Group)) {
+    } else if (c instanceof Group) {
       return _fqn((Group)c);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(c).toString());
+        Arrays.<Object>asList(c).toString());
     }
   }
   
-  public StringConcatenation param(final Parameter p, final ParameterType b) {
-    if ((p instanceof Parameter)
-         && (b instanceof BooleanParam)) {
-      return _param((Parameter)p, (BooleanParam)b);
-    } else if ((p instanceof Parameter)
-         && (b instanceof ChoiceParam)) {
-      return _param((Parameter)p, (ChoiceParam)b);
-    } else if ((p instanceof Parameter)
-         && (b instanceof StringParam)) {
-      return _param((Parameter)p, (StringParam)b);
+  public CharSequence param(final Parameter p, final ParameterType b) {
+    if (b instanceof BooleanParam) {
+      return _param(p, (BooleanParam)b);
+    } else if (b instanceof ChoiceParam) {
+      return _param(p, (ChoiceParam)b);
+    } else if (b instanceof StringParam) {
+      return _param(p, (StringParam)b);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(p, b).toString());
+        Arrays.<Object>asList(p, b).toString());
     }
   }
   
-  public StringConcatenation scm(final Scm cvs) {
-    if ((cvs instanceof ScmCVS)) {
+  public CharSequence scm(final Scm cvs) {
+    if (cvs instanceof ScmCVS) {
       return _scm((ScmCVS)cvs);
-    } else if ((cvs instanceof ScmGit)) {
+    } else if (cvs instanceof ScmGit) {
       return _scm((ScmGit)cvs);
-    } else if ((cvs instanceof ScmSVN)) {
+    } else if (cvs instanceof ScmSVN) {
       return _scm((ScmSVN)cvs);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(cvs).toString());
+        Arrays.<Object>asList(cvs).toString());
     }
   }
   
-  public StringConcatenation trigger(final EObject t) {
-    if ((t instanceof FirstStartTrigger)) {
+  public CharSequence trigger(final EObject t) {
+    if (t instanceof FirstStartTrigger) {
       return _trigger((FirstStartTrigger)t);
-    } else if ((t instanceof PollScmTrigger)) {
+    } else if (t instanceof PollScmTrigger) {
       return _trigger((PollScmTrigger)t);
-    } else if ((t instanceof TimerTrigger)) {
+    } else if (t instanceof TimerTrigger) {
       return _trigger((TimerTrigger)t);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(t).toString());
+        Arrays.<Object>asList(t).toString());
     }
   }
   
-  public StringConcatenation wrapper(final EObject e) {
-    if ((e instanceof ExclusiveExecution)) {
+  public CharSequence wrapper(final EObject e) {
+    if (e instanceof ExclusiveExecution) {
       return _wrapper((ExclusiveExecution)e);
-    } else if ((e instanceof Lock)) {
+    } else if (e instanceof Lock) {
       return _wrapper((Lock)e);
-    } else if ((e instanceof MatrixTieParent)) {
+    } else if (e instanceof MatrixTieParent) {
       return _wrapper((MatrixTieParent)e);
-    } else if ((e instanceof Release)) {
+    } else if (e instanceof Release) {
       return _wrapper((Release)e);
-    } else if ((e instanceof Timeout)) {
+    } else if (e instanceof Timeout) {
       return _wrapper((Timeout)e);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(e).toString());
+        Arrays.<Object>asList(e).toString());
     }
   }
   
-  public StringConcatenation build(final EObject a) {
-    if ((a instanceof Ant)) {
+  public CharSequence build(final EObject a) {
+    if (a instanceof Ant) {
       return _build((Ant)a);
-    } else if ((a instanceof Batch)) {
+    } else if (a instanceof Batch) {
       return _build((Batch)a);
-    } else if ((a instanceof Maven)) {
+    } else if (a instanceof Maven) {
       return _build((Maven)a);
-    } else if ((a instanceof Shell)) {
+    } else if (a instanceof Shell) {
       return _build((Shell)a);
-    } else if ((a instanceof SystemGroovy)) {
+    } else if (a instanceof SystemGroovy) {
       return _build((SystemGroovy)a);
-    } else if ((a instanceof TriggerBuilderSection)) {
+    } else if (a instanceof TriggerBuilderSection) {
       return _build((TriggerBuilderSection)a);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(a).toString());
+        Arrays.<Object>asList(a).toString());
     }
   }
   
-  public StringConcatenation publisher(final EObject a) {
-    if ((a instanceof Artifacts)) {
+  public CharSequence publisher(final EObject a) {
+    if (a instanceof Artifacts) {
       return _publisher((Artifacts)a);
-    } else if ((a instanceof Claim)) {
+    } else if (a instanceof Claim) {
       return _publisher((Claim)a);
-    } else if ((a instanceof Cobertura)) {
+    } else if (a instanceof Cobertura) {
       return _publisher((Cobertura)a);
-    } else if ((a instanceof DownStream)) {
+    } else if (a instanceof DownStream) {
       return _publisher((DownStream)a);
-    } else if ((a instanceof ExtMail)) {
+    } else if (a instanceof ExtMail) {
       return _publisher((ExtMail)a);
-    } else if ((a instanceof HTMLPublisher)) {
+    } else if (a instanceof HTMLPublisher) {
       return _publisher((HTMLPublisher)a);
-    } else if ((a instanceof TestResult)) {
+    } else if (a instanceof TestResult) {
       return _publisher((TestResult)a);
-    } else if ((a instanceof Warnings)) {
+    } else if (a instanceof Warnings) {
       return _publisher((Warnings)a);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(a).toString());
+        Arrays.<Object>asList(a).toString());
     }
   }
   
-  public StringConcatenation triggerParam(final EObject p) {
-    if ((p instanceof CurrentTriggerParams)) {
+  public CharSequence triggerParam(final EObject p) {
+    if (p instanceof CurrentTriggerParams) {
       return _triggerParam((CurrentTriggerParams)p);
-    } else if ((p instanceof GitCommitParam)) {
+    } else if (p instanceof GitCommitParam) {
       return _triggerParam((GitCommitParam)p);
-    } else if ((p instanceof PredefinedTriggerParams)) {
+    } else if (p instanceof PredefinedTriggerParams) {
       return _triggerParam((PredefinedTriggerParams)p);
-    } else if ((p instanceof PropertyFileTriggerParams)) {
+    } else if (p instanceof PropertyFileTriggerParams) {
       return _triggerParam((PropertyFileTriggerParams)p);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        java.util.Arrays.<Object>asList(p).toString());
+        Arrays.<Object>asList(p).toString());
     }
   }
 }

@@ -1,18 +1,56 @@
 package de.hajoeichler.jenkins.generator
 
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.generator.IGenerator
-import org.eclipse.xtext.generator.IFileSystemAccess
-import de.hajoeichler.jenkins.jobConfig.*
-import java.util.*
-
-import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
-import de.hajoeichler.jenkins.jobConfig.impl.ParameterSectionImpl
-
-import org.eclipse.emf.core.*
+import de.hajoeichler.jenkins.jobConfig.Ant
+import de.hajoeichler.jenkins.jobConfig.Artifacts
+import de.hajoeichler.jenkins.jobConfig.Batch
+import de.hajoeichler.jenkins.jobConfig.BooleanParam
+import de.hajoeichler.jenkins.jobConfig.ChoiceParam
+import de.hajoeichler.jenkins.jobConfig.Claim
+import de.hajoeichler.jenkins.jobConfig.Cobertura
+import de.hajoeichler.jenkins.jobConfig.Config
+import de.hajoeichler.jenkins.jobConfig.CurrentTriggerParams
+import de.hajoeichler.jenkins.jobConfig.DownStream
+import de.hajoeichler.jenkins.jobConfig.DownStreamBuild
+import de.hajoeichler.jenkins.jobConfig.ExclusiveExecution
+import de.hajoeichler.jenkins.jobConfig.ExtMail
+import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger
+import de.hajoeichler.jenkins.jobConfig.GitCommitParam
+import de.hajoeichler.jenkins.jobConfig.Group
+import de.hajoeichler.jenkins.jobConfig.HTMLPublisher
+import de.hajoeichler.jenkins.jobConfig.Lock
+import de.hajoeichler.jenkins.jobConfig.MailTrigger
+import de.hajoeichler.jenkins.jobConfig.MatrixTieParent
+import de.hajoeichler.jenkins.jobConfig.Maven
+import de.hajoeichler.jenkins.jobConfig.OldBuildHandling
+import de.hajoeichler.jenkins.jobConfig.Parameter
+import de.hajoeichler.jenkins.jobConfig.PollScmTrigger
+import de.hajoeichler.jenkins.jobConfig.PredefinedTriggerParams
+import de.hajoeichler.jenkins.jobConfig.PropertyFileTriggerParams
+import de.hajoeichler.jenkins.jobConfig.Release
+import de.hajoeichler.jenkins.jobConfig.Scm
+import de.hajoeichler.jenkins.jobConfig.ScmCVS
+import de.hajoeichler.jenkins.jobConfig.ScmGit
+import de.hajoeichler.jenkins.jobConfig.ScmSVN
+import de.hajoeichler.jenkins.jobConfig.Shell
+import de.hajoeichler.jenkins.jobConfig.StringParam
+import de.hajoeichler.jenkins.jobConfig.SystemGroovy
+import de.hajoeichler.jenkins.jobConfig.TestResult
+import de.hajoeichler.jenkins.jobConfig.Timeout
+import de.hajoeichler.jenkins.jobConfig.TimerTrigger
+import de.hajoeichler.jenkins.jobConfig.TriggerBuilderSection
+import de.hajoeichler.jenkins.jobConfig.TriggeredBuild
+import de.hajoeichler.jenkins.jobConfig.Warnings
+import java.util.ArrayList
+import java.util.LinkedHashMap
+import java.util.List
+import java.util.Map
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.xtext.xtend2.lib.ResourceExtensions
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.xtext.generator.IFileSystemAccess
+import org.eclipse.xtext.generator.IGenerator
+
+import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
 
 class JobConfigGenerator implements IGenerator {
 
