@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Application
+Bundle-SymbolicName: de.hajoeichler.jenkins.jobconfig.application; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: de.hajoeichler.jenkins.jobconfig.application.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.intro,
+ de.hajoeichler.jenkins.jobconfig.ui;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="de.hajoeichler.jenkins.jobconfig.application.intro.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RCP Perspective"
+            class="de.hajoeichler.jenkins.jobconfig.application.intro.Perspective"
+            id="de.hajoeichler.jenkins.jobconfig.application.perspective">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="de.hajoeichler.jenkins.jobconfig.application.application"
+            name="Jenkins Job Configuration Generator">
+         <property
+               name="windowImages"
+               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+         </property>
+         <property
+               name="appName"
+               value="Jenkins Job Configuration Generator">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="de.hajoeichler.jenkins.jobconfig.application.intro">
+      </intro>
+      <introProductBinding
+            introId="de.hajoeichler.jenkins.jobconfig.application.intro"
+            productId="de.hajoeichler.jenkins.jobconfig.application.product">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            introId="de.hajoeichler.jenkins.jobconfig.application.intro"
+            content="introContent.xml"
+            id="de.hajoeichler.jenkins.jobconfig.application.configId">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+
+</plugin>
