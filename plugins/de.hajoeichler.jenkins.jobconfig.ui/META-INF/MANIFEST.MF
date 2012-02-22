@@ -24,5 +24,6 @@ Import-Package: org.apache.log4j,
  org.apache.commons.logging
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: de.hajoeichler.jenkins.ui.contentassist.antlr,
- de.hajoeichler.jenkins.ui.internal
+ de.hajoeichler.jenkins.ui.internal,
+ de.hajoeichler.jenkins.ui.contentassist
 Bundle-Activator: de.hajoeichler.jenkins.ui.internal.JobConfigActivator
