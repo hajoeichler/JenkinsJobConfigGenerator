@@ -224,7 +224,8 @@ PredefinedTriggerParams:
 
 PublisherSection:
 	"publishers" "("
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov)+ // FindBugs
+	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
+	FindBugs)+
 	")";
 
 Artifacts:
@@ -245,6 +246,9 @@ Cobertura:
 
 Rcov:
 	"rcov" reportDir=STRING;
+
+FindBugs:
+	"findbugs" results=STRING;
 
 Claim:
 	(canClaim?="canClaim");
