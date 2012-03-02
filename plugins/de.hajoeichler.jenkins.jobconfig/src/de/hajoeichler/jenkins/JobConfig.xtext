@@ -257,8 +257,7 @@ Claim:
 
 HipChat:
 	("room" room=STRING)?
-	(startNotification?="startNotification")
-;
+	(startNotification?="startNotification");
 
 ExtMail:
 	{ExtMail}
@@ -272,25 +271,16 @@ ExtMail:
 	")";
 
 MailTrigger:
-	// TODO: check new types
+// TODO: check new types
 	type=("Still-Failing" | "Success" | "Fixed" | "Still-Unstable" | "Before-Build" | "Failure" | "Unstable")
-	(toList?="toList")?
-	(toCommiter?="toCommiter")?
-	(toRequester?="toRequester")?
-	(toCulprits?="toCulprits")?
-	("to" to=STRING)?
-	("subject" subject=STRING)?
-	("content" content=STRING)?;
+	(toList?="toList")? (toCommiter?="toCommiter")? (toRequester?="toRequester")? (toCulprits?="toCulprits")? ("to"
+	to=STRING)? ("subject" subject=STRING)? ("content" content=STRING)?;
 
 DownStream:
-	{DownStream}
-	"downstream" "("
-	builds+=DownStreamBuild*
-	")";
+	{DownStream} "downstream" "(" builds+=DownStreamBuild* ")";
 
 DownStreamBuild:
-	builds=[Config]
-	"when" condition=("Stable" | "Unstable" | "Not-Failed" | "Failed" | "Complete")
+	builds=[Config] "when" condition=("Stable" | "Unstable" | "Not-Failed" | "Failed" | "Complete")
 	triggerParams+=(CurrentTriggerParams | PropertyFileTriggerParams | PredefinedTriggerParams | GitCommitParam)*;
 
 GitCommitParam:
