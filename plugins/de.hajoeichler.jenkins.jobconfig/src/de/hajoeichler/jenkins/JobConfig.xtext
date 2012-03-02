@@ -75,6 +75,7 @@ Matrix:
 	"matrix" matrix=[MatrixDecl];
 
 OldBuildHandling:
+	{OldBuildHandling}
 	"oldBuilds" "("
 	("daysToKeep" daysToKeep=INT)?
 	("maxNumberOfBuilds" maxNumberOfBuilds=INT)?
@@ -139,6 +140,7 @@ AnsiColor: // 3rdParty
 	(ansicolor?='ansicolor');
 
 Release: // 3rdParty
+	{Release}
 	"release" "("
 	(notKeepForever?='notKeepForever')?
 	(paramSection=ParameterSection)?
@@ -162,7 +164,7 @@ MatrixTieParent:
 
 BuildSection:
 	"builds" "("
-	builds+=(Maven | Ant | Shell | Batch | SystemGroovy | MSBuild | TriggerBuilderSection)+ // Rake
+	builds+=(Maven | Ant | Shell | Batch | SystemGroovy | MSBuild | TriggerBuilderSection)+
 	")";
 
 Maven:
@@ -225,7 +227,7 @@ PredefinedTriggerParams:
 PublisherSection:
 	"publishers" "("
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs)+
+	FindBugs | HipChat)+
 	")";
 
 Artifacts:
@@ -253,7 +255,13 @@ FindBugs:
 Claim:
 	(canClaim?="canClaim");
 
+HipChat:
+	("room" room=STRING)?
+	(startNotification?="startNotification")
+;
+
 ExtMail:
+	{ExtMail}
 	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("
 	("to" to=STRING)?
 	("type" type=("html" | "text"))?
@@ -264,6 +272,7 @@ ExtMail:
 	")";
 
 MailTrigger:
+	// TODO: check new types
 	type=("Still-Failing" | "Success" | "Fixed" | "Still-Unstable" | "Before-Build" | "Failure" | "Unstable")
 	(toList?="toList")?
 	(toCommiter?="toCommiter")?
@@ -274,6 +283,7 @@ MailTrigger:
 	("content" content=STRING)?;
 
 DownStream:
+	{DownStream}
 	"downstream" "("
 	builds+=DownStreamBuild*
 	")";
