@@ -17,6 +17,7 @@ import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger
 import de.hajoeichler.jenkins.jobConfig.GitCommitParam
 import de.hajoeichler.jenkins.jobConfig.Group
 import de.hajoeichler.jenkins.jobConfig.HTMLPublisher
+import de.hajoeichler.jenkins.jobConfig.HipChat
 import de.hajoeichler.jenkins.jobConfig.Lock
 import de.hajoeichler.jenkins.jobConfig.MailTrigger
 import de.hajoeichler.jenkins.jobConfig.MatrixTieParent
@@ -26,6 +27,7 @@ import de.hajoeichler.jenkins.jobConfig.Parameter
 import de.hajoeichler.jenkins.jobConfig.PollScmTrigger
 import de.hajoeichler.jenkins.jobConfig.PredefinedTriggerParams
 import de.hajoeichler.jenkins.jobConfig.PropertyFileTriggerParams
+import de.hajoeichler.jenkins.jobConfig.Rcov
 import de.hajoeichler.jenkins.jobConfig.Release
 import de.hajoeichler.jenkins.jobConfig.Scm
 import de.hajoeichler.jenkins.jobConfig.ScmCVS
@@ -51,7 +53,6 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 
 import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
-import de.hajoeichler.jenkins.jobConfig.Rcov
 
 class JobConfigGenerator implements IGenerator {
 
@@ -68,7 +69,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def normalize (String s) {
 		if (s == null) {
-			return s;
+			return s
 		}
 		s.replaceJobName(currentConfig).escape()
 	}
@@ -133,7 +134,6 @@ class JobConfigGenerator implements IGenerator {
 			getRestrictTo(c.parentConfig)
 		}
 	}
-	
 
 	def OldBuildHandling getAnyOldBuildHandling (Config c) {
 		if (c.oldBuildHandling != null) {
@@ -233,6 +233,7 @@ class JobConfigGenerator implements IGenerator {
 		  <properties>
 		    «gitHub(c)»
 		    «parameters(c)»
+		    «hipChat(c)»
 		  </properties>
 		  «IF c.getAnyScm == null»
 		  <scm class="hudson.scm.NullSCM"/>
@@ -322,6 +323,30 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch param(Parameter p, ChoiceParam c) '''
+	'''
+
+	def HipChat getHipChat(Config c) {
+		if (c.publisherSection != null) {
+			for (p : c.publisherSection.publishers) {
+				if (p instanceof HipChat) {
+					return p as HipChat
+				}
+			}
+		}
+		if (c.parentConfig != null) {
+			return getHipChat(c.parentConfig)
+		}
+		return null
+	}
+
+	def hipChat(Config c) '''
+		«val hc = c.getHipChat»
+		«IF hc != null»
+		<jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>
+		  <room>«hc.room»</room>
+		  <startNotification>«hc.startNotification»</startNotification>
+		</jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>
+		«ENDIF»
 	'''
 
 	def dispatch scm(ScmGit git) '''
@@ -506,11 +531,11 @@ class JobConfigGenerator implements IGenerator {
 		for (m : c.matrixes) {
 			for (a : m.matrix.axes) {
 				if (!r.containsKey(a.label)) {
-					r.put(a.label, new ArrayList());
+					r.put(a.label, new ArrayList())
 				}
-				val l = r.get(a.label);
+				val l = r.get(a.label)
 				for (v : a.values) {
-					l.add(v);
+					l.add(v)
 				}
 			}
 		}
@@ -655,7 +680,7 @@ class JobConfigGenerator implements IGenerator {
 					}
 				}
 			}
-			c = c.parentConfig;
+			c = c.parentConfig
 		}
 		return null
 	}
@@ -816,6 +841,10 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch publisher (Claim c) '''
 		<hudson.plugins.claim.ClaimPublisher/>
+	'''
+
+	def dispatch publisher (HipChat h) '''
+		<jenkins.plugins.hipchat.HipChatNotifier/>
 	'''
 
 	def dispatch publisher (Cobertura c) '''
