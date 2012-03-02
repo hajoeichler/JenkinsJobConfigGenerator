@@ -256,8 +256,8 @@ Claim:
 	(canClaim?="canClaim");
 
 HipChat:
-	("room" room=STRING)?
-	(startNotification?="startNotification");
+	{HipChat}
+	"hipchat" ("room" room=STRING)? (startNotification?="startNotification")?;
 
 ExtMail:
 	{ExtMail}
