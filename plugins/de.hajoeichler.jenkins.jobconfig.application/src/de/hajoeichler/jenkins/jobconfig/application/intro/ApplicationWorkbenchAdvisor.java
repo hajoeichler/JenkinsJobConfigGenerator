@@ -19,6 +19,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     }
 
 	public String getInitialWindowPerspectiveId() {
-		return "org.eclipse.ui.resourcePerspective";
+		return PERSPECTIVE_ID;
 	}
 }
