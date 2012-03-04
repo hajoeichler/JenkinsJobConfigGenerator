@@ -8,7 +8,7 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
   <groupId>de.hajoeichler</groupId>
-  <artifactId>de.hajoeichler.jenkins.jobconfig.ui</artifactId>
+  <artifactId>de.hajoeichler.jenkins.jobconfig.application</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project>

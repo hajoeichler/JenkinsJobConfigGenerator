@@ -6,11 +6,11 @@
   <parent>
     <artifactId>plugins</artifactId>
     <groupId>de.hajoeichler</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
   </parent>
   <groupId>de.hajoeichler</groupId>
   <artifactId>de.hajoeichler.jenkins.jobconfig</artifactId>
-  <version>1.0.0</version>
+  <version>0.1.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <properties>
     <job.config.file>test.jobConfig</job.config.file>

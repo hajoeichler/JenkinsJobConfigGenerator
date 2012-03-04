@@ -5,14 +5,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.hajoeichler</groupId>
   <artifactId>plugins</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
-    <tycho-version>0.14.0</tycho-version>
+    <tycho-version>0.14.1</tycho-version>
   </properties>
   <modules>
-    <module>de.hajoeichler.jenkins.jobconfig.platform</module>
     <module>de.hajoeichler.jenkins.jobconfig</module>
+    <module>de.hajoeichler.jenkins.jobconfig.application</module>
+    <module>de.hajoeichler.jenkins.jobconfig.platform</module> <!-- doesn't have to be in plugins -->
     <module>de.hajoeichler.jenkins.jobconfig.tests</module>
     <module>de.hajoeichler.jenkins.jobconfig.ui</module>
   </modules>
@@ -34,7 +35,7 @@
             <artifact>
               <groupId>de.hajoeichler</groupId>
               <artifactId>de.hajoeichler.jenkins.jobconfig.platform</artifactId>
-              <version>0.0.2-SNAPSHOT</version>
+              <version>0.1.0-SNAPSHOT</version>
               <classifier>indigo</classifier>
             </artifact>
           </target>
