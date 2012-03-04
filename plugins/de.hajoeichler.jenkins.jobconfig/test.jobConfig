@@ -1,0 +1,5 @@
+// File used in CloudBees build
+group PlayGround- (
+  job yetAnotherTest (
+  )
+)
