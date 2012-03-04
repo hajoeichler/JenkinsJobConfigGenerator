@@ -12,11 +12,6 @@
   <artifactId>de.hajoeichler.jenkins.application</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>eclipse-repository</packaging>
-  <description>Builds the product</description>
-  <properties>
-    <productID>jenkinsJobConfigGen.product</productID>
-    <rootFolder>fooHAJO</rootFolder>
-  </properties>
   <build>
     <plugins>
       <plugin>
@@ -41,8 +36,8 @@
         <configuration>
           <products>
             <product>
-              <id>${productID}</id>
-              <rootFolder>jjcg</rootFolder>
+              <id>jenkinsJobConfigGen.product</id>
+              <rootFolder>jenkinsJobConfigGenerator</rootFolder>
             </product>
           </products>
         </configuration>

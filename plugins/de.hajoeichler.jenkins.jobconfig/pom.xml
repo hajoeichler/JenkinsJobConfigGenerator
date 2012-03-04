@@ -27,11 +27,11 @@
             <configuration>
               <tasks>
                 <echo>Generating config: run Generator</echo>
-                <property name="compile_classpath" refid="maven.compile.classpath"/>
-                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                <property name="job_config" value="${job.config.file}"/>
+                <property name="compile_classpath" refid="maven.compile.classpath" />
+                <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                <property name="job_config" value="${job.config.file}" />
                 <ant antfile="${basedir}/jc2config.xml" inheritRefs="true">
-                  <target name="run"/>
+                  <target name="run" />
                 </ant>
               </tasks>
             </configuration>
@@ -58,11 +58,10 @@
                 <configuration>
                   <tasks>
                     <echo>Generating source: run Mwe2 workflow</echo>
-                    <property name="compile_classpath" refid="maven.compile.classpath"/>
-                    <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                    <ant antfile="${basedir}/mwe2.xml"
-                      inheritRefs="true">
-                      <target name="xtext"/>
+                    <property name="compile_classpath" refid="maven.compile.classpath" />
+                    <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                    <ant antfile="${basedir}/mwe2.xml" inheritRefs="true">
+                      <target name="xtext" />
                     </ant>
                   </tasks>
                 </configuration>
@@ -89,11 +88,10 @@
                 <configuration>
                   <tasks>
                     <echo>Generating source: run Mwe2 workflow</echo>
-                    <property name="compile_classpath" refid="maven.compile.classpath"/>
-                    <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                    <ant antfile="${basedir}/mwe2.xml"
-                      inheritRefs="true">
-                      <target name="xtend"/>
+                    <property name="compile_classpath" refid="maven.compile.classpath" />
+                    <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                    <ant antfile="${basedir}/mwe2.xml" inheritRefs="true">
+                      <target name="xtend" />
                     </ant>
                   </tasks>
                 </configuration>
