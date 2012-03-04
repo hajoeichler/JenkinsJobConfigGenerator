@@ -1,5 +1,7 @@
 package de.hajoeichler.jenkins.generator;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class MultilineStringFormatingTest extends AbstractGeneratorTest {
@@ -19,4 +21,8 @@ public class MultilineStringFormatingTest extends AbstractGeneratorTest {
 		assertSingleConfig("overriddenTimeout", "test-overriddenTimeout");
 	}
 
+	@Test
+	public void hipChat() throws Exception {
+		assertSingleConfig("hipchat", "JobWithHipChat");
+	}
 }
