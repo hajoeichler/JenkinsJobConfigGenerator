@@ -53,6 +53,7 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 
 import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
+import de.hajoeichler.jenkins.jobConfig.AnsiColor
 
 class JobConfigGenerator implements IGenerator {
 
@@ -482,6 +483,10 @@ class JobConfigGenerator implements IGenerator {
 		<matrixtieparent.BuildWrapperMtp>
 		  <labelName>«m.matrixParent»</labelName>
 		</matrixtieparent.BuildWrapperMtp>
+	'''
+
+	def dispatch wrapper(AnsiColor a) '''
+		<TODO/>
 	'''
 
 	def dispatch wrapper(Release r) '''

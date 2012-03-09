@@ -1,5 +1,6 @@
 package de.hajoeichler.jenkins.generator;
 
+import de.hajoeichler.jenkins.jobConfig.AnsiColor;
 import de.hajoeichler.jenkins.jobConfig.Ant;
 import de.hajoeichler.jenkins.jobConfig.AntDecl;
 import de.hajoeichler.jenkins.jobConfig.Artifacts;
@@ -1139,6 +1140,13 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</labelName>");
     _builder.newLineIfNotEmpty();
     _builder.append("</matrixtieparent.BuildWrapperMtp>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  protected CharSequence _wrapper(final AnsiColor a) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<TODO/>");
     _builder.newLine();
     return _builder;
   }
@@ -2511,20 +2519,22 @@ public class JobConfigGenerator implements IGenerator {
     }
   }
   
-  public CharSequence wrapper(final EObject e) {
-    if (e instanceof ExclusiveExecution) {
-      return _wrapper((ExclusiveExecution)e);
-    } else if (e instanceof Lock) {
-      return _wrapper((Lock)e);
-    } else if (e instanceof MatrixTieParent) {
-      return _wrapper((MatrixTieParent)e);
-    } else if (e instanceof Release) {
-      return _wrapper((Release)e);
-    } else if (e instanceof Timeout) {
-      return _wrapper((Timeout)e);
+  public CharSequence wrapper(final EObject a) {
+    if (a instanceof AnsiColor) {
+      return _wrapper((AnsiColor)a);
+    } else if (a instanceof ExclusiveExecution) {
+      return _wrapper((ExclusiveExecution)a);
+    } else if (a instanceof Lock) {
+      return _wrapper((Lock)a);
+    } else if (a instanceof MatrixTieParent) {
+      return _wrapper((MatrixTieParent)a);
+    } else if (a instanceof Release) {
+      return _wrapper((Release)a);
+    } else if (a instanceof Timeout) {
+      return _wrapper((Timeout)a);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        Arrays.<Object>asList(e).toString());
+        Arrays.<Object>asList(a).toString());
     }
   }
   
