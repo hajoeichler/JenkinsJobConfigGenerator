@@ -9,6 +9,7 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 
 import de.hajoeichler.jenkins.generator.JobConfigGenerator;
+import de.hajoeichler.jenkins.jobConfig.Artifacts;
 import de.hajoeichler.jenkins.jobConfig.Config;
 import de.hajoeichler.jenkins.jobConfig.JobConfigPackage;
 import de.hajoeichler.jenkins.jobConfig.Shell;
@@ -19,14 +20,38 @@ public class JobConfigJavaValidator extends AbstractJobConfigJavaValidator {
 	@Check
 	public void checkShell(Shell shell) {
 		String string = shell.getShellScript();
-		checkForJobUrl(string,
-				JobConfigPackage.eINSTANCE.getShell_ShellScript(), shell);
+		EStructuralFeature feature = JobConfigPackage.eINSTANCE
+				.getShell_ShellScript();
+		checkForJobUrl(string, feature, shell);
+		checkForJobNameReplacement(string, feature);
 	}
 
 	@Check
 	public void checkStringParam(StringParam stringParam) {
-		checkForJobUrl(stringParam.getValue(),
-				JobConfigPackage.eINSTANCE.getStringParam_Value(), stringParam);
+		String string = stringParam.getValue();
+		EStructuralFeature feature = JobConfigPackage.eINSTANCE
+				.getStringParam_Value();
+		checkForJobUrl(string, feature, stringParam);
+		checkForJobNameReplacement(string, feature);
+	}
+
+	@Check
+	public void checkArtifacts(Artifacts artifacts) {
+		String string = artifacts.getArtifacts();
+		EStructuralFeature feature = JobConfigPackage.eINSTANCE
+				.getArtifacts_Artifacts();
+		checkForJobNameReplacement(string, feature);
+	}
+
+	private void checkForJobNameReplacement(String string,
+			EStructuralFeature feature) {
+		if (!string.contains("@@")) {
+			return;
+		}
+		String replacedString = string.replaceAll("@@jobName@@", "");
+		if (replacedString.contains("@@")) {
+			warning("The @@ variable is unknown.", feature);
+		}
 	}
 
 	private void checkForJobUrl(String string, EStructuralFeature feature,
@@ -50,6 +75,6 @@ public class JobConfigJavaValidator extends AbstractJobConfigJavaValidator {
 				return;
 			}
 		}
-		//warning("The URL does not point to a valid job name.", feature);
+		// warning("The URL does not point to a valid job name.", feature);
 	}
 }
