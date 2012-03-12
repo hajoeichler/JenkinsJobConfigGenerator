@@ -19,6 +19,7 @@ import de.hajoeichler.jenkins.jobConfig.ExclusiveExecution;
 import de.hajoeichler.jenkins.jobConfig.ExtMail;
 import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger;
 import de.hajoeichler.jenkins.jobConfig.GitCommitParam;
+import de.hajoeichler.jenkins.jobConfig.GitHubPushTrigger;
 import de.hajoeichler.jenkins.jobConfig.Group;
 import de.hajoeichler.jenkins.jobConfig.HTMLPublisher;
 import de.hajoeichler.jenkins.jobConfig.HipChat;
@@ -1053,6 +1054,18 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected CharSequence _trigger(final GitHubPushTrigger t) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<com.cloudbees.jenkins.GitHubPushTrigger>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<spec></spec>");
+    _builder.newLine();
+    _builder.append("</com.cloudbees.jenkins.GitHubPushTrigger>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public CharSequence wrappers(final Config c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<buildWrappers>");
@@ -1115,8 +1128,11 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</timeoutMinutes>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("<failBuild>true</failBuild>");
-    _builder.newLine();
+    _builder.append("<failBuild>");
+    boolean _isFailBuild = t.isFailBuild();
+    _builder.append(_isFailBuild, "  ");
+    _builder.append("</failBuild>");
+    _builder.newLineIfNotEmpty();
     _builder.append("</hudson.plugins.build__timeout.BuildTimeoutWrapper>");
     _builder.newLine();
     return _builder;
@@ -1146,7 +1162,7 @@ public class JobConfigGenerator implements IGenerator {
   
   protected CharSequence _wrapper(final AnsiColor a) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<TODO/>");
+    _builder.append("<hudson.plugins.ansicolor.AnsiColorBuildWrapper/>");
     _builder.newLine();
     return _builder;
   }
@@ -1936,7 +1952,18 @@ public class JobConfigGenerator implements IGenerator {
         _builder.append("</keepLongStdio>");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
-        _builder.append("<testDataPublishers/>");
+        _builder.append("<testDataPublishers>");
+        _builder.newLine();
+        {
+          boolean _isClaim = t.isClaim();
+          if (_isClaim) {
+            _builder.append("  ");
+            _builder.append("<hudson.plugins.claim.ClaimTestDataPublisher/>");
+            _builder.newLine();
+          }
+        }
+        _builder.append("  ");
+        _builder.append("</testDataPublishers>");
         _builder.newLine();
         _builder.append("</hudson.tasks.junit.JUnitResultArchiver>");
         _builder.newLine();
@@ -2138,6 +2165,9 @@ public class JobConfigGenerator implements IGenerator {
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<shouldDetectModules>false</shouldDetectModules>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<dontComputeNew>true</dontComputeNew>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<parserConfigurations/>");
@@ -2509,6 +2539,8 @@ public class JobConfigGenerator implements IGenerator {
   public CharSequence trigger(final EObject t) {
     if (t instanceof FirstStartTrigger) {
       return _trigger((FirstStartTrigger)t);
+    } else if (t instanceof GitHubPushTrigger) {
+      return _trigger((GitHubPushTrigger)t);
     } else if (t instanceof PollScmTrigger) {
       return _trigger((PollScmTrigger)t);
     } else if (t instanceof TimerTrigger) {
