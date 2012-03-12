@@ -54,6 +54,7 @@ import org.eclipse.xtext.generator.IGenerator
 
 import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
 import de.hajoeichler.jenkins.jobConfig.AnsiColor
+import de.hajoeichler.jenkins.jobConfig.GitHubPushTrigger
 
 class JobConfigGenerator implements IGenerator {
 
@@ -449,6 +450,12 @@ class JobConfigGenerator implements IGenerator {
 		</org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger>
 	'''
 
+	def dispatch trigger(GitHubPushTrigger t) '''
+		<com.cloudbees.jenkins.GitHubPushTrigger>
+		  <spec></spec>
+		</com.cloudbees.jenkins.GitHubPushTrigger>
+	'''
+
 	def wrappers(Config c) '''
 		<buildWrappers>
 		  «val m = new LinkedHashMap<EClass, EObject>()»
@@ -471,7 +478,7 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch wrapper(Timeout t) '''
 		<hudson.plugins.build__timeout.BuildTimeoutWrapper>
 		  <timeoutMinutes>«t.t»</timeoutMinutes>
-		  <failBuild>true</failBuild>
+		  <failBuild>«t.failBuild»</failBuild>
 		</hudson.plugins.build__timeout.BuildTimeoutWrapper>
 	'''
 
@@ -486,7 +493,7 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch wrapper(AnsiColor a) '''
-		<TODO/>
+		<hudson.plugins.ansicolor.AnsiColorBuildWrapper/>
 	'''
 
 	def dispatch wrapper(Release r) '''
@@ -759,13 +766,16 @@ class JobConfigGenerator implements IGenerator {
 		</hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
 	'''
 
-	// TODO: claim of tests?
 	def dispatch publisher (TestResult t) '''
 		«IF isNotEmpty(t.testresults)»
 		<hudson.tasks.junit.JUnitResultArchiver>
 		  <testResults>«t.testresults»</testResults>
 		  <keepLongStdio>«t.longIO»</keepLongStdio>
-		  <testDataPublishers/>
+		  <testDataPublishers>
+		  «IF t.claim»
+		    <hudson.plugins.claim.ClaimTestDataPublisher/>
+		  «ENDIF»
+		  </testDataPublishers>
 		</hudson.tasks.junit.JUnitResultArchiver>
 		«ENDIF»
 	'''
@@ -837,6 +847,7 @@ class JobConfigGenerator implements IGenerator {
 		    <failedNewLow></failedNewLow>
 		  </thresholds>
 		  <shouldDetectModules>false</shouldDetectModules>
+		  <dontComputeNew>true</dontComputeNew>
 		  <parserConfigurations/>
 		  <consoleLogParsers>
 		    <string>«w.parser.name»</string>

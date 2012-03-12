@@ -20,7 +20,7 @@ terminal ID:
 
 DeclSpecs:
 	"declarations" "("
-	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl | WarningsDecl | MatrixDecl)+ // Label | )+
+	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl | WarningsDecl | MatrixDecl)+
 	")";
 
 AntDecl:
@@ -60,8 +60,8 @@ Config:
 	(executeConcurrent?="executeConcurrent")?
 	("description" description=STRING)?
 	(matrixes+=Matrix)*
-	("restrictRunning" restrictTo=STRING)?
-	('gitUrl' gitUrl=STRING)? // 3rdParty
+	("restrictRunningTo" restrictTo=STRING)?
+	('gitUrl' gitUrl=STRING)?
 	(concurrentBuild?="concurrentBuild")?
 	(paramSection=ParameterSection)?
 	(scm=Scm)?
@@ -109,7 +109,7 @@ ChoiceParam:
 Scm:
 	ScmGit | ScmSVN | ScmCVS;
 
-ScmGit: // 3rdParty
+ScmGit:
 	"git" "(" "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")? ("excludedRegions"
 	excludedRegions=STRING)? ")";
 
@@ -120,7 +120,7 @@ ScmCVS:
 	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? ")";
 
 TriggerSection:
-	"trigger" "(" buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger)+ ")";
+	"trigger" "(" buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger | GitHubPushTrigger)+ ")";
 
 TimerTrigger:
 	"periodically" timer=STRING;
@@ -128,18 +128,21 @@ TimerTrigger:
 PollScmTrigger:
 	"pollScm" poll=STRING;
 
-FirstStartTrigger: // 3rdParty
+FirstStartTrigger:
 	buildOnFirstStart?="buildOnFirstStart";
+
+GitHubPushTrigger:
+	buildOnPushToGitHub?="buildOnPushToGitHub";
 
 WrapperSection:
 	"wrappers" "("
-	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent)+ // Android, TCP Port
+	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent)
 	")";
 
-AnsiColor: // 3rdParty
+AnsiColor:
 	(ansicolor?='ansicolor');
 
-Release: // 3rdParty
+Release:
 	{Release}
 	"release" "("
 	(notKeepForever?='notKeepForever')?
@@ -150,10 +153,10 @@ Release: // 3rdParty
 	("final" finalBuildSection=BuildSection)?
 	")";
 
-Timeout: // 3rdParty
+Timeout:
 	"timeout" t=INT (failBuild?='failBuild')?;
 
-Lock: // 3rdParty
+Lock:
 	"lock" lock=[LockDecl];
 
 ExclusiveExecution:
@@ -234,14 +237,14 @@ Artifacts:
 	"artifacts" artifacts=STRING (onlyLatest?="onlyLatest")?;
 
 TestResult:
-	"testresults" testresults=STRING (longIO?="longIO")?;
+	"testresults" testresults=STRING (longIO?="longIO")? (claim?="claim")?;
 
 	// TODO: support multiple
 HTMLPublisher:
 	"htmlpublisher" name=STRING "dir" dir=STRING "files" files=STRING (keepPast?='keepPast')?;
 
 Warnings:
-	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)?;
+	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)? (computeNewWarnings?="computeNewWarnings")?;
 
 Cobertura:
 	"cobertura" xmlreport=STRING (onlyStable?="onlyStable")?;
