@@ -428,6 +428,12 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_description, "  ");
     _builder.append("</description>");
     _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<displayName>");
+    String _displayName = c.getDisplayName();
+    _builder.append(_displayName, "  ");
+    _builder.append("</displayName>");
+    _builder.newLineIfNotEmpty();
     {
       OldBuildHandling _anyOldBuildHandling = this.getAnyOldBuildHandling(c);
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_anyOldBuildHandling, null);

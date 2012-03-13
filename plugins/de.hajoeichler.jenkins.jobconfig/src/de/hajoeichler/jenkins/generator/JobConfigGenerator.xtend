@@ -228,6 +228,7 @@ class JobConfigGenerator implements IGenerator {
 		«ENDIF»
 		  <actions/>
 		  <description>«c.description»</description>
+		  <displayName>«c.displayName»</displayName>
 		  «IF c.getAnyOldBuildHandling != null»
 		  «logRotator(c.getAnyOldBuildHandling)»
 		  «ENDIF»

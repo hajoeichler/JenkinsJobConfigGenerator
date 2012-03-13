@@ -59,6 +59,7 @@ Config:
 	(oldBuildHandling=OldBuildHandling)?
 	(executeConcurrent?="executeConcurrent")?
 	("description" description=STRING)?
+	("displayName" displayName=STRING)?
 	(matrixes+=Matrix)*
 	("restrictRunningTo" restrictTo=STRING)?
 	('gitUrl' gitUrl=STRING)?
