@@ -2,6 +2,7 @@
 <project>
   <actions/>
   <description></description>
+  <displayName></displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
   </properties>
