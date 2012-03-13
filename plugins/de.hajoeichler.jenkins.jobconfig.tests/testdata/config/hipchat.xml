@@ -2,7 +2,6 @@
 <project>
   <actions/>
   <description></description>
-  <displayName></displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>

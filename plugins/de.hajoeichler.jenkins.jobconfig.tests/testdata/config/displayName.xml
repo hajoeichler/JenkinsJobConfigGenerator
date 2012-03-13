@@ -2,6 +2,7 @@
 <project>
   <actions/>
   <description></description>
+  <displayName>My lovely job!</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
   </properties>
@@ -18,9 +19,5 @@
   <publishers>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.build__timeout.BuildTimeoutWrapper>
-      <timeoutMinutes>2</timeoutMinutes>
-      <failBuild>true</failBuild>
-    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
   </buildWrappers>
 </project>

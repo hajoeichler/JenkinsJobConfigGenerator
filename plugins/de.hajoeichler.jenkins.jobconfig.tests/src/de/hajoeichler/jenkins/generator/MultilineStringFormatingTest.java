@@ -1,7 +1,5 @@
 package de.hajoeichler.jenkins.generator;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class MultilineStringFormatingTest extends AbstractGeneratorTest {
@@ -24,5 +22,10 @@ public class MultilineStringFormatingTest extends AbstractGeneratorTest {
 	@Test
 	public void hipChat() throws Exception {
 		assertSingleConfig("hipchat", "JobWithHipChat");
+	}
+
+	@Test
+	public void jobWithDisplayName() throws Exception {
+		assertSingleConfig("displayName", "JobWithDisplayName");
 	}
 }

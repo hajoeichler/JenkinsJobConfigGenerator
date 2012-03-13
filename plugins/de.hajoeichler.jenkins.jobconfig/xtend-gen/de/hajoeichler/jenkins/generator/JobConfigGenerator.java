@@ -428,16 +428,22 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_description, "  ");
     _builder.append("</description>");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    _builder.append("<displayName>");
-    String _displayName = c.getDisplayName();
-    _builder.append(_displayName, "  ");
-    _builder.append("</displayName>");
-    _builder.newLineIfNotEmpty();
+    {
+      String _displayName = c.getDisplayName();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_displayName, null);
+      if (_operator_notEquals) {
+        _builder.append("  ");
+        _builder.append("<displayName>");
+        String _displayName_1 = c.getDisplayName();
+        _builder.append(_displayName_1, "  ");
+        _builder.append("</displayName>");
+        _builder.newLineIfNotEmpty();
+      }
+    }
     {
       OldBuildHandling _anyOldBuildHandling = this.getAnyOldBuildHandling(c);
-      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_anyOldBuildHandling, null);
-      if (_operator_notEquals) {
+      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_anyOldBuildHandling, null);
+      if (_operator_notEquals_1) {
         _builder.append("  ");
         OldBuildHandling _anyOldBuildHandling_1 = this.getAnyOldBuildHandling(c);
         CharSequence _logRotator = this.logRotator(_anyOldBuildHandling_1);
