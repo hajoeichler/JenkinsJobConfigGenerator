@@ -244,8 +244,8 @@ TestResult:
 HTMLPublisher:
 	"htmlpublisher" name=STRING "dir" dir=STRING "files" files=STRING (keepPast?='keepPast')?;
 
-Warnings:
-	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)? (computeNewWarnings?="computeNewWarnings")?;
+Warnings: // TODO: move treshholds etc. into own rule
+	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)? ("failTotalAll" failTotalAll=INT)? (computeNewWarnings?="computeNewWarnings")?;
 
 Cobertura:
 	"cobertura" xmlreport=STRING (onlyStable?="onlyStable")?;
