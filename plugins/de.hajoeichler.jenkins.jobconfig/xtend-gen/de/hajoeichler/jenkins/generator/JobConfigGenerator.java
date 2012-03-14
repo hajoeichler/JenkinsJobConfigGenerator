@@ -551,30 +551,54 @@ public class JobConfigGenerator implements IGenerator {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<logRotator>");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("<daysToKeep>");
-    int _daysToKeep = obh.getDaysToKeep();
-    _builder.append(_daysToKeep, "  ");
-    _builder.append("</daysToKeep>");
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    _builder.append("<numToKeep>");
-    int _maxNumberOfBuilds = obh.getMaxNumberOfBuilds();
-    _builder.append(_maxNumberOfBuilds, "  ");
-    _builder.append("</numToKeep>");
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    _builder.append("<artifactDaysToKeep>");
-    int _daysToKeepArtifact = obh.getDaysToKeepArtifact();
-    _builder.append(_daysToKeepArtifact, "  ");
-    _builder.append("</artifactDaysToKeep>");
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    _builder.append("<artifactNumToKeep>");
-    int _maxNumberOfBuildsWithArtifact = obh.getMaxNumberOfBuildsWithArtifact();
-    _builder.append(_maxNumberOfBuildsWithArtifact, "  ");
-    _builder.append("</artifactNumToKeep>");
-    _builder.newLineIfNotEmpty();
+    {
+      int _daysToKeep = obh.getDaysToKeep();
+      boolean _operator_greaterThan = IntegerExtensions.operator_greaterThan(_daysToKeep, 0);
+      if (_operator_greaterThan) {
+        _builder.append("  ");
+        _builder.append("<daysToKeep>");
+        int _daysToKeep_1 = obh.getDaysToKeep();
+        _builder.append(_daysToKeep_1, "  ");
+        _builder.append("</daysToKeep>");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      int _maxNumberOfBuilds = obh.getMaxNumberOfBuilds();
+      boolean _operator_greaterThan_1 = IntegerExtensions.operator_greaterThan(_maxNumberOfBuilds, 0);
+      if (_operator_greaterThan_1) {
+        _builder.append("  ");
+        _builder.append("<numToKeep>");
+        int _maxNumberOfBuilds_1 = obh.getMaxNumberOfBuilds();
+        _builder.append(_maxNumberOfBuilds_1, "  ");
+        _builder.append("</numToKeep>");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      int _daysToKeepArtifact = obh.getDaysToKeepArtifact();
+      boolean _operator_greaterThan_2 = IntegerExtensions.operator_greaterThan(_daysToKeepArtifact, 0);
+      if (_operator_greaterThan_2) {
+        _builder.append("  ");
+        _builder.append("<artifactDaysToKeep>");
+        int _daysToKeepArtifact_1 = obh.getDaysToKeepArtifact();
+        _builder.append(_daysToKeepArtifact_1, "  ");
+        _builder.append("</artifactDaysToKeep>");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      int _maxNumberOfBuildsWithArtifact = obh.getMaxNumberOfBuildsWithArtifact();
+      boolean _operator_greaterThan_3 = IntegerExtensions.operator_greaterThan(_maxNumberOfBuildsWithArtifact, 0);
+      if (_operator_greaterThan_3) {
+        _builder.append("  ");
+        _builder.append("<artifactNumToKeep>");
+        int _maxNumberOfBuildsWithArtifact_1 = obh.getMaxNumberOfBuildsWithArtifact();
+        _builder.append(_maxNumberOfBuildsWithArtifact_1, "  ");
+        _builder.append("</artifactNumToKeep>");
+        _builder.newLineIfNotEmpty();
+      }
+    }
     _builder.append("</logRotator>");
     _builder.newLine();
     return _builder;
@@ -2148,9 +2172,22 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("    ");
     _builder.append("<unstableNewLow></unstableNewLow>");
     _builder.newLine();
-    _builder.append("    ");
-    _builder.append("<failedTotalAll></failedTotalAll>");
-    _builder.newLine();
+    {
+      int _failTotalAll = w.getFailTotalAll();
+      boolean _operator_greaterThan_1 = IntegerExtensions.operator_greaterThan(_failTotalAll, 0);
+      if (_operator_greaterThan_1) {
+        _builder.append("    ");
+        _builder.append("<failedTotalAll>");
+        int _failTotalAll_1 = w.getFailTotalAll();
+        _builder.append(_failTotalAll_1, "    ");
+        _builder.append("</failedTotalAll>");
+        _builder.newLineIfNotEmpty();
+      } else {
+        _builder.append("    ");
+        _builder.append("<failedTotalAll></failedTotalAll>");
+        _builder.newLine();
+      }
+    }
     _builder.append("    ");
     _builder.append("<failedTotalHigh></failedTotalHigh>");
     _builder.newLine();

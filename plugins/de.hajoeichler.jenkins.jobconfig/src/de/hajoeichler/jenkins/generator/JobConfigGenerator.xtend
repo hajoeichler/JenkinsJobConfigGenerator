@@ -266,10 +266,18 @@ class JobConfigGenerator implements IGenerator {
 
 	def logRotator(OldBuildHandling obh) '''
 		<logRotator>
+		  «IF obh.daysToKeep > 0»
 		  <daysToKeep>«obh.daysToKeep»</daysToKeep>
+		  «ENDIF»
+		  «IF obh.maxNumberOfBuilds > 0»
 		  <numToKeep>«obh.maxNumberOfBuilds»</numToKeep>
+		  «ENDIF»
+		  «IF obh.daysToKeepArtifact > 0»
 		  <artifactDaysToKeep>«obh.daysToKeepArtifact»</artifactDaysToKeep>
+		  «ENDIF»
+		  «IF obh.maxNumberOfBuildsWithArtifact > 0»
 		  <artifactNumToKeep>«obh.maxNumberOfBuildsWithArtifact»</artifactNumToKeep>
+		  «ENDIF»
 		</logRotator>
 	'''
 
@@ -840,7 +848,11 @@ class JobConfigGenerator implements IGenerator {
 		    <unstableNewHigh></unstableNewHigh>
 		    <unstableNewNormal></unstableNewNormal>
 		    <unstableNewLow></unstableNewLow>
+		    «IF w.failTotalAll > 0»
+		    <failedTotalAll>«w.failTotalAll»</failedTotalAll>
+		    «ELSE»
 		    <failedTotalAll></failedTotalAll>
+		    «ENDIF»
 		    <failedTotalHigh></failedTotalHigh>
 		    <failedTotalNormal></failedTotalNormal>
 		    <failedTotalLow></failedTotalLow>
