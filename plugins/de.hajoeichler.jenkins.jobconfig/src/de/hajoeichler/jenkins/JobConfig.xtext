@@ -18,10 +18,18 @@ FqnWithWildCard:
 terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_' | '-') ('a'..'z' | 'A'..'Z' | '_' | '-' | '0'..'9')*;
 
+BracketOpen:
+	"("
+;
+
+BracketClose:
+	")"
+;
+
 DeclSpecs:
-	"declarations" "("
+	"declarations" BracketOpen
 	decls+=(AntDecl | MavenDecl | LockDecl | MSBuildDecl | WarningsDecl | MatrixDecl)+
-	")";
+	BracketClose;
 
 AntDecl:
 	"ant" name=ID;
@@ -39,22 +47,22 @@ WarningsDecl:
 	"warnings" name=ID;
 
 MatrixDecl:
-	"matrix" name=ID "("
+	"matrix" name=ID BracketOpen
 	(runSequentially?="runSequentially")?
 	axes+=AxisDecl+
-	")";
+	BracketClose;
 
 AxisDecl:
 	"axis" ("label" label=STRING
 	"values" values+=STRING+);
 
 Group:
-	"group" name=ID "("
+	"group" name=ID BracketOpen
 	(configs+=Config)*
-	")";
+	BracketClose;
 
 Config:
-	(abstract?="abstract")? "job" name=ID ("extends" parentConfig=[Config])? "("
+	(abstract?="abstract")? "job" name=ID ("extends" parentConfig=[Config])? BracketOpen
 	(disabled?="isDisabled")?
 	(oldBuildHandling=OldBuildHandling)?
 	(executeConcurrent?="executeConcurrent")?
@@ -70,30 +78,30 @@ Config:
 	(wrapper=WrapperSection)?
 	(buildSection=BuildSection)?
 	(publisherSection=PublisherSection)?
-	")";
+	BracketClose;
 
 Matrix:
 	"matrix" matrix=[MatrixDecl];
 
 OldBuildHandling:
 	{OldBuildHandling}
-	"oldBuilds" "("
+	"oldBuilds" BracketOpen
 	("daysToKeep" daysToKeep=INT)?
 	("maxNumberOfBuilds" maxNumberOfBuilds=INT)?
 	("daysToKeepArtifact" daysToKeepArtifact=INT)?
 	("maxNumberOfBuildsWithArtifact" maxNumberOfBuildsWithArtifact=INT)?
-	")";
+	BracketClose;
 
 ParameterSection:
-	"params" "("
+	"params" BracketOpen
 	parameters+=Parameter+
-	")";
+	BracketClose;
 
 Parameter:
-	name=STRING "("
+	name=STRING BracketOpen
 	type=ParameterType
 	("description" description=STRING)?
-	")";
+	BracketClose;
 
 ParameterType:
 	StringParam | BooleanParam | ChoiceParam;
@@ -111,17 +119,17 @@ Scm:
 	ScmGit | ScmSVN | ScmCVS;
 
 ScmGit:
-	"git" "(" "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")? ("excludedRegions"
-	excludedRegions=STRING)? ")";
+	"git" BracketOpen "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")? ("excludedRegions"
+	excludedRegions=STRING)? BracketClose;
 
 ScmSVN:
-	"svn" "(" "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser" browser=STRING)? ")";
+	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser" browser=STRING)? BracketClose;
 
 ScmCVS:
-	"cvs" "(" "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? ")";
+	"cvs" BracketOpen "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? BracketClose;
 
 TriggerSection:
-	"trigger" "(" buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger | GitHubPushTrigger)+ ")";
+	"trigger" BracketOpen buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger | GitHubPushTrigger)+ BracketClose;
 
 TimerTrigger:
 	"periodically" timer=STRING;
@@ -136,23 +144,23 @@ GitHubPushTrigger:
 	buildOnPushToGitHub?="buildOnPushToGitHub";
 
 WrapperSection:
-	"wrappers" "("
+	"wrappers" BracketOpen
 	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent)
-	")";
+	BracketClose;
 
 AnsiColor:
 	(ansicolor?='ansicolor');
 
 Release:
 	{Release}
-	"release" "("
+	"release" BracketOpen
 	(notKeepForever?='notKeepForever')?
 	(paramSection=ParameterSection)?
 	("pre" preBuildSection=BuildSection)?
 	("success" successBuildSection=BuildSection)?
 	("failed" failedBuildSection=BuildSection)?
 	("final" finalBuildSection=BuildSection)?
-	")";
+	BracketClose;
 
 Timeout:
 	"timeout" t=INT (failBuild?='failBuild')?;
@@ -167,52 +175,52 @@ MatrixTieParent:
 	"tie matrix parent to" matrixParent=STRING;
 
 BuildSection:
-	"builds" "("
+	"builds" BracketOpen
 	builds+=(Maven | Ant | Shell | Batch | SystemGroovy | MSBuild | TriggerBuilderSection)+
-	")";
+	BracketClose;
 
 Maven:
-	"maven" version=[MavenDecl] "("
+	"maven" version=[MavenDecl] BracketOpen
 	"goals" mavenGoals=STRING
 	("pom" mavenPOM=STRING)?
 	("properties" mavenProperties=STRING)?
 	(mavenPrivateRepo?="usePrivateRepo")?
-	")";
+	BracketClose;
 
 Ant:
-	"ant" version=[AntDecl] "("
+	"ant" version=[AntDecl] BracketOpen
 	("buildFile" buildFile=STRING)?
 	("targets" targets=STRING)?
-	")";
+	BracketClose;
 
 Shell:
-	"sh" "("
+	"sh" BracketOpen
 	shellScript=STRING
 	(append?="append")?
-	")";
+	BracketClose;
 
 Batch:
-	"batch" "("
+	"batch" BracketOpen
 	batchScript=STRING
 	(append?="append")?
-	")";
+	BracketClose;
 
 SystemGroovy:
-	"systemGroovy" "("
+	"systemGroovy" BracketOpen
 	groovyScript=STRING
 	// TODO support more config
-	")";
+	BracketClose;
 
 MSBuild:
-	"msbuild" version=[MSBuildDecl] "("
+	"msbuild" version=[MSBuildDecl] BracketOpen
 	"buildFile" buildFile=STRING
 	("args" targets=STRING)?
-	")";
+	BracketClose;
 
 TriggerBuilderSection:
-	"triggered builds" "("
+	"triggered builds" BracketOpen
 	(triggeredBuilds+=TriggeredBuild)+
-	")";
+	BracketClose;
 
 TriggeredBuild:
 	builds=[Config]
@@ -229,10 +237,10 @@ PredefinedTriggerParams:
 	'predefined' predefined=STRING;
 
 PublisherSection:
-	"publishers" "("
+	"publishers" BracketOpen
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
 	FindBugs | HipChat)+
-	")";
+	BracketClose;
 
 Artifacts:
 	"artifacts" artifacts=STRING (onlyLatest?="onlyLatest")?;
@@ -265,14 +273,14 @@ HipChat:
 
 ExtMail:
 	{ExtMail}
-	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? "("
+	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? BracketOpen
 	("to" to=STRING)?
 	("type" type=("html" | "text"))?
 	("subject" subject=STRING)?
 	("content" content=STRING)?
 	("attachments" attachments=STRING)?
-	("trigger" "(" (mailTrigger+=MailTrigger)+ ")")?
-	")";
+	("trigger" BracketOpen (mailTrigger+=MailTrigger)+ BracketClose)?
+	BracketClose;
 
 MailTrigger:
 // TODO: check new types
@@ -281,7 +289,7 @@ MailTrigger:
 	to=STRING)? ("subject" subject=STRING)? ("content" content=STRING)?;
 
 DownStream:
-	{DownStream} "downstream" "(" builds+=DownStreamBuild* ")";
+	{DownStream} "downstream" BracketOpen builds+=DownStreamBuild* BracketClose;
 
 DownStreamBuild:
 	builds=[Config] "when" condition=("Stable" | "Unstable" | "Not-Failed" | "Failed" | "Complete")
