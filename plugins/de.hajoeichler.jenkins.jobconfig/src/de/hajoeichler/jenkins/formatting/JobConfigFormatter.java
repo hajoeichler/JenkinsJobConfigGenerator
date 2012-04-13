@@ -48,14 +48,14 @@ public class JobConfigFormatter extends AbstractDeclarativeFormatter {
             }
         }
 
-        List<Keyword> bracketsOpen = jobConfigGrammarAccess.findKeywords("(");
-        for (Keyword bracketOpen : bracketsOpen) {
+        List<RuleCall> bracketsOpen = jobConfigGrammarAccess.findRuleCalls(jobConfigGrammarAccess.getBracketOpenRule());
+        for (RuleCall bracketOpen : bracketsOpen) {
             c.setLinewrap(1, 1, 1).after(bracketOpen);
             c.setIndentationIncrement().after(bracketOpen);
         }
 
-        List<Keyword> bracketsClose = jobConfigGrammarAccess.findKeywords(")");
-        for (Keyword bracketClose : bracketsClose) {
+        List<RuleCall> bracketsClose = jobConfigGrammarAccess.findRuleCalls(jobConfigGrammarAccess.getBracketCloseRule());
+        for (RuleCall bracketClose : bracketsClose) {
             c.setLinewrap(1, 1, 1).before(bracketClose);
             c.setIndentationDecrement().before(bracketClose);
             c.setLinewrap(1, 1, 1).after(bracketClose);
