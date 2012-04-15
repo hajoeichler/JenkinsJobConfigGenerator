@@ -10,7 +10,7 @@ The so defined configurations are generated as config.xml files and can simply c
 ## Building
 
 1. run ./build.sh
-1. Mac OS X product will be copied to jenkinsJobConfigGenerator folder and can be started via open jenkinsJobConfigGenerator/Eclipse.app
+1. Mac OS X product can be started via ./run.sh
 
 ## License
 
