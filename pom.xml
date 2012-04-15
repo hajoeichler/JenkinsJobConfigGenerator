@@ -12,6 +12,7 @@
   </properties>
   
   <modules>
+  	<module>build</module>
   	<module>plugins</module>
   	<module>features</module>
   	<module>products</module>
