@@ -145,7 +145,7 @@ GitHubPushTrigger:
 
 WrapperSection:
 	"wrappers" BracketOpen
-	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent)
+	wrappers+=(AnsiColor | Release | Timeout | Lock | ExclusiveExecution | MatrixTieParent)+
 	BracketClose;
 
 AnsiColor:
