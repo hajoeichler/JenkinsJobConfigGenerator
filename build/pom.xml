@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>plugins</artifactId>
+	<artifactId>build</artifactId>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>de.hajoeichler</groupId>
@@ -12,9 +12,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<modules>
-		<module>de.hajoeichler.jenkins.jobconfig</module>
-		<module>de.hajoeichler.jenkins.jobconfig.application</module>
-		<module>de.hajoeichler.jenkins.jobconfig.tests</module>
-		<module>de.hajoeichler.jenkins.jobconfig.ui</module>
+		<module>de.hajoeichler.jenkins.jobconfig.platform</module>
 	</modules>
 </project>

@@ -9,10 +9,8 @@ The so defined configurations are generated as config.xml files and can simply c
 
 ## Building
 
-1. goto plugins directory
-1. execute 'mvn --batch-mode -U clean generate-sources -Pgen-xtext'
-1. execute 'mvn --batch-mode compile'
-1. execute 'mvn --batch-mode install job.config.file=(you config file or directory)
+1. run ./build.sh
+1. Mac OS X product will be copied to jenkinsJobConfigGenerator folder and can be started via open jenkinsJobConfigGenerator/Eclipse.app
 
 ## License
 
