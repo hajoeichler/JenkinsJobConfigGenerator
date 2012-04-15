@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Jenkins Job Configuration Generator" uid="jenkinsJobConfigGen.product" id="de.hajoeichler.jenkins.jobconfig.application.product" application="de.hajoeichler.jenkins.jobconfig.application.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Jenkins Job Configuration Generator" uid="jenkinsJobConfigGen.product" id="de.hajoeichler.jenkins.jobconfig.application.product" application="org.eclipse.ui.ide.workbench" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+
 
    <configIni use="default">
    </configIni>
@@ -11,6 +12,24 @@
    </launcherArgs>
 
    <windowImages i16="icons/alt_window_16.gif" i32="icons/alt_window_32.gif"/>
+
+   <splash
+      location="de.hajoeichler.jenkins.jobconfig.application"
+      startupProgressRect="7,250,582,15"
+      startupMessageRect="7,230,582,20"
+      startupForegroundColor="000000" />
+   <launcher>
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <intro introId="de.hajoeichler.jenkins.jobconfig.application.intro"/>
+
+   <vm>
+   </vm>
+
 
    <plugins>
       <plugin id="com.google.guava"/>
