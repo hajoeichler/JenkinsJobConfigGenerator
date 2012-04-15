@@ -3,19 +3,10 @@
 <plugin>
 
    <extension
-         id="application"
-         point="org.eclipse.core.runtime.applications">
-      <application>
-         <run
-               class="de.hajoeichler.jenkins.jobconfig.application.intro.Application">
-         </run>
-      </application>
-   </extension>
-   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RCP Perspective"
-            class="de.hajoeichler.jenkins.jobconfig.application.intro.Perspective"
+            name="Jenkins Perspective"
+            class="de.hajoeichler.jenkins.jobconfig.application.Perspective"
             id="de.hajoeichler.jenkins.jobconfig.application.perspective">
       </perspective>
    </extension>
@@ -23,7 +14,7 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="de.hajoeichler.jenkins.jobconfig.application.application"
+            application="org.eclipse.ui.ide.workbench"
             name="Jenkins Job Configuration Generator">
          <property
                name="windowImages"

@@ -3,10 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Application
 Bundle-SymbolicName: de.hajoeichler.jenkins.jobconfig.application; singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Activator: de.hajoeichler.jenkins.jobconfig.application.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.intro,
- de.hajoeichler.jenkins.jobconfig.ui
-Bundle-ActivationPolicy: lazy
+ de.hajoeichler.jenkins.jobconfig.ui,
+ org.eclipse.ui.ide;bundle-version="3.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
