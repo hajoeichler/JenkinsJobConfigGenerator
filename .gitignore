@@ -3,3 +3,4 @@ target
 plugin.xml_gen
 src-gen
 xtend-gen
+jenkinsJobConfigGenerator
