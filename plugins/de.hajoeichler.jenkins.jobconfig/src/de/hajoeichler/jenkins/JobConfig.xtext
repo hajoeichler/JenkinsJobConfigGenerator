@@ -119,8 +119,8 @@ Scm:
 	ScmGit | ScmSVN | ScmCVS;
 
 ScmGit:
-	"git" BracketOpen "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")? ("excludedRegions"
-	excludedRegions=STRING)? BracketClose;
+	"git" BracketOpen "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")?
+	("excludedRegions" excludedRegions=STRING)? ("includedRegions" includedRegions=STRING)? BracketClose;
 
 ScmSVN:
 	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser" browser=STRING)? BracketClose;
@@ -239,7 +239,7 @@ PredefinedTriggerParams:
 PublisherSection:
 	"publishers" BracketOpen
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs | HipChat)+
+	FindBugs | HipChat | PlayAutoTestReport)+
 	BracketClose;
 
 Artifacts:
@@ -270,6 +270,10 @@ Claim:
 HipChat:
 	{HipChat}
 	"hipchat" ("room" room=STRING)? (startNotification?="startNotification")?;
+
+PlayAutoTestReport:
+	(reportPlayAutoTest?="reportPlay!auto-test")
+;
 
 ExtMail:
 	{ExtMail}

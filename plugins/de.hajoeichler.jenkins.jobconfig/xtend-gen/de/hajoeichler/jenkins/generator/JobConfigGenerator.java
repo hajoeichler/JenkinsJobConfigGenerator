@@ -35,6 +35,7 @@ import de.hajoeichler.jenkins.jobConfig.OldBuildHandling;
 import de.hajoeichler.jenkins.jobConfig.Parameter;
 import de.hajoeichler.jenkins.jobConfig.ParameterSection;
 import de.hajoeichler.jenkins.jobConfig.ParameterType;
+import de.hajoeichler.jenkins.jobConfig.PlayAutoTestReport;
 import de.hajoeichler.jenkins.jobConfig.PollScmTrigger;
 import de.hajoeichler.jenkins.jobConfig.PredefinedTriggerParams;
 import de.hajoeichler.jenkins.jobConfig.PropertyFileTriggerParams;
@@ -868,6 +869,9 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</branches>");
     _builder.newLine();
     _builder.append("  ");
+    _builder.append("<disableSubmodules>false</disableSubmodules>");
+    _builder.newLine();
+    _builder.append("  ");
     _builder.append("<recursiveSubmodules>false</recursiveSubmodules>");
     _builder.newLine();
     _builder.append("  ");
@@ -898,6 +902,9 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<remotePoll>false</remotePoll>");
     _builder.newLine();
     _builder.append("  ");
+    _builder.append("<ignoreNotifyCommit>false</ignoreNotifyCommit>");
+    _builder.newLine();
+    _builder.append("  ");
     _builder.append("<buildChooser class=\"hudson.plugins.git.util.DefaultBuildChooser\"/>");
     _builder.newLine();
     _builder.append("  ");
@@ -908,6 +915,9 @@ public class JobConfigGenerator implements IGenerator {
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<relativeTargetDir></relativeTargetDir>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<reference></reference>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<excludedRegions>");
@@ -928,6 +938,13 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<skipTag>false</skipTag>");
     _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<includedRegions>");
+    String _includedRegions = git.getIncludedRegions();
+    String _normalize_2 = this.normalize(_includedRegions);
+    _builder.append(_normalize_2, "  ");
+    _builder.append("</includedRegions>");
+    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("<scmName></scmName>");
     _builder.newLine();
@@ -2253,6 +2270,13 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected CharSequence _publisher(final PlayAutoTestReport p) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<com.gmail.ikeike443.PlayTestResultPublisher/>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected CharSequence _publisher(final Cobertura c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.cobertura.CoberturaPublisher>");
@@ -2653,6 +2677,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((HTMLPublisher)a);
     } else if (a instanceof HipChat) {
       return _publisher((HipChat)a);
+    } else if (a instanceof PlayAutoTestReport) {
+      return _publisher((PlayAutoTestReport)a);
     } else if (a instanceof Rcov) {
       return _publisher((Rcov)a);
     } else if (a instanceof TestResult) {

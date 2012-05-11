@@ -55,6 +55,7 @@ import org.eclipse.xtext.generator.IGenerator
 import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
 import de.hajoeichler.jenkins.jobConfig.AnsiColor
 import de.hajoeichler.jenkins.jobConfig.GitHubPushTrigger
+import de.hajoeichler.jenkins.jobConfig.PlayAutoTestReport
 
 class JobConfigGenerator implements IGenerator {
 
@@ -381,6 +382,7 @@ class JobConfigGenerator implements IGenerator {
 		      «ENDIF»
 		    </hudson.plugins.git.BranchSpec>
 		  </branches>
+		  <disableSubmodules>false</disableSubmodules>
 		  <recursiveSubmodules>false</recursiveSubmodules>
 		  <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
 		  <authorOrCommitter>false</authorOrCommitter>
@@ -392,15 +394,18 @@ class JobConfigGenerator implements IGenerator {
 		  «ENDIF»
 		  <pruneBranches>false</pruneBranches>
 		  <remotePoll>false</remotePoll>
+		  <ignoreNotifyCommit>false</ignoreNotifyCommit>
 		  <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
 		  <gitTool>Default</gitTool>
 		  <submoduleCfg class="list"/>
 		  <relativeTargetDir></relativeTargetDir>
+		  <reference></reference>
 		  <excludedRegions>«git.excludedRegions.normalize»</excludedRegions>
 		  <excludedUsers></excludedUsers>
 		  <gitConfigName></gitConfigName>
 		  <gitConfigEmail></gitConfigEmail>
 		  <skipTag>false</skipTag>
+		  <includedRegions>«git.includedRegions.normalize»</includedRegions>
 		  <scmName></scmName>
 		</scm>
 	'''
@@ -876,6 +881,10 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch publisher (HipChat h) '''
 		<jenkins.plugins.hipchat.HipChatNotifier/>
+	'''
+
+	def dispatch publisher (PlayAutoTestReport p) '''
+		<com.gmail.ikeike443.PlayTestResultPublisher/>
 	'''
 
 	def dispatch publisher (Cobertura c) '''
