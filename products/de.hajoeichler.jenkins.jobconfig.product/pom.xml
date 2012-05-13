@@ -11,6 +11,9 @@
 	</parent>
 	<artifactId>de.hajoeichler.jenkins.product</artifactId>
 	<packaging>eclipse-repository</packaging>
+	<properties>
+		<root.folder>jenkinsJobConfigGenerator</root.folder>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -36,11 +39,47 @@
 					<products>
 						<product>
 							<id>jenkinsJobConfigGen.product</id>
-							<rootFolder>jenkinsJobConfigGenerator</rootFolder>
+							<rootFolder>${root.folder}</rootFolder>
 						</product>
 					</products>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>create-installer</id>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>tycho-installer-plugin-repo</id>
+					<layout>default</layout>
+					<url>https://repository-katmatt.forge.cloudbees.com/snapshot/</url>					
+				</pluginRepository>
+			</pluginRepositories>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipselabs.tycho.installer.plugin</groupId>
+						<artifactId>tycho-installer-plugin</artifactId>
+						<version>0.9.0-SNAPSHOT</version>
+						<executions>
+							<execution>
+								<id>create-installer</id>
+								<phase>package</phase>
+								<goals>
+									<goal>create-installer</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<manufacturer>Hajo Eichler</manufacturer>
+							<productFile>${project.basedir}/de.hajoeichler.jenkins.jobconfig.product</productFile>
+							<rootFolder>${root.folder}</rootFolder>
+							<installerName>JenkinsJobDSL-${project.version}</installerName>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

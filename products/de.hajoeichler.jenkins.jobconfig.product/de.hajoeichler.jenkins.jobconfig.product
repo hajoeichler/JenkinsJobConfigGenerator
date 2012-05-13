@@ -3,7 +3,6 @@
 
 <product name="Jenkins Job Configuration Generator" uid="jenkinsJobConfigGen.product" id="de.hajoeichler.jenkins.jobconfig.application.product" application="org.eclipse.ui.ide.workbench" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -18,7 +17,7 @@
       startupProgressRect="7,250,582,15"
       startupMessageRect="7,230,582,20"
       startupForegroundColor="000000" />
-   <launcher>
+   <launcher name="JenkinsJobDSL">
       <solaris/>
       <win useIco="false">
          <bmp/>
@@ -30,14 +29,13 @@
    <vm>
    </vm>
 
-
    <plugins>
       <plugin id="com.google.guava"/>
       <plugin id="com.google.inject"/>
       <plugin id="com.ibm.icu"/>
-      <plugin id="de.hajoeichler.jenkins.jobconfig"/>
-      <plugin id="de.hajoeichler.jenkins.jobconfig.application"/>
-      <plugin id="de.hajoeichler.jenkins.jobconfig.ui"/>
+      <plugin id="de.hajoeichler.jenkins.jobconfig" fragment=""/>
+      <plugin id="de.hajoeichler.jenkins.jobconfig.application" fragment=""/>
+      <plugin id="de.hajoeichler.jenkins.jobconfig.ui" fragment=""/>
       <plugin id="javax.inject"/>
       <plugin id="org.antlr.runtime"/>
       <plugin id="org.apache.commons.cli"/>
