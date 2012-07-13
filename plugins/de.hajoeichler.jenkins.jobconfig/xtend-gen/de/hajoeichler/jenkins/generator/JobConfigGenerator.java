@@ -67,6 +67,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -74,6 +75,7 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.xbase.lib.BooleanExtensions;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IntegerExtensions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -85,20 +87,26 @@ public class JobConfigGenerator implements IGenerator {
   private Config currentConfig;
   
   public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
-    Iterable<EObject> _allContentsIterable = ResourceExtensions.allContentsIterable(resource);
-    Iterable<Config> _filter = IterableExtensions.<Config>filter(_allContentsIterable, de.hajoeichler.jenkins.jobConfig.Config.class);
-    for (final Config config : _filter) {
-      boolean _isAbstract = config.isAbstract();
-      boolean _operator_not = BooleanExtensions.operator_not(_isAbstract);
-      if (_operator_not) {
-        {
-          this.currentConfig = config;
-          String _fileName = this.fileName(config);
-          CharSequence _content = this.content(config);
-          fsa.generateFile(_fileName, _content);
+      URI _uRI = resource.getURI();
+      String _operator_plus = StringExtensions.operator_plus("Processing ", _uRI);
+      InputOutput.<String>println(_operator_plus);
+      Iterable<EObject> _allContentsIterable = ResourceExtensions.allContentsIterable(resource);
+      Iterable<Config> _filter = IterableExtensions.<Config>filter(_allContentsIterable, de.hajoeichler.jenkins.jobConfig.Config.class);
+      for (final Config config : _filter) {
+        boolean _isAbstract = config.isAbstract();
+        boolean _operator_not = BooleanExtensions.operator_not(_isAbstract);
+        if (_operator_not) {
+          {
+            this.currentConfig = config;
+            String _fileName = this.fileName(config);
+            String _operator_plus_1 = StringExtensions.operator_plus("Writing config to ", _fileName);
+            InputOutput.<String>println(_operator_plus_1);
+            String _fileName_1 = this.fileName(config);
+            CharSequence _content = this.content(config);
+            fsa.generateFile(_fileName_1, _content);
+          }
         }
       }
-    }
   }
   
   public String normalize(final String s) {

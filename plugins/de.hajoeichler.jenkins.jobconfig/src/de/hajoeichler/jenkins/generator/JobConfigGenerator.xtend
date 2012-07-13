@@ -62,9 +62,11 @@ class JobConfigGenerator implements IGenerator {
 	Config currentConfig
 
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
+		println("Processing " + resource.URI)
 		for(config: resource.allContentsIterable.filter(typeof(Config))) {
 			if (!config.abstract) {
 				currentConfig = config
+				println("Writing config to " + config.fileName)
 				fsa.generateFile(config.fileName, config.content)
 			}
 		}
