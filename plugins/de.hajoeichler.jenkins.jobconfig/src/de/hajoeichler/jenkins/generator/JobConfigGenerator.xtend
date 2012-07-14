@@ -241,7 +241,6 @@ class JobConfigGenerator implements IGenerator {
 		  <properties>
 		    «gitHub(c)»
 		    «parameters(c)»
-		    «hipChat(c)»
 		  </properties>
 		  «IF c.getAnyScm == null»
 		  <scm class="hudson.scm.NullSCM"/>
@@ -339,30 +338,6 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch param(Parameter p, ChoiceParam c) '''
-	'''
-
-	def HipChat getHipChat(Config c) {
-		if (c.publisherSection != null) {
-			for (p : c.publisherSection.publishers) {
-				if (p instanceof HipChat) {
-					return p as HipChat
-				}
-			}
-		}
-		if (c.parentConfig != null) {
-			return getHipChat(c.parentConfig)
-		}
-		return null
-	}
-
-	def hipChat(Config c) '''
-		«val hc = c.getHipChat»
-		«IF hc != null»
-		<jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>
-		  <room>«hc.room»</room>
-		  <startNotification>«hc.startNotification»</startNotification>
-		</jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>
-		«ENDIF»
 	'''
 
 	def dispatch scm(ScmGit git) '''
@@ -882,7 +857,9 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch publisher (HipChat h) '''
-		<jenkins.plugins.hipchat.HipChatNotifier/>
+		<jenkins.plugins.hipchat.HipChatPublisher>
+		  <room>«h.room»</room>
+		</jenkins.plugins.hipchat.HipChatPublisher>
 	'''
 
 	def dispatch publisher (PlayAutoTestReport p) '''

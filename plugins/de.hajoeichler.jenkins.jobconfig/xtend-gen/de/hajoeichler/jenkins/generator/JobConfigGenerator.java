@@ -474,10 +474,6 @@ public class JobConfigGenerator implements IGenerator {
     CharSequence _parameters = this.parameters(c);
     _builder.append(_parameters, "    ");
     _builder.newLineIfNotEmpty();
-    _builder.append("    ");
-    CharSequence _hipChat = this.hipChat(c);
-    _builder.append(_hipChat, "    ");
-    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("</properties>");
     _builder.newLine();
@@ -762,57 +758,6 @@ public class JobConfigGenerator implements IGenerator {
   
   protected CharSequence _param(final Parameter p, final ChoiceParam c) {
     StringConcatenation _builder = new StringConcatenation();
-    return _builder;
-  }
-  
-  public HipChat getHipChat(final Config c) {
-      PublisherSection _publisherSection = c.getPublisherSection();
-      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_publisherSection, null);
-      if (_operator_notEquals) {
-        PublisherSection _publisherSection_1 = c.getPublisherSection();
-        EList<EObject> _publishers = _publisherSection_1.getPublishers();
-        for (final EObject p : _publishers) {
-          if ((p instanceof HipChat)) {
-            return ((HipChat) p);
-          }
-        }
-      }
-      Config _parentConfig = c.getParentConfig();
-      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_parentConfig, null);
-      if (_operator_notEquals_1) {
-        Config _parentConfig_1 = c.getParentConfig();
-        HipChat _hipChat = this.getHipChat(_parentConfig_1);
-        return _hipChat;
-      }
-      return null;
-  }
-  
-  public CharSequence hipChat(final Config c) {
-    StringConcatenation _builder = new StringConcatenation();
-    HipChat _hipChat = this.getHipChat(c);
-    final HipChat hc = _hipChat;
-    _builder.newLineIfNotEmpty();
-    {
-      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(hc, null);
-      if (_operator_notEquals) {
-        _builder.append("<jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>");
-        _builder.newLine();
-        _builder.append("  ");
-        _builder.append("<room>");
-        String _room = hc.getRoom();
-        _builder.append(_room, "  ");
-        _builder.append("</room>");
-        _builder.newLineIfNotEmpty();
-        _builder.append("  ");
-        _builder.append("<startNotification>");
-        boolean _isStartNotification = hc.isStartNotification();
-        _builder.append(_isStartNotification, "  ");
-        _builder.append("</startNotification>");
-        _builder.newLineIfNotEmpty();
-        _builder.append("</jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>");
-        _builder.newLine();
-      }
-    }
     return _builder;
   }
   
@@ -2273,7 +2218,15 @@ public class JobConfigGenerator implements IGenerator {
   
   protected CharSequence _publisher(final HipChat h) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<jenkins.plugins.hipchat.HipChatNotifier/>");
+    _builder.append("<jenkins.plugins.hipchat.HipChatPublisher>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<room>");
+    String _room = h.getRoom();
+    _builder.append(_room, "  ");
+    _builder.append("</room>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("</jenkins.plugins.hipchat.HipChatPublisher>");
     _builder.newLine();
     return _builder;
   }
