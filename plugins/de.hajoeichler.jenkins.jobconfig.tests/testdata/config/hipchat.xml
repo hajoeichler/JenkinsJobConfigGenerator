@@ -4,10 +4,6 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>
-      <room>MyRoom</room>
-      <startNotification>true</startNotification>
-    </jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
@@ -20,7 +16,9 @@
   <builders>
   </builders>
   <publishers>
-    <jenkins.plugins.hipchat.HipChatNotifier/>
+    <jenkins.plugins.hipchat.HipChatPublisher>
+      <room>MyRoom</room>
+    </jenkins.plugins.hipchat.HipChatPublisher>
   </publishers>
   <buildWrappers>
   </buildWrappers>
