@@ -1,5 +1,5 @@
 job JobWithHipChat {
   publishers {
-    hipchat room "MyRoom" startNotification
+    hipchat room "MyRoom"
   }
 }
