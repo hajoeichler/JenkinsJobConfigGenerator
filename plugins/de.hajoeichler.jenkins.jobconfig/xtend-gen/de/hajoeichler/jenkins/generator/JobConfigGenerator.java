@@ -2056,9 +2056,9 @@ public class JobConfigGenerator implements IGenerator {
     {
       EList<ViolationsConfig> _violations = v.getViolations();
       for(final ViolationsConfig vc : _violations) {
-        _builder.append("        ");
+        _builder.append("      ");
         CharSequence _violationsConfig = this.violationsConfig(vc);
-        _builder.append(_violationsConfig, "        ");
+        _builder.append(_violationsConfig, "      ");
         _builder.newLineIfNotEmpty();
       }
     }

@@ -804,9 +804,9 @@ class JobConfigGenerator implements IGenerator {
 		    </suppressions>
 		    <typeConfigs>
 		      <no-comparator/>
-		        «FOR vc:v.violations»
-		        «violationsConfig(vc)»
-		        «ENDFOR»
+		      «FOR vc:v.violations»
+		      «violationsConfig(vc)»
+		      «ENDFOR»
 		    </typeConfigs>
 		    <limit>100</limit>
 		    <sourcePathPattern></sourcePathPattern>
