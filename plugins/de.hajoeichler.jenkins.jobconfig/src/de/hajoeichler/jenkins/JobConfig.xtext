@@ -19,12 +19,10 @@ terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_' | '-') ('a'..'z' | 'A'..'Z' | '_' | '-' | '0'..'9')*;
 
 BracketOpen:
-	"{"
-;
+	"{";
 
 BracketClose:
-	"}"
-;
+	"}";
 
 DeclSpecs:
 	"declarations" BracketOpen
@@ -123,13 +121,15 @@ ScmGit:
 	("excludedRegions" excludedRegions=STRING)? ("includedRegions" includedRegions=STRING)? BracketClose;
 
 ScmSVN:
-	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser" browser=STRING)? BracketClose;
+	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser"
+	browser=STRING)? BracketClose;
 
 ScmCVS:
 	"cvs" BracketOpen "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? BracketClose;
 
 TriggerSection:
-	"trigger" BracketOpen buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger | GitHubPushTrigger)+ BracketClose;
+	"trigger" BracketOpen buildtriggers+=(TimerTrigger | PollScmTrigger | FirstStartTrigger | GitHubPushTrigger)+
+	BracketClose;
 
 TimerTrigger:
 	"periodically" timer=STRING;
@@ -239,7 +239,7 @@ PredefinedTriggerParams:
 PublisherSection:
 	"publishers" BracketOpen
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs | HipChat | PlayAutoTestReport)+
+	FindBugs | HipChat | PlayAutoTestReport | Violations)+
 	BracketClose;
 
 Artifacts:
@@ -252,8 +252,18 @@ TestResult:
 HTMLPublisher:
 	"htmlpublisher" name=STRING "dir" dir=STRING "files" files=STRING (keepPast?='keepPast')?;
 
+Violations:
+	"violations" BracketOpen
+	violations+=ViolationsConfig
+	BracketClose;
+
+ViolationsConfig:
+	type=("checkstyle" | "csslint" | "findbugs" | "jslint") "min" min=INT "max" max=INT "unstable" unstable=INT "pattern"
+	pattern=STRING;
+
 Warnings: // TODO: move treshholds etc. into own rule
-	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)? ("failTotalAll" failTotalAll=INT)? (computeNewWarnings?="computeNewWarnings")?;
+	"warnings" parser=[WarningsDecl] ("unstableTotalAll" unstableTotalAll=INT)? ("failTotalAll" failTotalAll=INT)?
+	(computeNewWarnings?="computeNewWarnings")?;
 
 Cobertura:
 	"cobertura" xmlreport=STRING (onlyStable?="onlyStable")?;
@@ -268,23 +278,15 @@ Claim:
 	(canClaim?="canClaim");
 
 HipChat:
-	{HipChat}
-	"hipchat" ("room" room=STRING)? (startNotification?="startNotification")?;
+	{HipChat} "hipchat" ("room" room=STRING)?;
 
 PlayAutoTestReport:
-	(reportPlayAutoTest?="reportPlay!auto-test")
-;
+	(reportPlayAutoTest?="reportPlay!auto-test");
 
 ExtMail:
-	{ExtMail}
-	"extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? BracketOpen
-	("to" to=STRING)?
-	("type" type=("html" | "text"))?
-	("subject" subject=STRING)?
-	("content" content=STRING)?
-	("attachments" attachments=STRING)?
-	("trigger" BracketOpen (mailTrigger+=MailTrigger)+ BracketClose)?
-	BracketClose;
+	{ExtMail} "extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? BracketOpen ("to" to=STRING)? ("type" type=("html"
+	| "text"))? ("subject" subject=STRING)? ("content" content=STRING)? ("attachments" attachments=STRING)? ("trigger"
+	BracketOpen (mailTrigger+=MailTrigger)+ BracketClose)? BracketClose;
 
 MailTrigger:
 // TODO: check new types

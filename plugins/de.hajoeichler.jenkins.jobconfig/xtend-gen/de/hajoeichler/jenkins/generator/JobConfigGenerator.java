@@ -55,6 +55,8 @@ import de.hajoeichler.jenkins.jobConfig.TimerTrigger;
 import de.hajoeichler.jenkins.jobConfig.TriggerBuilderSection;
 import de.hajoeichler.jenkins.jobConfig.TriggerSection;
 import de.hajoeichler.jenkins.jobConfig.TriggeredBuild;
+import de.hajoeichler.jenkins.jobConfig.Violations;
+import de.hajoeichler.jenkins.jobConfig.ViolationsConfig;
 import de.hajoeichler.jenkins.jobConfig.Warnings;
 import de.hajoeichler.jenkins.jobConfig.WarningsDecl;
 import de.hajoeichler.jenkins.jobConfig.WrapperSection;
@@ -2029,6 +2031,111 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected CharSequence _publisher(final Violations v) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.violations.ViolationsPublisher>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<config>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<suppressions class=\"tree-set\">");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<no-comparator/>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("</suppressions>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<typeConfigs>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<no-comparator/>");
+    _builder.newLine();
+    {
+      EList<ViolationsConfig> _violations = v.getViolations();
+      for(final ViolationsConfig vc : _violations) {
+        _builder.append("        ");
+        CharSequence _violationsConfig = this.violationsConfig(vc);
+        _builder.append(_violationsConfig, "        ");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.append("    ");
+    _builder.append("</typeConfigs>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<limit>100</limit>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<sourcePathPattern></sourcePathPattern>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<fauxProjectPath></fauxProjectPath>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<encoding>default</encoding>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</config>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.violations.ViolationsPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence violationsConfig(final ViolationsConfig vc) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<entry>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<string>checkstyle</string>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<hudson.plugins.violations.TypeConfig>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<type>");
+    String _type = vc.getType();
+    _builder.append(_type, "    ");
+    _builder.append("</type>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("<min>");
+    int _min = vc.getMin();
+    _builder.append(_min, "    ");
+    _builder.append("</min>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("<max>");
+    int _max = vc.getMax();
+    _builder.append(_max, "    ");
+    _builder.append("</max>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("<unstable>");
+    int _unstable = vc.getUnstable();
+    _builder.append(_unstable, "    ");
+    _builder.append("</unstable>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("<usePattern>false</usePattern>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<pattern>");
+    String _pattern = vc.getPattern();
+    _builder.append(_pattern, "    ");
+    _builder.append("</pattern>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("</hudson.plugins.violations.TypeConfig>");
+    _builder.newLine();
+    _builder.append("</entry>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected CharSequence _publisher(final HTMLPublisher h) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<htmlpublisher.HtmlPublisher>");
@@ -2644,6 +2751,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((Rcov)a);
     } else if (a instanceof TestResult) {
       return _publisher((TestResult)a);
+    } else if (a instanceof Violations) {
+      return _publisher((Violations)a);
     } else if (a instanceof Warnings) {
       return _publisher((Warnings)a);
     } else {

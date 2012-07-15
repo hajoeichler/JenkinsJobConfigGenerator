@@ -56,6 +56,8 @@ import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
 import de.hajoeichler.jenkins.jobConfig.AnsiColor
 import de.hajoeichler.jenkins.jobConfig.GitHubPushTrigger
 import de.hajoeichler.jenkins.jobConfig.PlayAutoTestReport
+import de.hajoeichler.jenkins.jobConfig.Violations
+import de.hajoeichler.jenkins.jobConfig.ViolationsConfig
 
 class JobConfigGenerator implements IGenerator {
 
@@ -792,6 +794,40 @@ class JobConfigGenerator implements IGenerator {
 		  <latestOnly>false</latestOnly>
 		  «ENDIF»
 		</hudson.tasks.ArtifactArchiver>
+	'''
+
+	def dispatch publisher(Violations v) '''
+		<hudson.plugins.violations.ViolationsPublisher>
+		  <config>
+		    <suppressions class="tree-set">
+		      <no-comparator/>
+		    </suppressions>
+		    <typeConfigs>
+		      <no-comparator/>
+		        «FOR vc:v.violations»
+		        «violationsConfig(vc)»
+		        «ENDFOR»
+		    </typeConfigs>
+		    <limit>100</limit>
+		    <sourcePathPattern></sourcePathPattern>
+		    <fauxProjectPath></fauxProjectPath>
+		    <encoding>default</encoding>
+		  </config>
+		</hudson.plugins.violations.ViolationsPublisher>
+	'''
+
+	def violationsConfig (ViolationsConfig vc) '''
+		<entry>
+		  <string>checkstyle</string>
+		  <hudson.plugins.violations.TypeConfig>
+		    <type>«vc.type»</type>
+		    <min>«vc.min»</min>
+		    <max>«vc.max»</max>
+		    <unstable>«vc.unstable»</unstable>
+		    <usePattern>false</usePattern>
+		    <pattern>«vc.pattern»</pattern>
+		  </hudson.plugins.violations.TypeConfig>
+		</entry>
 	'''
 
 	def dispatch publisher (HTMLPublisher h) '''
