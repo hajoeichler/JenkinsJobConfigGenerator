@@ -875,14 +875,24 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<reference></reference>");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("<excludedRegions>");
-    ScmRegions _regions = git.getRegions();
-    String _excludedRegions = _regions.getExcludedRegions();
-    String _normalize_1 = this.normalize(_excludedRegions);
-    _builder.append(_normalize_1, "  ");
-    _builder.append("</excludedRegions>");
-    _builder.newLineIfNotEmpty();
+    {
+      ScmRegions _regions = git.getRegions();
+      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_regions, null);
+      if (_operator_notEquals_1) {
+        _builder.append("  ");
+        _builder.append("<excludedRegions>");
+        ScmRegions _regions_1 = git.getRegions();
+        String _excludedRegions = _regions_1.getExcludedRegions();
+        String _normalize_1 = this.normalize(_excludedRegions);
+        _builder.append(_normalize_1, "  ");
+        _builder.append("</excludedRegions>");
+        _builder.newLineIfNotEmpty();
+      } else {
+        _builder.append("  ");
+        _builder.append("<excludedRegions></excludedRegions>");
+        _builder.newLine();
+      }
+    }
     _builder.append("  ");
     _builder.append("<excludedUsers></excludedUsers>");
     _builder.newLine();
@@ -895,14 +905,24 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<skipTag>false</skipTag>");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("<includedRegions>");
-    ScmRegions _regions_1 = git.getRegions();
-    String _includedRegions = _regions_1.getIncludedRegions();
-    String _normalize_2 = this.normalize(_includedRegions);
-    _builder.append(_normalize_2, "  ");
-    _builder.append("</includedRegions>");
-    _builder.newLineIfNotEmpty();
+    {
+      ScmRegions _regions_2 = git.getRegions();
+      boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_regions_2, null);
+      if (_operator_notEquals_2) {
+        _builder.append("  ");
+        _builder.append("<includedRegions>");
+        ScmRegions _regions_3 = git.getRegions();
+        String _includedRegions = _regions_3.getIncludedRegions();
+        String _normalize_2 = this.normalize(_includedRegions);
+        _builder.append(_normalize_2, "  ");
+        _builder.append("</includedRegions>");
+        _builder.newLineIfNotEmpty();
+      } else {
+        _builder.append("  ");
+        _builder.append("<includedRegions></includedRegions>");
+        _builder.newLine();
+      }
+    }
     _builder.append("  ");
     _builder.append("<scmName></scmName>");
     _builder.newLine();
@@ -941,22 +961,35 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("</locations>");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("<excludedRegions>");
-    ScmRegions _regions = svn.getRegions();
-    String _excludedRegions = _regions.getExcludedRegions();
-    String _normalize_2 = this.normalize(_excludedRegions);
-    _builder.append(_normalize_2, "  ");
-    _builder.append("</excludedRegions>");
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    _builder.append("<includedRegions>");
-    ScmRegions _regions_1 = svn.getRegions();
-    String _includedRegions = _regions_1.getIncludedRegions();
-    String _normalize_3 = this.normalize(_includedRegions);
-    _builder.append(_normalize_3, "  ");
-    _builder.append("</includedRegions>");
-    _builder.newLineIfNotEmpty();
+    {
+      ScmRegions _regions = svn.getRegions();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_regions, null);
+      if (_operator_notEquals) {
+        _builder.append("  ");
+        _builder.append("<excludedRegions>");
+        ScmRegions _regions_1 = svn.getRegions();
+        String _excludedRegions = _regions_1.getExcludedRegions();
+        String _normalize_2 = this.normalize(_excludedRegions);
+        _builder.append(_normalize_2, "  ");
+        _builder.append("</excludedRegions>");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("<includedRegions>");
+        ScmRegions _regions_2 = svn.getRegions();
+        String _includedRegions = _regions_2.getIncludedRegions();
+        String _normalize_3 = this.normalize(_includedRegions);
+        _builder.append(_normalize_3, "  ");
+        _builder.append("</includedRegions>");
+        _builder.newLineIfNotEmpty();
+      } else {
+        _builder.append("  ");
+        _builder.append("<excludedRegions></excludedRegions>");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("<includedRegions></includedRegions>");
+        _builder.newLine();
+      }
+    }
     _builder.append("  ");
     _builder.append("<excludedUsers></excludedUsers>");
     _builder.newLine();
