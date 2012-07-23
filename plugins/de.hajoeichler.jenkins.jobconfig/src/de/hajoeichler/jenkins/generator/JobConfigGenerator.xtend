@@ -379,12 +379,12 @@ class JobConfigGenerator implements IGenerator {
 		  <submoduleCfg class="list"/>
 		  <relativeTargetDir></relativeTargetDir>
 		  <reference></reference>
-		  <excludedRegions>«git.excludedRegions.normalize»</excludedRegions>
+		  <excludedRegions>«git.regions.excludedRegions.normalize»</excludedRegions>
 		  <excludedUsers></excludedUsers>
 		  <gitConfigName></gitConfigName>
 		  <gitConfigEmail></gitConfigEmail>
 		  <skipTag>false</skipTag>
-		  <includedRegions>«git.includedRegions.normalize»</includedRegions>
+		  <includedRegions>«git.regions.includedRegions.normalize»</includedRegions>
 		  <scmName></scmName>
 		</scm>
 	'''
@@ -397,8 +397,8 @@ class JobConfigGenerator implements IGenerator {
 		        <local>«svn.localDir.normalize»</local>
 		      </hudson.scm.SubversionSCM_-ModuleLocation>
 		    </locations>
-		    <excludedRegions></excludedRegions>
-		    <includedRegions></includedRegions>
+		    <excludedRegions>«svn.regions.excludedRegions.normalize»</excludedRegions>
+		    <includedRegions>«svn.regions.includedRegions.normalize»</includedRegions>
 		    <excludedUsers></excludedUsers>
 		    <excludedRevprop></excludedRevprop>
 		    <excludedCommitMessages></excludedCommitMessages>

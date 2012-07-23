@@ -118,11 +118,15 @@ Scm:
 
 ScmGit:
 	"git" BracketOpen "url" url=STRING ("branch" branch=STRING)? (wipeOutWorkspace?="wipeOutWorkspace")?
-	("excludedRegions" excludedRegions=STRING)? ("includedRegions" includedRegions=STRING)? BracketClose;
+	regions=ScmRegions BracketClose;
 
 ScmSVN:
-	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=STRING) ("browser"
-	browser=STRING)? BracketClose;
+	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=("up" | "ceckout" | "stash" |
+	"revert"))? ("browser"
+	browser=STRING)? regions=ScmRegions BracketClose;
+
+ScmRegions:
+	("excludedRegions" excludedRegions=STRING)? ("includedRegions" includedRegions=STRING)?;
 
 ScmCVS:
 	"cvs" BracketOpen "cvsroot" root=STRING "modules" modules=STRING (useUpdate?="useUpdate")? BracketClose;
