@@ -744,7 +744,7 @@ class JobConfigGenerator implements IGenerator {
 		  «ELSE»
 		  <defaultContent>«em.content»</defaultContent>
 		  «ENDIF»
-		  <attachmentsPattern></attachmentsPattern>
+		  <attachmentsPattern>«em.attachments»</attachmentsPattern>
 		</hudson.plugins.emailext.ExtendedEmailPublisher>
 	'''
 

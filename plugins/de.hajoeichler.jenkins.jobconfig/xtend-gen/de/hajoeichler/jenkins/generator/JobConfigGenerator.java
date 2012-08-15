@@ -1883,8 +1883,11 @@ public class JobConfigGenerator implements IGenerator {
       }
     }
     _builder.append("  ");
-    _builder.append("<attachmentsPattern></attachmentsPattern>");
-    _builder.newLine();
+    _builder.append("<attachmentsPattern>");
+    String _attachments = em.getAttachments();
+    _builder.append(_attachments, "  ");
+    _builder.append("</attachmentsPattern>");
+    _builder.newLineIfNotEmpty();
     _builder.append("</hudson.plugins.emailext.ExtendedEmailPublisher>");
     _builder.newLine();
     return _builder;
