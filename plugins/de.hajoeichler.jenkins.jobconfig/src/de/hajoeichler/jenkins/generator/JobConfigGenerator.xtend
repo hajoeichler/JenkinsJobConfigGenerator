@@ -690,6 +690,42 @@ class JobConfigGenerator implements IGenerator {
 		em.to
 	}
 
+	def String getSubject(ExtMail em) {
+		if (em.subject != null) {
+			return em.subject
+		}
+		if (em.mergeWithSuperConfig == true) {
+			val pm = getParentExtMail(em)
+			if (pm != null) {
+			  return getSubject(pm)
+			}
+		}
+	}
+
+	def String getContent(ExtMail em) {
+		if (em.content != null) {
+			return em.content
+		}
+		if (em.mergeWithSuperConfig == true) {
+			val pm = getParentExtMail(em)
+			if (pm != null) {
+			  return getContent(pm)
+			}
+		}
+	}
+
+	def String getAttachments(ExtMail em) {
+		if (em.attachments != null) {
+			return em.attachments
+		}
+		if (em.mergeWithSuperConfig == true) {
+			val pm = getParentExtMail(em)
+			if (pm != null) {
+			  return getAttachments(pm)
+			}
+		}
+	}
+
 	def ExtMail getParentExtMail(ExtMail em) {
 		var c = getMyConfig(em)
 		while (c.parentConfig != null) {
@@ -734,17 +770,19 @@ class JobConfigGenerator implements IGenerator {
 		  «ELSE»
 		  <contentType>«em.type»</contentType>
 		  «ENDIF»
-		  «IF em.subject == null»
+		  «val subject = getSubject(em)»
+		  «IF subject == null»
 		  <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
 		  «ELSE»
-		  <defaultSubject>«em.subject»</defaultSubject>
+		  <defaultSubject>«subject»</defaultSubject>
 		  «ENDIF»
-		  «IF em.content == null»
+		  «val content = getContent(em)»
+		  «IF content == null»
 		  <defaultContent>$DEFAULT_CONTENT</defaultContent>
 		  «ELSE»
-		  <defaultContent>«em.content»</defaultContent>
+		  <defaultContent>«content»</defaultContent>
 		  «ENDIF»
-		  <attachmentsPattern>«em.attachments»</attachmentsPattern>
+		  <attachmentsPattern>«getAttachments(em)»</attachmentsPattern>
 		</hudson.plugins.emailext.ExtendedEmailPublisher>
 	'''
 

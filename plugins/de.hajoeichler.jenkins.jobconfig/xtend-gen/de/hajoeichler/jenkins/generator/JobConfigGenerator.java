@@ -1747,6 +1747,102 @@ public class JobConfigGenerator implements IGenerator {
     return _xblockexpression;
   }
   
+  public String getSubject(final ExtMail em) {
+    String _xblockexpression = null;
+    {
+      String _subject = em.getSubject();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_subject, null);
+      if (_operator_notEquals) {
+        String _subject_1 = em.getSubject();
+        return _subject_1;
+      }
+      String _xifexpression = null;
+      boolean _isMergeWithSuperConfig = em.isMergeWithSuperConfig();
+      boolean _operator_equals = BooleanExtensions.operator_equals(_isMergeWithSuperConfig, true);
+      if (_operator_equals) {
+        String _xblockexpression_1 = null;
+        {
+          ExtMail _parentExtMail = this.getParentExtMail(em);
+          final ExtMail pm = _parentExtMail;
+          String _xifexpression_1 = null;
+          boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(pm, null);
+          if (_operator_notEquals_1) {
+            String _subject_2 = this.getSubject(pm);
+            return _subject_2;
+          }
+          _xblockexpression_1 = (_xifexpression_1);
+        }
+        _xifexpression = _xblockexpression_1;
+      }
+      _xblockexpression = (_xifexpression);
+    }
+    return _xblockexpression;
+  }
+  
+  public String getContent(final ExtMail em) {
+    String _xblockexpression = null;
+    {
+      String _content = em.getContent();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_content, null);
+      if (_operator_notEquals) {
+        String _content_1 = em.getContent();
+        return _content_1;
+      }
+      String _xifexpression = null;
+      boolean _isMergeWithSuperConfig = em.isMergeWithSuperConfig();
+      boolean _operator_equals = BooleanExtensions.operator_equals(_isMergeWithSuperConfig, true);
+      if (_operator_equals) {
+        String _xblockexpression_1 = null;
+        {
+          ExtMail _parentExtMail = this.getParentExtMail(em);
+          final ExtMail pm = _parentExtMail;
+          String _xifexpression_1 = null;
+          boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(pm, null);
+          if (_operator_notEquals_1) {
+            String _content_2 = this.getContent(pm);
+            return _content_2;
+          }
+          _xblockexpression_1 = (_xifexpression_1);
+        }
+        _xifexpression = _xblockexpression_1;
+      }
+      _xblockexpression = (_xifexpression);
+    }
+    return _xblockexpression;
+  }
+  
+  public String getAttachments(final ExtMail em) {
+    String _xblockexpression = null;
+    {
+      String _attachments = em.getAttachments();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_attachments, null);
+      if (_operator_notEquals) {
+        String _attachments_1 = em.getAttachments();
+        return _attachments_1;
+      }
+      String _xifexpression = null;
+      boolean _isMergeWithSuperConfig = em.isMergeWithSuperConfig();
+      boolean _operator_equals = BooleanExtensions.operator_equals(_isMergeWithSuperConfig, true);
+      if (_operator_equals) {
+        String _xblockexpression_1 = null;
+        {
+          ExtMail _parentExtMail = this.getParentExtMail(em);
+          final ExtMail pm = _parentExtMail;
+          String _xifexpression_1 = null;
+          boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(pm, null);
+          if (_operator_notEquals_1) {
+            String _attachments_2 = this.getAttachments(pm);
+            return _attachments_2;
+          }
+          _xblockexpression_1 = (_xifexpression_1);
+        }
+        _xifexpression = _xblockexpression_1;
+      }
+      _xblockexpression = (_xifexpression);
+    }
+    return _xblockexpression;
+  }
+  
   public ExtMail getParentExtMail(final ExtMail em) {
       Config _myConfig = this.getMyConfig(em);
       Config c = _myConfig;
@@ -1850,9 +1946,12 @@ public class JobConfigGenerator implements IGenerator {
         _builder.newLineIfNotEmpty();
       }
     }
+    _builder.append("  ");
+    String _subject = this.getSubject(em);
+    final String subject = _subject;
+    _builder.newLineIfNotEmpty();
     {
-      String _subject = em.getSubject();
-      boolean _operator_equals_1 = ObjectExtensions.operator_equals(_subject, null);
+      boolean _operator_equals_1 = ObjectExtensions.operator_equals(subject, null);
       if (_operator_equals_1) {
         _builder.append("  ");
         _builder.append("<defaultSubject>$DEFAULT_SUBJECT</defaultSubject>");
@@ -1860,15 +1959,17 @@ public class JobConfigGenerator implements IGenerator {
       } else {
         _builder.append("  ");
         _builder.append("<defaultSubject>");
-        String _subject_1 = em.getSubject();
-        _builder.append(_subject_1, "  ");
+        _builder.append(subject, "  ");
         _builder.append("</defaultSubject>");
         _builder.newLineIfNotEmpty();
       }
     }
+    _builder.append("  ");
+    String _content = this.getContent(em);
+    final String content = _content;
+    _builder.newLineIfNotEmpty();
     {
-      String _content = em.getContent();
-      boolean _operator_equals_2 = ObjectExtensions.operator_equals(_content, null);
+      boolean _operator_equals_2 = ObjectExtensions.operator_equals(content, null);
       if (_operator_equals_2) {
         _builder.append("  ");
         _builder.append("<defaultContent>$DEFAULT_CONTENT</defaultContent>");
@@ -1876,15 +1977,14 @@ public class JobConfigGenerator implements IGenerator {
       } else {
         _builder.append("  ");
         _builder.append("<defaultContent>");
-        String _content_1 = em.getContent();
-        _builder.append(_content_1, "  ");
+        _builder.append(content, "  ");
         _builder.append("</defaultContent>");
         _builder.newLineIfNotEmpty();
       }
     }
     _builder.append("  ");
     _builder.append("<attachmentsPattern>");
-    String _attachments = em.getAttachments();
+    String _attachments = this.getAttachments(em);
     _builder.append(_attachments, "  ");
     _builder.append("</attachmentsPattern>");
     _builder.newLineIfNotEmpty();
