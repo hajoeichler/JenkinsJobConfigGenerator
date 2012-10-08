@@ -77,7 +77,7 @@ public class Main {
 				for (Issue issue : list) {
 					System.err.println(issue);
 				}
-				return;
+				System.exit(-13);
 			}
 			// configure and start the generator
 			fileAccess.setOutputPath("target/configs/");
