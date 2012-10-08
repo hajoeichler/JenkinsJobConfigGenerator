@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector">
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+  </builders>
+  <publishers>
+    <hudson.plugins.violations.ViolationsPublisher>
+      <config>
+        <suppressions class="tree-set">
+          <no-comparator/>
+        </suppressions>
+        <typeConfigs>
+          <no-comparator/>
+          <entry>
+            <string>checkstyle</string>
+            <hudson.plugins.violations.TypeConfig>
+              <type>checkstyle</type>
+              <min>0</min>
+              <max>99</max>
+              <unstable>10</unstable>
+              <usePattern>false</usePattern>
+              <pattern>foo.xml</pattern>
+            </hudson.plugins.violations.TypeConfig>
+          </entry>
+        </typeConfigs>
+        <limit>100</limit>
+        <sourcePathPattern></sourcePathPattern>
+        <fauxProjectPath></fauxProjectPath>
+        <encoding>default</encoding>
+      </config>
+    </hudson.plugins.violations.ViolationsPublisher>
+  </publishers>
+  <buildWrappers>
+  </buildWrappers>
+</project>

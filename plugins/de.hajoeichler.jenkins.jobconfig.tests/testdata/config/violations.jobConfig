@@ -1,0 +1,7 @@
+job JobWithViolations {
+  publishers {
+    violations {
+    	checkstyle min 0 max 99 unstable 10 pattern "foo.xml"
+    }
+  }
+}
