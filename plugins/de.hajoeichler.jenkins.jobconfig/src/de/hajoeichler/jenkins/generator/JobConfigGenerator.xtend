@@ -815,7 +815,7 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch publisher (TestResult t) '''
 		«IF isNotEmpty(t.testresults)»
 		<hudson.tasks.junit.JUnitResultArchiver>
-		  <testResults>«t.testresults»</testResults>
+		  <testResults>«t.testresults.normalize»</testResults>
 		  <keepLongStdio>«t.longIO»</keepLongStdio>
 		  <testDataPublishers>
 		  «IF t.claim»

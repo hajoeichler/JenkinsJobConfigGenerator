@@ -2099,7 +2099,8 @@ public class JobConfigGenerator implements IGenerator {
         _builder.append("  ");
         _builder.append("<testResults>");
         String _testresults_1 = t.getTestresults();
-        _builder.append(_testresults_1, "  ");
+        String _normalize = this.normalize(_testresults_1);
+        _builder.append(_normalize, "  ");
         _builder.append("</testResults>");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
