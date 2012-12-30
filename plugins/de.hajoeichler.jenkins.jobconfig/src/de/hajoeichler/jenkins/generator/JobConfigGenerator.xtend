@@ -58,6 +58,7 @@ import de.hajoeichler.jenkins.jobConfig.GitHubPushTrigger
 import de.hajoeichler.jenkins.jobConfig.PlayAutoTestReport
 import de.hajoeichler.jenkins.jobConfig.Violations
 import de.hajoeichler.jenkins.jobConfig.ViolationsConfig
+import de.hajoeichler.jenkins.jobConfig.Gatling
 
 class JobConfigGenerator implements IGenerator {
 
@@ -845,6 +846,14 @@ class JobConfigGenerator implements IGenerator {
 		  <latestOnly>false</latestOnly>
 		  «ENDIF»
 		</hudson.tasks.ArtifactArchiver>
+	'''
+
+	def dispatch publisher(Gatling g) '''
+	<com.excilys.ebi.gatling.jenkins.GatlingPublisher plugin="gatling@1.0.0">
+	  <simulation>
+	    <name>«g.resultprefix»</name>
+	  </simulation>
+	</com.excilys.ebi.gatling.jenkins.GatlingPublisher>
 	'''
 
 	def dispatch publisher(Violations v) '''

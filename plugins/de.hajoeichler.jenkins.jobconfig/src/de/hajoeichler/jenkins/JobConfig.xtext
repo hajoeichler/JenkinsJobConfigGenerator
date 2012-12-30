@@ -243,8 +243,12 @@ PredefinedTriggerParams:
 PublisherSection:
 	"publishers" BracketOpen
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs | HipChat | PlayAutoTestReport | Violations)+
+	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling)+
 	BracketClose;
+
+Gatling:
+	"gatling" resultprefix=STRING
+;
 
 Artifacts:
 	"artifacts" artifacts=STRING (onlyLatest?="onlyLatest")?;

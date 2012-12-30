@@ -18,6 +18,7 @@ import de.hajoeichler.jenkins.jobConfig.DownStreamBuild;
 import de.hajoeichler.jenkins.jobConfig.ExclusiveExecution;
 import de.hajoeichler.jenkins.jobConfig.ExtMail;
 import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger;
+import de.hajoeichler.jenkins.jobConfig.Gatling;
 import de.hajoeichler.jenkins.jobConfig.GitCommitParam;
 import de.hajoeichler.jenkins.jobConfig.GitHubPushTrigger;
 import de.hajoeichler.jenkins.jobConfig.Group;
@@ -2181,6 +2182,27 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected CharSequence _publisher(final Gatling g) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<com.excilys.ebi.gatling.jenkins.GatlingPublisher plugin=\"gatling@1.0.0\">");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<simulation>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<name>");
+    String _resultprefix = g.getResultprefix();
+    _builder.append(_resultprefix, "    ");
+    _builder.append("</name>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("</simulation>");
+    _builder.newLine();
+    _builder.append("</com.excilys.ebi.gatling.jenkins.GatlingPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected CharSequence _publisher(final Violations v) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.violations.ViolationsPublisher>");
@@ -2891,6 +2913,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((DownStream)a);
     } else if (a instanceof ExtMail) {
       return _publisher((ExtMail)a);
+    } else if (a instanceof Gatling) {
+      return _publisher((Gatling)a);
     } else if (a instanceof HTMLPublisher) {
       return _publisher((HTMLPublisher)a);
     } else if (a instanceof HipChat) {
