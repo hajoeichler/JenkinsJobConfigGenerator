@@ -2192,7 +2192,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("    ");
     _builder.append("<name>");
     String _resultprefix = g.getResultprefix();
-    _builder.append(_resultprefix, "    ");
+    String _normalize = this.normalize(_resultprefix);
+    _builder.append(_normalize, "    ");
     _builder.append("</name>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
