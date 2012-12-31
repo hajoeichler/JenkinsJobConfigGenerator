@@ -293,14 +293,18 @@ PlayAutoTestReport:
 
 ExtMail:
 	{ExtMail} "extMail" (mergeWithSuperConfig?="mergeWithSuperConfig")? BracketOpen ("to" to=STRING)? ("type" type=("html"
-	| "text"))? ("subject" subject=STRING)? ("content" content=STRING)? ("attachments" attachments=STRING)? ("trigger"
+	| "text"))? mailConfig=MailConfig ("trigger"
 	BracketOpen (mailTrigger+=MailTrigger)+ BracketClose)? BracketClose;
 
 MailTrigger:
 // TODO: check new types
 	type=("Still-Failing" | "Success" | "Fixed" | "Still-Unstable" | "Before-Build" | "Failure" | "Unstable")
 	(toList?="toList")? (toCommiter?="toCommiter")? (toRequester?="toRequester")? (toCulprits?="toCulprits")? ("to"
-	to=STRING)? ("subject" subject=STRING)? ("content" content=STRING)?;
+	to=STRING)? mailConfig=MailConfig;
+
+MailConfig:
+	("subject" subject=STRING)? ("content" content=STRING)? ("attachments" attachments=STRING)? (attachBuildLog?="attachBuildLog")?
+;
 
 DownStream:
 	{DownStream} "downstream" BracketOpen builds+=DownStreamBuild* BracketClose;

@@ -26,6 +26,7 @@ import de.hajoeichler.jenkins.jobConfig.HTMLPublisher;
 import de.hajoeichler.jenkins.jobConfig.HipChat;
 import de.hajoeichler.jenkins.jobConfig.Lock;
 import de.hajoeichler.jenkins.jobConfig.LockDecl;
+import de.hajoeichler.jenkins.jobConfig.MailConfig;
 import de.hajoeichler.jenkins.jobConfig.MailTrigger;
 import de.hajoeichler.jenkins.jobConfig.Matrix;
 import de.hajoeichler.jenkins.jobConfig.MatrixDecl;
@@ -1751,10 +1752,10 @@ public class JobConfigGenerator implements IGenerator {
   public String getSubject(final ExtMail em) {
     String _xblockexpression = null;
     {
-      String _subject = em.getSubject();
+      String _subject = this.getSubject(em);
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_subject, null);
       if (_operator_notEquals) {
-        String _subject_1 = em.getSubject();
+        String _subject_1 = this.getSubject(em);
         return _subject_1;
       }
       String _xifexpression = null;
@@ -1783,10 +1784,12 @@ public class JobConfigGenerator implements IGenerator {
   public String getContent(final ExtMail em) {
     String _xblockexpression = null;
     {
-      String _content = em.getContent();
+      MailConfig _mailConfig = em.getMailConfig();
+      String _content = _mailConfig.getContent();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_content, null);
       if (_operator_notEquals) {
-        String _content_1 = em.getContent();
+        MailConfig _mailConfig_1 = em.getMailConfig();
+        String _content_1 = _mailConfig_1.getContent();
         return _content_1;
       }
       String _xifexpression = null;
@@ -1815,10 +1818,12 @@ public class JobConfigGenerator implements IGenerator {
   public String getAttachments(final ExtMail em) {
     String _xblockexpression = null;
     {
-      String _attachments = em.getAttachments();
+      MailConfig _mailConfig = em.getMailConfig();
+      String _attachments = _mailConfig.getAttachments();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_attachments, null);
       if (_operator_notEquals) {
-        String _attachments_1 = em.getAttachments();
+        MailConfig _mailConfig_1 = em.getMailConfig();
+        String _attachments_1 = _mailConfig_1.getAttachments();
         return _attachments_1;
       }
       String _xifexpression = null;
@@ -1989,6 +1994,11 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_attachments, "  ");
     _builder.append("</attachmentsPattern>");
     _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    MailConfig _mailConfig = em.getMailConfig();
+    CharSequence _mailConfig_1 = this.mailConfig(_mailConfig);
+    _builder.append(_mailConfig_1, "  ");
+    _builder.newLineIfNotEmpty();
     _builder.append("</hudson.plugins.emailext.ExtendedEmailPublisher>");
     _builder.newLine();
     return _builder;
@@ -2022,7 +2032,8 @@ public class JobConfigGenerator implements IGenerator {
       }
     }
     {
-      String _subject = mt.getSubject();
+      MailConfig _mailConfig = mt.getMailConfig();
+      String _subject = _mailConfig.getSubject();
       boolean _operator_equals_1 = ObjectExtensions.operator_equals(_subject, null);
       if (_operator_equals_1) {
         _builder.append("    ");
@@ -2031,14 +2042,16 @@ public class JobConfigGenerator implements IGenerator {
       } else {
         _builder.append("    ");
         _builder.append("<subject>");
-        String _subject_1 = mt.getSubject();
+        MailConfig _mailConfig_1 = mt.getMailConfig();
+        String _subject_1 = _mailConfig_1.getSubject();
         _builder.append(_subject_1, "    ");
         _builder.append("</subject>");
         _builder.newLineIfNotEmpty();
       }
     }
     {
-      String _content = mt.getContent();
+      MailConfig _mailConfig_2 = mt.getMailConfig();
+      String _content = _mailConfig_2.getContent();
       boolean _operator_equals_2 = ObjectExtensions.operator_equals(_content, null);
       if (_operator_equals_2) {
         _builder.append("    ");
@@ -2047,7 +2060,8 @@ public class JobConfigGenerator implements IGenerator {
       } else {
         _builder.append("    ");
         _builder.append("<body>");
-        String _content_1 = mt.getContent();
+        MailConfig _mailConfig_3 = mt.getMailConfig();
+        String _content_1 = _mailConfig_3.getContent();
         _builder.append(_content_1, "    ");
         _builder.append("</body>");
         _builder.newLineIfNotEmpty();
@@ -2077,6 +2091,18 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_isToList, "    ");
     _builder.append("</sendToRecipientList>");
     _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("<attachmentsPattern>");
+    MailConfig _mailConfig_4 = mt.getMailConfig();
+    String _attachments = _mailConfig_4.getAttachments();
+    _builder.append(_attachments, "    ");
+    _builder.append("</attachmentsPattern>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    MailConfig _mailConfig_5 = mt.getMailConfig();
+    CharSequence _mailConfig_6 = this.mailConfig(_mailConfig_5);
+    _builder.append(_mailConfig_6, "    ");
+    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("</email>");
     _builder.newLine();
@@ -2085,6 +2111,16 @@ public class JobConfigGenerator implements IGenerator {
     String _replace_1 = _type_1.replace("-", "");
     _builder.append(_replace_1, "");
     _builder.append("Trigger>");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  public CharSequence mailConfig(final MailConfig mc) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<attachBuildLog>");
+    boolean _isAttachBuildLog = mc.isAttachBuildLog();
+    _builder.append(_isAttachBuildLog, "");
+    _builder.append("</attachBuildLog>");
     _builder.newLineIfNotEmpty();
     return _builder;
   }

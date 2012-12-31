@@ -59,6 +59,7 @@ import de.hajoeichler.jenkins.jobConfig.PlayAutoTestReport
 import de.hajoeichler.jenkins.jobConfig.Violations
 import de.hajoeichler.jenkins.jobConfig.ViolationsConfig
 import de.hajoeichler.jenkins.jobConfig.Gatling
+import de.hajoeichler.jenkins.jobConfig.MailConfig
 
 class JobConfigGenerator implements IGenerator {
 
@@ -704,8 +705,8 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def String getContent(ExtMail em) {
-		if (em.content != null) {
-			return em.content
+		if (em.mailConfig.content != null) {
+			return em.mailConfig.content
 		}
 		if (em.mergeWithSuperConfig == true) {
 			val pm = getParentExtMail(em)
@@ -716,8 +717,8 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def String getAttachments(ExtMail em) {
-		if (em.attachments != null) {
-			return em.attachments
+		if (em.mailConfig.attachments != null) {
+			return em.mailConfig.attachments
 		}
 		if (em.mergeWithSuperConfig == true) {
 			val pm = getParentExtMail(em)
@@ -784,6 +785,7 @@ class JobConfigGenerator implements IGenerator {
 		  <defaultContent>«content»</defaultContent>
 		  «ENDIF»
 		  <attachmentsPattern>«getAttachments(em)»</attachmentsPattern>
+		  «mailConfig(em.mailConfig)»
 		</hudson.plugins.emailext.ExtendedEmailPublisher>
 	'''
 
@@ -795,22 +797,28 @@ class JobConfigGenerator implements IGenerator {
 		    «ELSE»
 		    <recipientList>«mt.to»</recipientList>
 		    «ENDIF»
-		    «IF mt.subject == null»
+		    «IF mt.mailConfig.subject == null»
 		    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
 		    «ELSE»
-		    <subject>«mt.subject»</subject>
+		    <subject>«mt.mailConfig.subject»</subject>
 		    «ENDIF»
-		    «IF mt.content == null»
+		    «IF mt.mailConfig.content == null»
 		    <body>$PROJECT_DEFAULT_CONTENT</body>
 		    «ELSE»
-		    <body>«mt.content»</body>
+		    <body>«mt.mailConfig.content»</body>
 		    «ENDIF»
 		    <sendToDevelopers>«mt.toCommiter»</sendToDevelopers>
 		    <sendToRequester>«mt.toRequester»</sendToRequester>
 		    <includeCulprits>«mt.toCulprits»</includeCulprits>
 		    <sendToRecipientList>«mt.toList»</sendToRecipientList>
+		    <attachmentsPattern>«mt.mailConfig.attachments»</attachmentsPattern>
+		    «mailConfig(mt.mailConfig)»
 		  </email>
 		</hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
+	'''
+
+	def mailConfig(MailConfig mc) '''
+		<attachBuildLog>«mc.attachBuildLog»</attachBuildLog>
 	'''
 
 	def dispatch publisher (TestResult t) '''
