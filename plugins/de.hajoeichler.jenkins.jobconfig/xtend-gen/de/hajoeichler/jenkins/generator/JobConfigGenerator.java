@@ -1752,10 +1752,12 @@ public class JobConfigGenerator implements IGenerator {
   public String getSubject(final ExtMail em) {
     String _xblockexpression = null;
     {
-      String _subject = this.getSubject(em);
+      MailConfig _mailConfig = em.getMailConfig();
+      String _subject = _mailConfig.getSubject();
       boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_subject, null);
       if (_operator_notEquals) {
-        String _subject_1 = this.getSubject(em);
+        MailConfig _mailConfig_1 = em.getMailConfig();
+        String _subject_1 = _mailConfig_1.getSubject();
         return _subject_1;
       }
       String _xifexpression = null;

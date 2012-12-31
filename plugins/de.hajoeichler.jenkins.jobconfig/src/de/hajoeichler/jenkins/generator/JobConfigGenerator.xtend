@@ -693,8 +693,8 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def String getSubject(ExtMail em) {
-		if (em.subject != null) {
-			return em.subject
+		if (em.mailConfig.subject != null) {
+			return em.mailConfig.subject
 		}
 		if (em.mergeWithSuperConfig == true) {
 			val pm = getParentExtMail(em)
