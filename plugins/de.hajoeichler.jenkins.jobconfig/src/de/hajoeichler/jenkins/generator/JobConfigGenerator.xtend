@@ -849,11 +849,11 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch publisher(Gatling g) '''
-	<com.excilys.ebi.gatling.jenkins.GatlingPublisher plugin="gatling@1.0.0">
-	  <simulation>
-	    <name>«g.resultprefix.normalize»</name>
-	  </simulation>
-	</com.excilys.ebi.gatling.jenkins.GatlingPublisher>
+		<com.excilys.ebi.gatling.jenkins.GatlingPublisher plugin="gatling@1.0.0">
+		  <simulation>
+		    <name>«g.resultprefix.normalize»</name>
+		  </simulation>
+		</com.excilys.ebi.gatling.jenkins.GatlingPublisher>
 	'''
 
 	def dispatch publisher(Violations v) '''
