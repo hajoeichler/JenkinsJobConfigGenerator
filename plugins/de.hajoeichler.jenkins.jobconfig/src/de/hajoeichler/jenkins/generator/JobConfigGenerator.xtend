@@ -693,7 +693,7 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def String getSubject(ExtMail em) {
-		if (em.mailConfig.subject != null) {
+		if (em.mailConfig != null && em.mailConfig.subject != null) {
 			return em.mailConfig.subject
 		}
 		if (em.mergeWithSuperConfig == true) {
@@ -705,7 +705,7 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def String getContent(ExtMail em) {
-		if (em.mailConfig.content != null) {
+		if (em.mailConfig != null && em.mailConfig.content != null) {
 			return em.mailConfig.content
 		}
 		if (em.mergeWithSuperConfig == true) {
@@ -717,7 +717,7 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def String getAttachments(ExtMail em) {
-		if (em.mailConfig.attachments != null) {
+		if (em.mailConfig != null && em.mailConfig.attachments != null) {
 			return em.mailConfig.attachments
 		}
 		if (em.mergeWithSuperConfig == true) {
@@ -785,7 +785,9 @@ class JobConfigGenerator implements IGenerator {
 		  <defaultContent>«content»</defaultContent>
 		  «ENDIF»
 		  <attachmentsPattern>«getAttachments(em)»</attachmentsPattern>
+		  «IF em.mailConfig != null»
 		  «mailConfig(em.mailConfig)»
+		  «ENDIF»
 		</hudson.plugins.emailext.ExtendedEmailPublisher>
 	'''
 
@@ -797,12 +799,12 @@ class JobConfigGenerator implements IGenerator {
 		    «ELSE»
 		    <recipientList>«mt.to»</recipientList>
 		    «ENDIF»
-		    «IF mt.mailConfig.subject == null»
+		    «IF mt.mailConfig != null && mt.mailConfig.subject == null»
 		    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
 		    «ELSE»
 		    <subject>«mt.mailConfig.subject»</subject>
 		    «ENDIF»
-		    «IF mt.mailConfig.content == null»
+		    «IF mt.mailConfig != null && mt.mailConfig.content == null»
 		    <body>$PROJECT_DEFAULT_CONTENT</body>
 		    «ELSE»
 		    <body>«mt.mailConfig.content»</body>
@@ -811,8 +813,10 @@ class JobConfigGenerator implements IGenerator {
 		    <sendToRequester>«mt.toRequester»</sendToRequester>
 		    <includeCulprits>«mt.toCulprits»</includeCulprits>
 		    <sendToRecipientList>«mt.toList»</sendToRecipientList>
+		    «IF mt.mailConfig != null»
 		    <attachmentsPattern>«mt.mailConfig.attachments»</attachmentsPattern>
 		    «mailConfig(mt.mailConfig)»
+		    «ENDIF»
 		  </email>
 		</hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
 	'''

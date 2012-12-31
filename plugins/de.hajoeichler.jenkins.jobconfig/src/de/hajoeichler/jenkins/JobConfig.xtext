@@ -302,7 +302,7 @@ MailTrigger:
 	to=STRING)? mailConfig=MailConfig;
 
 MailConfig:
-	("subject" subject=STRING)? ("content" content=STRING)? ("attachments" attachments=STRING)? (attachBuildLog?="attachBuildLog")?
+	{MailConfig} ("subject" subject=STRING)? ("content" content=STRING)? ("attachments" attachments=STRING)? (attachBuildLog?="attachBuildLog")?
 ;
 
 DownStream:
