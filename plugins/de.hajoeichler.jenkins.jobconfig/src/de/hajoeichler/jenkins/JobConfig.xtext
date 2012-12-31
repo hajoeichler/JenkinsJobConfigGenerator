@@ -297,8 +297,7 @@ ExtMail:
 	BracketOpen (mailTrigger+=MailTrigger)+ BracketClose)? BracketClose;
 
 MailTrigger:
-// TODO: check new types
-	type=("Still-Failing" | "Success" | "Fixed" | "Still-Unstable" | "Before-Build" | "Failure" | "Unstable")
+	type=("Pre-Build" | "Still-Unstable" | "Fixed" | "Success" | "Improvement" | "Still-Failing" | "Regression" | "Aborted" | "Not-Built" | "First-Failure" | "Failure" | "Unstable")
 	(toList?="toList")? (toCommiter?="toCommiter")? (toRequester?="toRequester")? (toCulprits?="toCulprits")? ("to"
 	to=STRING)? mailConfig=MailConfig;
 
