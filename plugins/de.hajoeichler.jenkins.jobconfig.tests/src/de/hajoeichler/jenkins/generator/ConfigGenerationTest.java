@@ -2,7 +2,7 @@ package de.hajoeichler.jenkins.generator;
 
 import org.junit.Test;
 
-public class MultilineStringFormatingTest extends AbstractGeneratorTest {
+public class ConfigGenerationTest extends AbstractGeneratorTest {
 
     @Test
     public void testEmptyJobConfig() throws Exception {
