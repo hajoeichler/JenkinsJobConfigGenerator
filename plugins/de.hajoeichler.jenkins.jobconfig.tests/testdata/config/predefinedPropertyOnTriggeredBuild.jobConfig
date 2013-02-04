@@ -1,0 +1,7 @@
+job JobWithPredefinedPropsOnTriggeredBuild {
+  builds {
+  	triggered builds {
+  		JobWithPredefinedPropsOnTriggeredBuild predefined "foo=@@jobName@@"
+  	}
+  }
+}

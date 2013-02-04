@@ -1091,7 +1091,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch triggerParam(PredefinedTriggerParams p) '''
 		<hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-		  <properties>«p.predefined»</properties>
+		  <properties>«p.predefined.normalize»</properties>
 		</hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
 	'''
 }

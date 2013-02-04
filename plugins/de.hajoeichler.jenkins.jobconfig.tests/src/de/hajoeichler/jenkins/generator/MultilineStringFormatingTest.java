@@ -33,4 +33,9 @@ public class MultilineStringFormatingTest extends AbstractGeneratorTest {
     public void jobWithCheckstyleViolations() throws Exception {
         assertSingleConfig("violations", "JobWithViolations");
     }
+
+    @Test
+    public void jobWithPredefinedPropertyOnTriggeredBuild() throws Exception {
+        assertSingleConfig("predefinedPropertyOnTriggeredBuild", "JobWithPredefinedPropsOnTriggeredBuild");
+    }
 }

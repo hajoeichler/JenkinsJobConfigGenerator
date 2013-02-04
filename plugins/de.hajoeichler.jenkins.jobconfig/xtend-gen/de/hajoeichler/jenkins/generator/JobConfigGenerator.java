@@ -2895,7 +2895,8 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<properties>");
     String _predefined = p.getPredefined();
-    _builder.append(_predefined, "  ");
+    String _normalize = this.normalize(_predefined);
+    _builder.append(_normalize, "  ");
     _builder.append("</properties>");
     _builder.newLineIfNotEmpty();
     _builder.append("</hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>");
