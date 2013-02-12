@@ -9,8 +9,10 @@ The so defined configurations are generated as config.xml files and can simply c
 
 ## Building
 
-1. run ./build.sh or if you run on Mac OS X ./create-dmg.sh, which creates a dmg installer at products/de.hajoeichler.jenkins.jobconfig.product/target/installer/
-1. Mac OS X product can be started via ./run.sh
+1. Just run `./build.sh`
+  * Use `-c` to generate your configuration.
+  * Use `-i` on a Mac to create a DMG installer for the tool.
+1. Mac OS X product can be started via `./run.sh`
 
 ## License
 
