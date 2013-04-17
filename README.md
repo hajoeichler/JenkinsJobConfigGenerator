@@ -1,4 +1,6 @@
-# The Jenkins Job Config Generator
+Jenkins Job Config Generator
+============================
+
 The Jenkins Job Config Generator is a small eclipse RCP based Java program that allows you to define your jobs with a textual notation.
 
 This is much faster than clicking around in the Jenkins UI - especially, when you have a set of jobs that are similar or common configuration you want to share.
@@ -6,6 +8,10 @@ This is much faster than clicking around in the Jenkins UI - especially, when yo
 The DSL for the configurations therefor provides mechanism to inherit basic configurations.
 
 The so defined configurations are generated as config.xml files and can simply copied to ${JENKINS\_HOME}/jobs 
+
+## Build
+
+[![Build Status](https://hajo.ci.cloudbees.com/job/JenkinsJobConfigurator/badge/icon)](https://hajo.ci.cloudbees.com/job/JenkinsJobConfigurator/)
 
 ## Building
 
