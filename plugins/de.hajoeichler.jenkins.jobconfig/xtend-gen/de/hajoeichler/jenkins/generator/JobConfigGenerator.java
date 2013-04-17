@@ -763,6 +763,45 @@ public class JobConfigGenerator implements IGenerator {
   
   protected CharSequence _param(final Parameter p, final ChoiceParam c) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.model.ChoiceParameterDefinition>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<name>");
+    String _name = p.getName();
+    _builder.append(_name, "  ");
+    _builder.append("</name>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<description>");
+    String _description = p.getDescription();
+    _builder.append(_description, "  ");
+    _builder.append("</description>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<choices class=\"java.util.Arrays$ArrayList\">");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<a class=\"string-array\">");
+    _builder.newLine();
+    {
+      String _choices = c.getChoices();
+      String[] _split = _choices.split("\n");
+      for(final String s : _split) {
+        _builder.append("    ");
+        _builder.append("<string>");
+        _builder.append(s, "    ");
+        _builder.append("</string>");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.append("    ");
+    _builder.append("</a>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</choices>");
+    _builder.newLine();
+    _builder.append("</hudson.model.ChoiceParameterDefinition>");
+    _builder.newLine();
     return _builder;
   }
   

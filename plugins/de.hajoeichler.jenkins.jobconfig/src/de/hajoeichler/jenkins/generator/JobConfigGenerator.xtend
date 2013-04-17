@@ -342,6 +342,17 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch param(Parameter p, ChoiceParam c) '''
+		<hudson.model.ChoiceParameterDefinition>
+		  <name>«p.name»</name>
+		  <description>«p.description»</description>
+		  <choices class="java.util.Arrays$ArrayList">
+		    <a class="string-array">
+		    «FOR s:c.choices.split("\n")»
+		      <string>«s»</string>
+		    «ENDFOR»
+		    </a>
+		  </choices>
+		</hudson.model.ChoiceParameterDefinition>
 	'''
 
 	def dispatch scm(ScmGit git) '''

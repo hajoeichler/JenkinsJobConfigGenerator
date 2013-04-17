@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>SERVICE</name>
+          <description>Make your decision</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+            <string>default</string>
+            <string>c1</string>
+            <string>c2</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector">
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+  </builders>
+  <publishers>
+  </publishers>
+  <buildWrappers>
+  </buildWrappers>
+</project>

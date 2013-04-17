@@ -38,4 +38,10 @@ public class ConfigGenerationTest extends AbstractGeneratorTest {
     public void jobWithPredefinedPropertyOnTriggeredBuild() throws Exception {
         assertSingleConfig("predefinedPropertyOnTriggeredBuild", "JobWithPredefinedPropsOnTriggeredBuild");
     }
+
+    @Test
+    public void paramChoice() throws Exception {
+        assertSingleConfig("paramChoice", "pleaseChoose");
+    }
+
 }

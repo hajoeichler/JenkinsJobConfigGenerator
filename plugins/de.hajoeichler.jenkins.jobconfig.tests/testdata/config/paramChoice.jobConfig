@@ -1,0 +1,11 @@
+job pleaseChoose {
+	params {
+		"SERVICE"
+		{
+			Choice "default
+c1
+c2"
+			description "Make your decision"
+		}
+	}
+}
