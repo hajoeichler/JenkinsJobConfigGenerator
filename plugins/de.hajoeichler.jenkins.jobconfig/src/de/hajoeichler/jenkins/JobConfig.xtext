@@ -243,8 +243,11 @@ PredefinedTriggerParams:
 PublisherSection:
 	"publishers" BracketOpen
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling)+
+	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling | GitPublisher)+
 	BracketClose;
+
+GitPublisher:
+	"gitpublish" (onlyOnSuccess?="onlyOnSuccess")? BracketOpen branch=STRING origin=STRING BracketClose;
 
 Gatling:
 	"gatling" resultprefix=STRING

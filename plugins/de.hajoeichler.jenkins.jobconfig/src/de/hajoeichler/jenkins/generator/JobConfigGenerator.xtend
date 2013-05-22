@@ -60,6 +60,7 @@ import de.hajoeichler.jenkins.jobConfig.Violations
 import de.hajoeichler.jenkins.jobConfig.ViolationsConfig
 import de.hajoeichler.jenkins.jobConfig.Gatling
 import de.hajoeichler.jenkins.jobConfig.MailConfig
+import de.hajoeichler.jenkins.jobConfig.GitPublisher
 
 class JobConfigGenerator implements IGenerator {
 
@@ -869,6 +870,20 @@ class JobConfigGenerator implements IGenerator {
 		  <latestOnly>false</latestOnly>
 		  «ENDIF»
 		</hudson.tasks.ArtifactArchiver>
+	'''
+
+	def dispatch publisher(GitPublisher g) '''
+		<hudson.plugins.git.GitPublisher>
+		  <configVersion>2</configVersion>
+		  <pushMerge>false</pushMerge>
+		  <pushOnlyIfSuccess>«g.onlyOnSuccess»</pushOnlyIfSuccess>
+		  <branchesToPush>
+		    <hudson.plugins.git.GitPublisher_-BranchToPush>
+		      <targetRepoName>«g.origin»</targetRepoName>
+		      <branchName>«g.branch»</branchName>
+		    </hudson.plugins.git.GitPublisher_-BranchToPush>
+		  </branchesToPush>
+		</hudson.plugins.git.GitPublisher>
 	'''
 
 	def dispatch publisher(Gatling g) '''

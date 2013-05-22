@@ -21,6 +21,7 @@ import de.hajoeichler.jenkins.jobConfig.FirstStartTrigger;
 import de.hajoeichler.jenkins.jobConfig.Gatling;
 import de.hajoeichler.jenkins.jobConfig.GitCommitParam;
 import de.hajoeichler.jenkins.jobConfig.GitHubPushTrigger;
+import de.hajoeichler.jenkins.jobConfig.GitPublisher;
 import de.hajoeichler.jenkins.jobConfig.Group;
 import de.hajoeichler.jenkins.jobConfig.HTMLPublisher;
 import de.hajoeichler.jenkins.jobConfig.HipChat;
@@ -2311,6 +2312,51 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected CharSequence _publisher(final GitPublisher g) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.git.GitPublisher>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<configVersion>2</configVersion>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<pushMerge>false</pushMerge>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("<pushOnlyIfSuccess>");
+    boolean _isOnlyOnSuccess = g.isOnlyOnSuccess();
+    _builder.append(_isOnlyOnSuccess, "  ");
+    _builder.append("</pushOnlyIfSuccess>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<branchesToPush>");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("<hudson.plugins.git.GitPublisher_-BranchToPush>");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("<targetRepoName>");
+    String _origin = g.getOrigin();
+    _builder.append(_origin, "      ");
+    _builder.append("</targetRepoName>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("      ");
+    _builder.append("<branchName>");
+    String _branch = g.getBranch();
+    _builder.append(_branch, "      ");
+    _builder.append("</branchName>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("</hudson.plugins.git.GitPublisher_-BranchToPush>");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("</branchesToPush>");
+    _builder.newLine();
+    _builder.append("</hudson.plugins.git.GitPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected CharSequence _publisher(final Gatling g) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<com.excilys.ebi.gatling.jenkins.GatlingPublisher plugin=\"gatling@1.0.0\">");
@@ -3046,6 +3092,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((ExtMail)a);
     } else if (a instanceof Gatling) {
       return _publisher((Gatling)a);
+    } else if (a instanceof GitPublisher) {
+      return _publisher((GitPublisher)a);
     } else if (a instanceof HTMLPublisher) {
       return _publisher((HTMLPublisher)a);
     } else if (a instanceof HipChat) {
