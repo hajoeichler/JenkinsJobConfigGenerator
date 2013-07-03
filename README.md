@@ -5,7 +5,7 @@ The Jenkins Job Config Generator is a small eclipse RCP based Java program that 
 
 This is much faster than clicking around in the Jenkins UI - especially, when you have a set of jobs that are similar or common configuration you want to share.
 
-The DSL for the configurations therefor provides mechanism to inherit basic configurations.
+The DSL for the configurations therefore provides mechanism to inherit basic configurations.
 
 The so defined configurations are generated as `config.xml` files and can simply copied to `${JENKINS\_HOME}/jobs`
 
