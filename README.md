@@ -7,7 +7,7 @@ This is much faster than clicking around in the Jenkins UI - especially, when yo
 
 The DSL for the configurations therefor provides mechanism to inherit basic configurations.
 
-The so defined configurations are generated as config.xml files and can simply copied to ${JENKINS\_HOME}/jobs 
+The so defined configurations are generated as `config.xml` files and can simply copied to `${JENKINS\_HOME}/jobs`
 
 ## Build
 
@@ -19,6 +19,16 @@ The so defined configurations are generated as config.xml files and can simply c
   * Use `-c` to generate your configuration.
   * Use `-i` on a Mac to create a DMG installer for the tool.
 1. Mac OS X product can be started via `./run.sh`
+
+## Development
+
+This little section should help to get familiar with the architecture and should enable you to enhance the generator.
+
+The grammar for the configuration DSL is defined using [xtext](https://www.eclipse.org/Xtext/) in the file [JobConfig.xtext](https://github.com/hajoeichler/JenkinsJobConfigGenerator/blob/master/plugins/de.hajoeichler.jenkins.jobconfig/src/de/hajoeichler/jenkins/JobConfig.xtext)
+
+Out of this grammar an EMF model (aka. AST) is generated.
+
+Each define job is then an instance of this model. Those instances are passed to the actually generator.
 
 ## License
 
