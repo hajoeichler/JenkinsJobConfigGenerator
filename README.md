@@ -26,9 +26,15 @@ This little section should help to get familiar with the architecture and should
 
 The grammar for the configuration DSL is defined using [xtext](https://www.eclipse.org/Xtext/) in the file [JobConfig.xtext](https://github.com/hajoeichler/JenkinsJobConfigGenerator/blob/master/plugins/de.hajoeichler.jenkins.jobconfig/src/de/hajoeichler/jenkins/JobConfig.xtext)
 
-Out of this grammar an EMF model (aka. AST) is generated.
+Out of this grammar an EMF model (aka. AST) is generated using an workflow, described in [JobConfigGeneratorMWE.mwe2](https://github.com/hajoeichler/JenkinsJobConfigGenerator/blob/master/plugins/de.hajoeichler.jenkins.jobconfig/src/de/hajoeichler/jenkins/generator/JobConfigGeneratorMWE.mwe2)
 
-Each define job is then an instance of this model. Those instances are passed to the actually generator.
+Each job written in the DSL is then an instance of this model.
+Those instances are passed to the actually generator - written in Xtend. 
+The generator is located in the file [JobConfigGenerator.xtend](https://github.com/hajoeichler/JenkinsJobConfigGenerator/blob/master/plugins/de.hajoeichler.jenkins.jobconfig/src/de/hajoeichler/jenkins/generator/JobConfigGenerator.xtend)
+
+## Testing
+
+There are only integration test that do transform configuration into `config.xml` and then compare the file content against the expected result. Please have a look at the [main test class](https://github.com/hajoeichler/JenkinsJobConfigGenerator/blob/master/plugins/de.hajoeichler.jenkins.jobconfig.tests/src/de/hajoeichler/jenkins/generator/ConfigGenerationTest.java), which uses the test data located [here](https://github.com/hajoeichler/JenkinsJobConfigGenerator/tree/master/plugins/de.hajoeichler.jenkins.jobconfig.tests/testdata/config)
 
 ## License
 
