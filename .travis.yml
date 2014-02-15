@@ -2,6 +2,8 @@ language: java
 jdk:
 - openjdk7
 - openjdk6
+before_script:
+- echo "TODO"
 script:
 - mvn --batch-mode -U -f build/pom.xml clean install
 - mvn --batch-mode -U clean generate-sources -Pgen-xtext
