@@ -18,6 +18,7 @@ import de.hajoeichler.jenkins.jobConfig.GitCommitParam
 import de.hajoeichler.jenkins.jobConfig.Group
 import de.hajoeichler.jenkins.jobConfig.HTMLPublisher
 import de.hajoeichler.jenkins.jobConfig.HipChat
+import de.hajoeichler.jenkins.jobConfig.JaCoCo
 import de.hajoeichler.jenkins.jobConfig.Lock
 import de.hajoeichler.jenkins.jobConfig.MailTrigger
 import de.hajoeichler.jenkins.jobConfig.MatrixTieParent
