@@ -243,7 +243,7 @@ PredefinedTriggerParams:
 PublisherSection:
 	"publishers" BracketOpen
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling | GitPublisher)+
+	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling | GitPublisher | JaCoCo)+
 	BracketClose;
 
 GitPublisher:
@@ -290,6 +290,9 @@ Claim:
 
 HipChat:
 	{HipChat} "hipchat" ("room" room=STRING)?;
+
+JaCoCo:
+	{JaCoCo} "jacoco" ("execPattern" execPattern=STRING)? ("classPattern" classPattern=STRING)? ("sourcePattern" sourcePattern=STRING)? ("inclusionPattern" inclusionPattern=STRING)? ("minimumInstructionCoverage" minimumInstructionCoverage=INT)? ("minimumBranchCoverage" minimumBranchCoverage=INT)? ("minimumComplexityCoverage" minimumComplexityCoverage=INT)? ("minimumLineCoverage" minimumLineCoverage=INT)? ("minimumMethodCoverage" minimumMethodCoverage=INT)? ("minimumClassCoverage" minimumClassCoverage=INT)? ("maximumInstructionCoverage" maximumInstructionCoverage=INT)? ("maximumBranchCoverage" maximumBranchCoverage=INT)? ("maximumComplexityCoverage" maximumComplexityCoverage=INT)? ("maximumLineCoverage" maximumLineCoverage=INT)? ("maximumMethodCoverage" maximumMethodCoverage=INT)? ("maximumClassCoverage" maximumClassCoverage=INT)? (changeBuildStatus?="changeBuildStatus");
 
 PlayAutoTestReport:
 	(reportPlayAutoTest?="reportPlay!auto-test");
