@@ -1001,29 +1001,27 @@ class JobConfigGenerator implements IGenerator {
 		<com.gmail.ikeike443.PlayTestResultPublisher/>
 	'''
 
-  def dispatch publisher (JaCoCo j) '''
-  '''
-//	def dispatch publisher (JaCoCo j) '''
-//		<hudson.plugins.jacoco.JacocoPublisher>
-//		<execPattern>«j.execPattern»</execPattern>
-//		<classPattern>«j.classPattern»</classPattern>
-//		<sourcePattern>«j.sourcePattern»</sourcePattern>
-//		<inclusionPattern>«j.inclusionPattern»<exclusionPattern/>
-//		<minimumInstructionCoverage>«j.minimumInstructionCoverage»</minimumInstructionCoverage>
-//		<minimumBranchCoverage>«j.minimumBranchCoverage»</minimumBranchCoverage>
-//		<minimumComplexityCoverage>«j.minimumComplexityCoverage»</minimumComplexityCoverage>
-//		<minimumLineCoverage>«j.minimumLineCoverage»</minimumLineCoverage>
-//		<minimumMethodCoverage>«j.minimumMethodCoverage»</minimumMethodCoverage>
-//		<minimumClassCoverage>«j.minimumClassCoverage»</minimumClassCoverage>
-//		<maximumInstructionCoverage>«j.maximumInstructionCoverage»</maximumInstructionCoverage>
-//		<maximumBranchCoverage>«j.maximumBranchCoverage»</maximumBranchCoverage>
-//		<maximumComplexityCoverage>«j.maximumComplexityCoverage»</maximumComplexityCoverage>
-//		<maximumLineCoverage>«j.maximumLineCoverage»</maximumLineCoverage>
-//		<maximumMethodCoverage>«j.maximumMethodCoverage»</maximumMethodCoverage>
-//		<maximumClassCoverage>«j.maximumClassCoverage»</maximumClassCoverage>
-//		<changeBuildStatus>«j.changeBuildStatus»</changeBuildStatus>
-//		</hudson.plugins.jacoco.JacocoPublisher>
-//	'''
+	def dispatch publisher (JaCoCo j) '''
+		<hudson.plugins.jacoco.JacocoPublisher>
+		<execPattern>«j.execPattern»</execPattern>
+		<classPattern>«j.classPattern»</classPattern>
+		<sourcePattern>«j.sourcePattern»</sourcePattern>
+		<inclusionPattern>«j.inclusionPattern»<exclusionPattern/>
+		<minimumInstructionCoverage>«j.minimumInstructionCoverage»</minimumInstructionCoverage>
+		<minimumBranchCoverage>«j.minimumBranchCoverage»</minimumBranchCoverage>
+		<minimumComplexityCoverage>«j.minimumComplexityCoverage»</minimumComplexityCoverage>
+		<minimumLineCoverage>«j.minimumLineCoverage»</minimumLineCoverage>
+		<minimumMethodCoverage>«j.minimumMethodCoverage»</minimumMethodCoverage>
+		<minimumClassCoverage>«j.minimumClassCoverage»</minimumClassCoverage>
+		<maximumInstructionCoverage>«j.maximumInstructionCoverage»</maximumInstructionCoverage>
+		<maximumBranchCoverage>«j.maximumBranchCoverage»</maximumBranchCoverage>
+		<maximumComplexityCoverage>«j.maximumComplexityCoverage»</maximumComplexityCoverage>
+		<maximumLineCoverage>«j.maximumLineCoverage»</maximumLineCoverage>
+		<maximumMethodCoverage>«j.maximumMethodCoverage»</maximumMethodCoverage>
+		<maximumClassCoverage>«j.maximumClassCoverage»</maximumClassCoverage>
+		<changeBuildStatus>«j.changeBuildStatus»</changeBuildStatus>
+		</hudson.plugins.jacoco.JacocoPublisher>
+	'''
 
 	def dispatch publisher (Cobertura c) '''
 		<hudson.plugins.cobertura.CoberturaPublisher>
