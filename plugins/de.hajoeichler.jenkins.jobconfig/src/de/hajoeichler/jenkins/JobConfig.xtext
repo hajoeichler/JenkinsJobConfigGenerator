@@ -240,11 +240,11 @@ PropertyFileTriggerParams:
 PredefinedTriggerParams:
 	'predefined' predefined=STRING;
 
-PublisherSection:
-	"publishers" BracketOpen
-	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling | GitPublisher | JaCoCo)+
-	BracketClose;
+//PublisherSection:
+//	"publishers" BracketOpen
+//	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
+//	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling | GitPublisher | JaCoCo)+
+//	BracketClose;
 
 GitPublisher:
 	"gitpublish" (onlyOnSuccess?="onlyOnSuccess")? BracketOpen branch=STRING origin=STRING BracketClose;
