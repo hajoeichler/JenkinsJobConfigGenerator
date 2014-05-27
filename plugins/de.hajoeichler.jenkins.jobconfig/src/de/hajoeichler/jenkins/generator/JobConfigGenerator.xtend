@@ -18,7 +18,7 @@ import de.hajoeichler.jenkins.jobConfig.GitCommitParam
 import de.hajoeichler.jenkins.jobConfig.Group
 import de.hajoeichler.jenkins.jobConfig.HTMLPublisher
 import de.hajoeichler.jenkins.jobConfig.HipChat
-//import de.hajoeichler.jenkins.jobConfig.JaCoCo
+import de.hajoeichler.jenkins.jobConfig.JaCoCo
 import de.hajoeichler.jenkins.jobConfig.Lock
 import de.hajoeichler.jenkins.jobConfig.MailTrigger
 import de.hajoeichler.jenkins.jobConfig.MatrixTieParent
@@ -1001,6 +1001,8 @@ class JobConfigGenerator implements IGenerator {
 		<com.gmail.ikeike443.PlayTestResultPublisher/>
 	'''
 
+  def dispatch publisher (JaCoCo j) '''
+  '''
 //	def dispatch publisher (JaCoCo j) '''
 //		<hudson.plugins.jacoco.JacocoPublisher>
 //		<execPattern>«j.execPattern»</execPattern>
