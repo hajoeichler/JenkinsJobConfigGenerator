@@ -25,6 +25,7 @@ import de.hajoeichler.jenkins.jobConfig.GitPublisher;
 import de.hajoeichler.jenkins.jobConfig.Group;
 import de.hajoeichler.jenkins.jobConfig.HTMLPublisher;
 import de.hajoeichler.jenkins.jobConfig.HipChat;
+import de.hajoeichler.jenkins.jobConfig.JaCoCo;
 import de.hajoeichler.jenkins.jobConfig.Lock;
 import de.hajoeichler.jenkins.jobConfig.LockDecl;
 import de.hajoeichler.jenkins.jobConfig.MailConfig;
@@ -2693,6 +2694,100 @@ public class JobConfigGenerator implements IGenerator {
     return _builder;
   }
   
+  protected CharSequence _publisher(final JaCoCo j) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<hudson.plugins.jacoco.JacocoPublisher>");
+    _builder.newLine();
+    _builder.append("<execPattern>");
+    String _execPattern = j.getExecPattern();
+    _builder.append(_execPattern, "");
+    _builder.append("</execPattern>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<classPattern>");
+    String _classPattern = j.getClassPattern();
+    _builder.append(_classPattern, "");
+    _builder.append("</classPattern>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<sourcePattern>");
+    String _sourcePattern = j.getSourcePattern();
+    _builder.append(_sourcePattern, "");
+    _builder.append("</sourcePattern>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<inclusionPattern>");
+    String _inclusionPattern = j.getInclusionPattern();
+    _builder.append(_inclusionPattern, "");
+    _builder.append("<exclusionPattern/>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<minimumInstructionCoverage>");
+    int _minimumInstructionCoverage = j.getMinimumInstructionCoverage();
+    _builder.append(_minimumInstructionCoverage, "");
+    _builder.append("</minimumInstructionCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<minimumBranchCoverage>");
+    int _minimumBranchCoverage = j.getMinimumBranchCoverage();
+    _builder.append(_minimumBranchCoverage, "");
+    _builder.append("</minimumBranchCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<minimumComplexityCoverage>");
+    int _minimumComplexityCoverage = j.getMinimumComplexityCoverage();
+    _builder.append(_minimumComplexityCoverage, "");
+    _builder.append("</minimumComplexityCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<minimumLineCoverage>");
+    int _minimumLineCoverage = j.getMinimumLineCoverage();
+    _builder.append(_minimumLineCoverage, "");
+    _builder.append("</minimumLineCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<minimumMethodCoverage>");
+    int _minimumMethodCoverage = j.getMinimumMethodCoverage();
+    _builder.append(_minimumMethodCoverage, "");
+    _builder.append("</minimumMethodCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<minimumClassCoverage>");
+    int _minimumClassCoverage = j.getMinimumClassCoverage();
+    _builder.append(_minimumClassCoverage, "");
+    _builder.append("</minimumClassCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<maximumInstructionCoverage>");
+    int _maximumInstructionCoverage = j.getMaximumInstructionCoverage();
+    _builder.append(_maximumInstructionCoverage, "");
+    _builder.append("</maximumInstructionCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<maximumBranchCoverage>");
+    int _maximumBranchCoverage = j.getMaximumBranchCoverage();
+    _builder.append(_maximumBranchCoverage, "");
+    _builder.append("</maximumBranchCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<maximumComplexityCoverage>");
+    int _maximumComplexityCoverage = j.getMaximumComplexityCoverage();
+    _builder.append(_maximumComplexityCoverage, "");
+    _builder.append("</maximumComplexityCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<maximumLineCoverage>");
+    int _maximumLineCoverage = j.getMaximumLineCoverage();
+    _builder.append(_maximumLineCoverage, "");
+    _builder.append("</maximumLineCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<maximumMethodCoverage>");
+    int _maximumMethodCoverage = j.getMaximumMethodCoverage();
+    _builder.append(_maximumMethodCoverage, "");
+    _builder.append("</maximumMethodCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<maximumClassCoverage>");
+    int _maximumClassCoverage = j.getMaximumClassCoverage();
+    _builder.append(_maximumClassCoverage, "");
+    _builder.append("</maximumClassCoverage>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("<changeBuildStatus>");
+    boolean _isChangeBuildStatus = j.isChangeBuildStatus();
+    _builder.append(_isChangeBuildStatus, "");
+    _builder.append("</changeBuildStatus>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("</hudson.plugins.jacoco.JacocoPublisher>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected CharSequence _publisher(final Cobertura c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<hudson.plugins.cobertura.CoberturaPublisher>");
@@ -3098,6 +3193,8 @@ public class JobConfigGenerator implements IGenerator {
       return _publisher((HTMLPublisher)a);
     } else if (a instanceof HipChat) {
       return _publisher((HipChat)a);
+    } else if (a instanceof JaCoCo) {
+      return _publisher((JaCoCo)a);
     } else if (a instanceof PlayAutoTestReport) {
       return _publisher((PlayAutoTestReport)a);
     } else if (a instanceof Rcov) {
