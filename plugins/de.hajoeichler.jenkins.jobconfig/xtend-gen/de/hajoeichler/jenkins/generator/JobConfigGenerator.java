@@ -2720,7 +2720,13 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<inclusionPattern>");
     String _inclusionPattern = j.getInclusionPattern();
     _builder.append(_inclusionPattern, "  ");
-    _builder.append("<exclusionPattern/>");
+    _builder.append("</inclusionPattern>");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("<exclusionPattern>");
+    String _exclusionPattern = j.getExclusionPattern();
+    _builder.append(_exclusionPattern, "  ");
+    _builder.append("</exclusionPattern>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("<minimumInstructionCoverage>");
