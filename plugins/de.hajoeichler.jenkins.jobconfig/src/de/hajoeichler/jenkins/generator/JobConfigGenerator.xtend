@@ -1007,7 +1007,7 @@ class JobConfigGenerator implements IGenerator {
 		  <classPattern>�j.classPattern�</classPattern>
 		  <sourcePattern>�j.sourcePattern�</sourcePattern>
 		  <inclusionPattern>�j.inclusionPattern�</inclusionPattern>
-		  <exclusionPattern>�j.inclusionPattern�</exclusionPattern>
+		  <exclusionPattern>�j.exclusionPattern�</exclusionPattern>
 		  <minimumInstructionCoverage>�j.minimumInstructionCoverage�</minimumInstructionCoverage>
 		  <minimumBranchCoverage>�j.minimumBranchCoverage�</minimumBranchCoverage>
 		  <minimumComplexityCoverage>�j.minimumComplexityCoverage�</minimumComplexityCoverage>
