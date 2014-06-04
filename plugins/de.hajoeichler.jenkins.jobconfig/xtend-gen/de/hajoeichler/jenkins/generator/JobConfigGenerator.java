@@ -2978,7 +2978,7 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</thresholdLimit>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("<pluginName>[CHECKSTYLE] </pluginName>");
+    _builder.append("<pluginName>[PMD] </pluginName>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<defaultEncoding>");
@@ -3118,7 +3118,7 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("</thresholdLimit>");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("<pluginName>[CHECKSTYLE] </pluginName>");
+    _builder.append("<pluginName>[FINDBUGS] </pluginName>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<defaultEncoding>");

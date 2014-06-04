@@ -1059,7 +1059,7 @@ class JobConfigGenerator implements IGenerator {
 	      <healthy>«p.healthy»</healthy>
 	      <unHealthy>«p.unHealthy»</unHealthy>
 	      <thresholdLimit>«p.thresholdLimit»</thresholdLimit>
-	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <pluginName>[PMD] </pluginName>
 	      <defaultEncoding>«p.defaultEncoding»</defaultEncoding>
 	      <canRunOnFailed>«p.canRunOnFailed»</canRunOnFailed>
 	      <useStableBuildAsReference>«p.useStableBuildAsReference»</useStableBuildAsReference>
@@ -1086,7 +1086,7 @@ class JobConfigGenerator implements IGenerator {
 	      <healthy>«f.healthy»</healthy>
 	      <unHealthy>«f.unHealthy»</unHealthy>
 	      <thresholdLimit>«f.thresholdLimit»</thresholdLimit>
-	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <pluginName>[FINDBUGS] </pluginName>
 	      <defaultEncoding>«f.defaultEncoding»</defaultEncoding>
 	      <canRunOnFailed>«f.canRunOnFailed»</canRunOnFailed>
 	      <useStableBuildAsReference>«f.useStableBuildAsReference»</useStableBuildAsReference>
