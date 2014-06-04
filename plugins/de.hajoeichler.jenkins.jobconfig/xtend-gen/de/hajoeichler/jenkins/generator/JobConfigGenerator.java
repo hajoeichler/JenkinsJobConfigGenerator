@@ -2957,7 +2957,7 @@ public class JobConfigGenerator implements IGenerator {
   
   protected CharSequence _publisher(final PMD p) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<hudson.plugins.checkstyle.CheckStylePublisher>");
+    _builder.append("<hudson.plugins.pmd.PmdPublisher>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<healthy>");
@@ -3090,14 +3090,14 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_pattern, "  ");
     _builder.append("</pattern>");
     _builder.newLineIfNotEmpty();
-    _builder.append("</hudson.plugins.checkstyle.CheckStylePublisher>");
+    _builder.append("</hudson.plugins.pmd.PmdPublisher>");
     _builder.newLine();
     return _builder;
   }
   
   protected CharSequence _publisher(final FindBugs f) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<hudson.plugins.checkstyle.CheckStylePublisher>");
+    _builder.append("<hudson.plugins.findbugs.FindBugsPublisher>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<healthy>");
@@ -3248,7 +3248,7 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append(_includePattern, "  ");
     _builder.append("</includePattern>");
     _builder.newLineIfNotEmpty();
-    _builder.append("</hudson.plugins.checkstyle.CheckStylePublisher>");
+    _builder.append("</hudson.plugins.findbugs.FindBugsPublisher>");
     _builder.newLine();
     return _builder;
   }
