@@ -1055,11 +1055,11 @@ class JobConfigGenerator implements IGenerator {
 	'''
 	
 	def dispatch publisher (PMD p) '''
-	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	    <hudson.plugins.pmd.PmdPublisher>
 	      <healthy>«p.healthy»</healthy>
 	      <unHealthy>«p.unHealthy»</unHealthy>
 	      <thresholdLimit>«p.thresholdLimit»</thresholdLimit>
-	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <pluginName>[PMD] </pluginName>
 	      <defaultEncoding>«p.defaultEncoding»</defaultEncoding>
 	      <canRunOnFailed>«p.canRunOnFailed»</canRunOnFailed>
 	      <useStableBuildAsReference>«p.useStableBuildAsReference»</useStableBuildAsReference>
@@ -1078,15 +1078,15 @@ class JobConfigGenerator implements IGenerator {
 	      <dontComputeNew>«p.dontComputeNew»</dontComputeNew>
 	      <doNotResolveRelativePaths>«p.doNotResolveRelativePaths»</doNotResolveRelativePaths>
 	      <pattern>«p.pattern»</pattern>
-	    </hudson.plugins.checkstyle.CheckStylePublisher>
+	    </hudson.plugins.pmd.PmdPublisher>
 	'''
 	
 	def dispatch publisher (FindBugs f) '''
-	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	    <hudson.plugins.findbugs.FindBugsPublisher>
 	      <healthy>«f.healthy»</healthy>
 	      <unHealthy>«f.unHealthy»</unHealthy>
 	      <thresholdLimit>«f.thresholdLimit»</thresholdLimit>
-	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <pluginName>[FINDBUGS] </pluginName>
 	      <defaultEncoding>«f.defaultEncoding»</defaultEncoding>
 	      <canRunOnFailed>«f.canRunOnFailed»</canRunOnFailed>
 	      <useStableBuildAsReference>«f.useStableBuildAsReference»</useStableBuildAsReference>
@@ -1108,7 +1108,7 @@ class JobConfigGenerator implements IGenerator {
 	      <isRankActivated>«f.isRankActivated»</isRankActivated>
 	      <excludePattern>«f.excludePattern»</excludePattern>
 	      <includePattern>«f.includePattern»</includePattern>
-	    </hudson.plugins.checkstyle.CheckStylePublisher>
+	    </hudson.plugins.findbugs.FindBugsPublisher>
 	'''
 
 	def dispatch publisher (Cobertura c) '''
