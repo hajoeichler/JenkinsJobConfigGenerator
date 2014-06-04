@@ -289,52 +289,55 @@ HipChat:
 	{HipChat} "hipchat" ("room" room=STRING)?;
 
 FindBugs:
-	{FindBugs} "findbugs"
+	{FindBugs} "findbugs" BracketOpen
 	"pattern" pattern=STRING
-	canRunOnFailed?="canRunOnFailed"
-	(shouldDetectModules?="shouldDetectModules")
+	(canRunOnFailed?="canRunOnFailed")?
+	(shouldDetectModules?="shouldDetectModules")?
 	("healthy" healthy=INT)?
 	("unHealthy" unHealthy=INT)?
 	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
 	thresholds=Thresholds
-	dontComputeNew?="dontComputeNew"
+	(dontComputeNew?="dontComputeNew")?
 	("defaultEncoding" defaultEncoding=STRING)?
-	useStableBuildAsReference?="useStableBuildAsReference"
-	useDeltaValues?="useDeltaValues"
-	doNotResolveRelativePaths?="doNotResolveRelativePaths"
-	isRankActivated?="isRankActivated"
+	(useStableBuildAsReference?="useStableBuildAsReference")?
+	(useDeltaValues?="useDeltaValues")?
+	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?
+	(isRankActivated?="isRankActivated")?
 	("excludePattern" excludePattern=STRING)?
-	("includePattern" includePattern=STRING)?;
+	("includePattern" includePattern=STRING)?
+	BracketClose;
 
 Checkstyle:
-	{Checkstyle} "checkstyle"
+	{Checkstyle} "checkstyle" BracketOpen
 	"pattern" pattern=STRING
-	canRunOnFailed?="canRunOnFailed"
-	(shouldDetectModules?="shouldDetectModules")
+	(canRunOnFailed?="canRunOnFailed")?
+	(shouldDetectModules?="shouldDetectModules")?
 	("healthy" healthy=INT)?
 	("unHealthy" unHealthy=INT)?
 	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
 	thresholds=Thresholds
-	dontComputeNew?="dontComputeNew"
+	(dontComputeNew?="dontComputeNew")?
 	("defaultEncoding" defaultEncoding=STRING)?
-	useStableBuildAsReference?="useStableBuildAsReference"
-	useDeltaValues?="useDeltaValues"
-	doNotResolveRelativePaths?="doNotResolveRelativePaths";
+	(useStableBuildAsReference?="useStableBuildAsReference")?
+	(useDeltaValues?="useDeltaValues")?
+	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?
+	BracketClose;
 	
 PMD:
-	{PMD} "pmd"
+	{PMD} "pmd" BracketOpen
 	"pattern" pattern=STRING
-	canRunOnFailed?="canRunOnFailed"
-	(shouldDetectModules?="shouldDetectModules")
+	(canRunOnFailed?="canRunOnFailed")?
+	(shouldDetectModules?="shouldDetectModules")?
 	("healthy" healthy=INT)?
 	("unHealthy" unHealthy=INT)?
 	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
 	thresholds=Thresholds
-	dontComputeNew?="dontComputeNew"
+	(dontComputeNew?="dontComputeNew")?
 	("defaultEncoding" defaultEncoding=STRING)?
-	useStableBuildAsReference?="useStableBuildAsReference"
-	useDeltaValues?="useDeltaValues"
-	doNotResolveRelativePaths?="doNotResolveRelativePaths";
+	(useStableBuildAsReference?="useStableBuildAsReference")?
+	(useDeltaValues?="useDeltaValues")?
+	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?
+	BracketClose;
 
 Thresholds:
 	{Thresholds} ("unstableTotalAll" unstableTotalAll=INT)? ("unstableTotalHigh" unstableTotalHigh=INT)? ("unstableTotalNormal" unstableTotalNormal=INT)? ("unstableTotalLow" unstableTotalLow=INT)? ("failedTotalAll" failedTotalAll=INT)? ("failedTotalHigh" failedTotalHigh=INT)? ("failedTotalNormal" failedTotalNormal=INT)? ("failedTotalLow" failedTotalLow=INT)?;
