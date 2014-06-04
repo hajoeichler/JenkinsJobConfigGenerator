@@ -243,7 +243,7 @@ PredefinedTriggerParams:
 PublisherSection:
 	"publishers" BracketOpen
 	publishers+=(Artifacts | TestResult | ExtMail | DownStream | HTMLPublisher | Warnings | Cobertura | Claim | Rcov |
-	FindBugs | HipChat | PlayAutoTestReport | Violations | Gatling | GitPublisher | JaCoCo)+
+	FindBugs | Checkstyle | PMD | HipChat | PlayAutoTestReport | Violations | Gatling | GitPublisher | JaCoCo)+
 	BracketClose;
 
 GitPublisher:
@@ -282,14 +282,62 @@ Cobertura:
 Rcov:
 	"rcov" reportDir=STRING;
 
-FindBugs:
-	"findbugs" results=STRING;
-
 Claim:
 	(canClaim?="canClaim");
 
 HipChat:
 	{HipChat} "hipchat" ("room" room=STRING)?;
+
+FindBugs:
+	{FindBugs} "findbugs"
+	"pattern" pattern=STRING
+	canRunOnFailed?="canRunOnFailed"
+	(shouldDetectModules?="shouldDetectModules")
+	("healthy" healthy=INT)?
+	("unHealthy" unHealthy=INT)?
+	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
+	thresholds=Thresholds
+	dontComputeNew?="dontComputeNew"
+	("defaultEncoding" defaultEncoding=STRING)?
+	useStableBuildAsReference?="useStableBuildAsReference"
+	useDeltaValues?="useDeltaValues"
+	doNotResolveRelativePaths?="doNotResolveRelativePaths"
+	isRankActivated?="isRankActivated"
+	("excludePattern" excludePattern=STRING)?
+	("includePattern" includePattern=STRING)?;
+
+Checkstyle:
+	{Checkstyle} "checkstyle"
+	"pattern" pattern=STRING
+	canRunOnFailed?="canRunOnFailed"
+	(shouldDetectModules?="shouldDetectModules")
+	("healthy" healthy=INT)?
+	("unHealthy" unHealthy=INT)?
+	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
+	thresholds=Thresholds
+	dontComputeNew?="dontComputeNew"
+	("defaultEncoding" defaultEncoding=STRING)?
+	useStableBuildAsReference?="useStableBuildAsReference"
+	useDeltaValues?="useDeltaValues"
+	doNotResolveRelativePaths?="doNotResolveRelativePaths";
+	
+PMD:
+	{PMD} "pmd"
+	"pattern" pattern=STRING
+	canRunOnFailed?="canRunOnFailed"
+	(shouldDetectModules?="shouldDetectModules")
+	("healthy" healthy=INT)?
+	("unHealthy" unHealthy=INT)?
+	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
+	thresholds=Thresholds
+	dontComputeNew?="dontComputeNew"
+	("defaultEncoding" defaultEncoding=STRING)?
+	useStableBuildAsReference?="useStableBuildAsReference"
+	useDeltaValues?="useDeltaValues"
+	doNotResolveRelativePaths?="doNotResolveRelativePaths";
+
+Thresholds:
+	{Thresholds} ("unstableTotalAll" unstableTotalAll=INT)? ("unstableTotalHigh" unstableTotalHigh=INT)? ("unstableTotalNormal" unstableTotalNormal=INT)? ("unstableTotalLow" unstableTotalLow=INT)? ("failedTotalAll" failedTotalAll=INT)? ("failedTotalHigh" failedTotalHigh=INT)? ("failedTotalNormal" failedTotalNormal=INT)? ("failedTotalLow" failedTotalLow=INT)?;
 
 JaCoCo:
 	{JaCoCo} "jacoco" ("execPattern" execPattern=STRING)? ("classPattern" classPattern=STRING)? ("sourcePattern" sourcePattern=STRING)? ("inclusionPattern" inclusionPattern=STRING)? ("exclusionPattern" exclusionPattern=STRING)? ("minimumInstructionCoverage" minimumInstructionCoverage=INT)? ("minimumBranchCoverage" minimumBranchCoverage=INT)? ("minimumComplexityCoverage" minimumComplexityCoverage=INT)? ("minimumLineCoverage" minimumLineCoverage=INT)? ("minimumMethodCoverage" minimumMethodCoverage=INT)? ("minimumClassCoverage" minimumClassCoverage=INT)? ("maximumInstructionCoverage" maximumInstructionCoverage=INT)? ("maximumBranchCoverage" maximumBranchCoverage=INT)? ("maximumComplexityCoverage" maximumComplexityCoverage=INT)? ("maximumLineCoverage" maximumLineCoverage=INT)? ("maximumMethodCoverage" maximumMethodCoverage=INT)? ("maximumClassCoverage" maximumClassCoverage=INT)? (changeBuildStatus?="changeBuildStatus")?;

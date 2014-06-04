@@ -62,6 +62,9 @@ import de.hajoeichler.jenkins.jobConfig.ViolationsConfig
 import de.hajoeichler.jenkins.jobConfig.Gatling
 import de.hajoeichler.jenkins.jobConfig.MailConfig
 import de.hajoeichler.jenkins.jobConfig.GitPublisher
+import de.hajoeichler.jenkins.jobConfig.Checkstyle
+import de.hajoeichler.jenkins.jobConfig.FindBugs
+import de.hajoeichler.jenkins.jobConfig.PMD
 
 class JobConfigGenerator implements IGenerator {
 
@@ -230,128 +233,128 @@ class JobConfigGenerator implements IGenerator {
 
 	def content(Config c) '''
 		<?xml version='1.0' encoding='UTF-8'?>
-		ï¿½IF c.isMatrixJobï¿½
+		«IF c.isMatrixJob»
 		<matrix-project>
-		ï¿½ELSEï¿½
+		«ELSE»
 		<project>
-		ï¿½ENDIFï¿½
+		«ENDIF»
 		  <actions/>
-		  <description>ï¿½c.descriptionï¿½</description>
-		  ï¿½IF c.displayName != nullï¿½
-		  <displayName>ï¿½c.displayNameï¿½</displayName>
-		  ï¿½ENDIFï¿½
-		  ï¿½IF c.getAnyOldBuildHandling != nullï¿½
-		  ï¿½logRotator(c.getAnyOldBuildHandling)ï¿½
-		  ï¿½ENDIFï¿½
+		  <description>«c.description»</description>
+		  «IF c.displayName != null»
+		  <displayName>«c.displayName»</displayName>
+		  «ENDIF»
+		  «IF c.getAnyOldBuildHandling != null»
+		  «logRotator(c.getAnyOldBuildHandling)»
+		  «ENDIF»
 		  <keepDependencies>false</keepDependencies>
 		  <properties>
-		    ï¿½gitHub(c)ï¿½
-		    ï¿½parameters(c)ï¿½
+		    «gitHub(c)»
+		    «parameters(c)»
 		  </properties>
-		  ï¿½IF c.getAnyScm == nullï¿½
+		  «IF c.getAnyScm == null»
 		  <scm class="hudson.scm.NullSCM"/>
-		  ï¿½ELSEï¿½
-		  ï¿½scm(c.getAnyScm)ï¿½
-		  ï¿½ENDIFï¿½
-		  ï¿½restrictTo(c)ï¿½
-		  <disabled>ï¿½c.disabledï¿½</disabled>
+		  «ELSE»
+		  «scm(c.getAnyScm)»
+		  «ENDIF»
+		  «restrictTo(c)»
+		  <disabled>«c.disabled»</disabled>
 		  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
 		  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-		  ï¿½triggers(c)ï¿½
-		  <concurrentBuild>ï¿½c.concurrentBuildï¿½</concurrentBuild>
-		  ï¿½IF c.isMatrixJobï¿½
-		  ï¿½matrix(c)ï¿½
-		  ï¿½ENDIFï¿½
-		  ï¿½builders(c)ï¿½
-		  ï¿½publishers(c)ï¿½
-		  ï¿½wrappers(c)ï¿½
-		ï¿½IF c.isMatrixJobï¿½
+		  «triggers(c)»
+		  <concurrentBuild>«c.concurrentBuild»</concurrentBuild>
+		  «IF c.isMatrixJob»
+		  «matrix(c)»
+		  «ENDIF»
+		  «builders(c)»
+		  «publishers(c)»
+		  «wrappers(c)»
+		«IF c.isMatrixJob»
 		</matrix-project>
-		ï¿½ELSEï¿½
+		«ELSE»
 		</project>
-		ï¿½ENDIFï¿½
+		«ENDIF»
 	'''
 
 	def logRotator(OldBuildHandling obh) '''
 		<logRotator>
-		  ï¿½IF obh.daysToKeep > 0ï¿½
-		  <daysToKeep>ï¿½obh.daysToKeepï¿½</daysToKeep>
-		  ï¿½ENDIFï¿½
-		  ï¿½IF obh.maxNumberOfBuilds > 0ï¿½
-		  <numToKeep>ï¿½obh.maxNumberOfBuildsï¿½</numToKeep>
-		  ï¿½ENDIFï¿½
-		  ï¿½IF obh.daysToKeepArtifact > 0ï¿½
-		  <artifactDaysToKeep>ï¿½obh.daysToKeepArtifactï¿½</artifactDaysToKeep>
-		  ï¿½ENDIFï¿½
-		  ï¿½IF obh.maxNumberOfBuildsWithArtifact > 0ï¿½
-		  <artifactNumToKeep>ï¿½obh.maxNumberOfBuildsWithArtifactï¿½</artifactNumToKeep>
-		  ï¿½ENDIFï¿½
+		  «IF obh.daysToKeep > 0»
+		  <daysToKeep>«obh.daysToKeep»</daysToKeep>
+		  «ENDIF»
+		  «IF obh.maxNumberOfBuilds > 0»
+		  <numToKeep>«obh.maxNumberOfBuilds»</numToKeep>
+		  «ENDIF»
+		  «IF obh.daysToKeepArtifact > 0»
+		  <artifactDaysToKeep>«obh.daysToKeepArtifact»</artifactDaysToKeep>
+		  «ENDIF»
+		  «IF obh.maxNumberOfBuildsWithArtifact > 0»
+		  <artifactNumToKeep>«obh.maxNumberOfBuildsWithArtifact»</artifactNumToKeep>
+		  «ENDIF»
 		</logRotator>
 	'''
 
 	def gitHub(Config c) '''
-		ï¿½val gitUrl = getGitUrl(c)ï¿½
-		ï¿½IF gitUrl != nullï¿½
+		«val gitUrl = getGitUrl(c)»
+		«IF gitUrl != null»
 		<com.coravy.hudson.plugins.github.GithubProjectProperty>
-		  <projectUrl>ï¿½gitUrl.normalizeï¿½</projectUrl>
+		  <projectUrl>«gitUrl.normalize»</projectUrl>
 		</com.coravy.hudson.plugins.github.GithubProjectProperty>
-		ï¿½ENDIFï¿½
+		«ENDIF»
 	'''
 
 	def restrictTo(Config c) '''
-		ï¿½val r = getRestrictTo(c)ï¿½
-		ï¿½IF r == nullï¿½
+		«val r = getRestrictTo(c)»
+		«IF r == null»
 		<canRoam>true</canRoam>
-		ï¿½ELSEï¿½
-		<assignedNode>ï¿½rï¿½</assignedNode>
+		«ELSE»
+		<assignedNode>«r»</assignedNode>
 		<canRoam>false</canRoam>
-		ï¿½ENDIFï¿½
+		«ENDIF»
 	'''
 
 	def parameters(Config c) '''
-		ï¿½val m = new LinkedHashMap<String, Parameter>()ï¿½
-		ï¿½val v = getAllParameters(c, m).valuesï¿½
-		ï¿½IF v.empty == falseï¿½
+		«val m = new LinkedHashMap<String, Parameter>()»
+		«val v = getAllParameters(c, m).values»
+		«IF v.empty == false»
 		<hudson.model.ParametersDefinitionProperty>
 		  <parameterDefinitions>
-		    ï¿½FOR p:vï¿½
-		    ï¿½param(p, p.type)ï¿½
-		    ï¿½ENDFORï¿½
+		    «FOR p:v»
+		    «param(p, p.type)»
+		    «ENDFOR»
 		  </parameterDefinitions>
 		</hudson.model.ParametersDefinitionProperty>
-		ï¿½ENDIFï¿½
+		«ENDIF»
 	'''
 
 	def dispatch param(Parameter p, StringParam s) '''
 		<hudson.model.StringParameterDefinition>
-		  <name>ï¿½p.nameï¿½</name>
-		  <description>ï¿½p.descriptionï¿½</description>
-		  <defaultValue>ï¿½s.value.normalizeï¿½</defaultValue>
+		  <name>«p.name»</name>
+		  <description>«p.description»</description>
+		  <defaultValue>«s.value.normalize»</defaultValue>
 		</hudson.model.StringParameterDefinition>
 	'''
 
 	def dispatch param(Parameter p, BooleanParam b) '''
 		<hudson.model.BooleanParameterDefinition>
-		  <name>ï¿½p.nameï¿½</name>
-		  <description>ï¿½p.descriptionï¿½</description>
-		  ï¿½IF b.checkedï¿½
+		  <name>«p.name»</name>
+		  <description>«p.description»</description>
+		  «IF b.checked»
 		  <defaultValue>true</defaultValue>
-		  ï¿½ENDIFï¿½
-		  ï¿½IF b.notCheckedï¿½
+		  «ENDIF»
+		  «IF b.notChecked»
 		  <defaultValue>false</defaultValue>
-		  ï¿½ENDIFï¿½
+		  «ENDIF»
 		</hudson.model.BooleanParameterDefinition>
 	'''
 
 	def dispatch param(Parameter p, ChoiceParam c) '''
 		<hudson.model.ChoiceParameterDefinition>
-		  <name>ï¿½p.nameï¿½</name>
-		  <description>ï¿½p.descriptionï¿½</description>
+		  <name>«p.name»</name>
+		  <description>«p.description»</description>
 		  <choices class="java.util.Arrays$ArrayList">
 		    <a class="string-array">
-		    ï¿½FOR s:c.choices.split("\n")ï¿½
-		      <string>ï¿½sï¿½</string>
-		    ï¿½ENDFORï¿½
+		    «FOR s:c.choices.split("\n")»
+		      <string>«s»</string>
+		    «ENDFOR»
 		    </a>
 		  </choices>
 		</hudson.model.ChoiceParameterDefinition>
@@ -364,16 +367,16 @@ class JobConfigGenerator implements IGenerator {
 		    <hudson.plugins.git.UserRemoteConfig>
 		      <name>origin</name>
 		      <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-		      <url>ï¿½git.url.normalizeï¿½</url>
+		      <url>«git.url.normalize»</url>
 		    </hudson.plugins.git.UserRemoteConfig>
 		  </userRemoteConfigs>
 		  <branches>
 		    <hudson.plugins.git.BranchSpec>
-		      ï¿½IF git.branch != nullï¿½
-		      <name>ï¿½git.branchï¿½</name>
-		      ï¿½ELSEï¿½
+		      «IF git.branch != null»
+		      <name>«git.branch»</name>
+		      «ELSE»
 		      <name>origin/master</name>
-		      ï¿½ENDIFï¿½
+		      «ENDIF»
 		    </hudson.plugins.git.BranchSpec>
 		  </branches>
 		  <disableSubmodules>false</disableSubmodules>
@@ -381,11 +384,11 @@ class JobConfigGenerator implements IGenerator {
 		  <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
 		  <authorOrCommitter>false</authorOrCommitter>
 		  <clean>false</clean>
-		  ï¿½IF git.wipeOutWorkspaceï¿½
+		  «IF git.wipeOutWorkspace»
 		  <wipeOutWorkspace>true</wipeOutWorkspace>
-		  ï¿½ELSEï¿½
+		  «ELSE»
 		  <wipeOutWorkspace>false</wipeOutWorkspace>
-		  ï¿½ENDIFï¿½
+		  «ENDIF»
 		  <pruneBranches>false</pruneBranches>
 		  <remotePoll>false</remotePoll>
 		  <ignoreNotifyCommit>false</ignoreNotifyCommit>
@@ -394,20 +397,20 @@ class JobConfigGenerator implements IGenerator {
 		  <submoduleCfg class="list"/>
 		  <relativeTargetDir></relativeTargetDir>
 		  <reference></reference>
-		  ï¿½IF git.regions != nullï¿½
-		  <excludedRegions>ï¿½git.regions.excludedRegions.normalizeï¿½</excludedRegions>
-		  ï¿½ELSEï¿½
+		  «IF git.regions != null»
+		  <excludedRegions>«git.regions.excludedRegions.normalize»</excludedRegions>
+		  «ELSE»
 		  <excludedRegions></excludedRegions>
-		  ï¿½ENDIFï¿½
+		  «ENDIF»
 		  <excludedUsers></excludedUsers>
 		  <gitConfigName></gitConfigName>
 		  <gitConfigEmail></gitConfigEmail>
 		  <skipTag>false</skipTag>
-		  ï¿½IF git.regions != nullï¿½
-		  <includedRegions>ï¿½git.regions.includedRegions.normalizeï¿½</includedRegions>
-		  ï¿½ELSEï¿½
+		  «IF git.regions != null»
+		  <includedRegions>«git.regions.includedRegions.normalize»</includedRegions>
+		  «ELSE»
 		  <includedRegions></includedRegions>
-		  ï¿½ENDIFï¿½
+		  «ENDIF»
 		  <scmName></scmName>
 		</scm>
 	'''
@@ -416,17 +419,17 @@ class JobConfigGenerator implements IGenerator {
 		  <scm class="hudson.scm.SubversionSCM">
 		    <locations>
 		      <hudson.scm.SubversionSCM_-ModuleLocation>
-		        <remote>ï¿½svn.url.normalizeï¿½</remote>
-		        <local>ï¿½svn.localDir.normalizeï¿½</local>
+		        <remote>«svn.url.normalize»</remote>
+		        <local>«svn.localDir.normalize»</local>
 		      </hudson.scm.SubversionSCM_-ModuleLocation>
 		    </locations>
-		    ï¿½IF svn.regions != nullï¿½
-		    <excludedRegions>ï¿½svn.regions.excludedRegions.normalizeï¿½</excludedRegions>
-		    <includedRegions>ï¿½svn.regions.includedRegions.normalizeï¿½</includedRegions>
-		    ï¿½ELSEï¿½
+		    «IF svn.regions != null»
+		    <excludedRegions>«svn.regions.excludedRegions.normalize»</excludedRegions>
+		    <includedRegions>«svn.regions.includedRegions.normalize»</includedRegions>
+		    «ELSE»
 		    <excludedRegions></excludedRegions>
 		    <includedRegions></includedRegions>
-		    ï¿½ENDIFï¿½
+		    «ENDIF»
 		    <excludedUsers></excludedUsers>
 		    <excludedRevprop></excludedRevprop>
 		    <excludedCommitMessages></excludedCommitMessages>
@@ -436,8 +439,8 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch scm(ScmCVS cvs) '''
 		<scm class="hudson.scm.CVSSCM">
-		  <cvsroot>ï¿½cvs.rootï¿½</cvsroot>
-		  <module>ï¿½cvs.modulesï¿½</module>
+		  <cvsroot>«cvs.root»</cvsroot>
+		  <module>«cvs.modules»</module>
 		  <canUseUpdate>false</canUseUpdate>
 		  <useHeadIfNotFound>false</useHeadIfNotFound>
 		  <flatten>false</flatten>
@@ -448,22 +451,22 @@ class JobConfigGenerator implements IGenerator {
 
 	def triggers(Config c) '''
 		<triggers class="vector">
-		  ï¿½val m = new LinkedHashMap<EClass, EObject>()ï¿½
-		  ï¿½FOR t:getAllTriggers(c, m).valuesï¿½
-		  ï¿½trigger(t)ï¿½
-		  ï¿½ENDFORï¿½
+		  «val m = new LinkedHashMap<EClass, EObject>()»
+		  «FOR t:getAllTriggers(c, m).values»
+		  «trigger(t)»
+		  «ENDFOR»
 		</triggers>
 	'''
 
 	def dispatch trigger(TimerTrigger t) '''
 		<hudson.triggers.TimerTrigger>
-		  <spec>ï¿½t.timerï¿½</spec>
+		  <spec>«t.timer»</spec>
 		</hudson.triggers.TimerTrigger>
 	'''
 
 	def dispatch trigger(PollScmTrigger t) '''
 		<hudson.triggers.SCMTrigger>
-		  <spec>ï¿½t.pollï¿½</spec>
+		  <spec>«t.poll»</spec>
 		</hudson.triggers.SCMTrigger>
 	'''
 
@@ -481,10 +484,10 @@ class JobConfigGenerator implements IGenerator {
 
 	def wrappers(Config c) '''
 		<buildWrappers>
-		  ï¿½val m = new LinkedHashMap<EClass, EObject>()ï¿½
-		  ï¿½FOR w:getAllWrappers(c, m).valuesï¿½
-		  ï¿½wrapper(w)ï¿½
-		  ï¿½ENDFORï¿½
+		  «val m = new LinkedHashMap<EClass, EObject>()»
+		  «FOR w:getAllWrappers(c, m).values»
+		  «wrapper(w)»
+		  «ENDFOR»
 		</buildWrappers>
 	'''
 
@@ -492,7 +495,7 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.plugins.locksandlatches.LockWrapper>
 		  <locks>
 		    <hudson.plugins.locksandlatches.LockWrapper_-LockWaitConfig>
-		      <name>ï¿½l.lock.nameï¿½</name>
+		      <name>«l.lock.name»</name>
 		    </hudson.plugins.locksandlatches.LockWrapper_-LockWaitConfig>
 		  </locks>
 		</hudson.plugins.locksandlatches.LockWrapper>
@@ -500,8 +503,8 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch wrapper(Timeout t) '''
 		<hudson.plugins.build__timeout.BuildTimeoutWrapper>
-		  <timeoutMinutes>ï¿½t.tï¿½</timeoutMinutes>
-		  <failBuild>ï¿½t.failBuildï¿½</failBuild>
+		  <timeoutMinutes>«t.t»</timeoutMinutes>
+		  <failBuild>«t.failBuild»</failBuild>
 		</hudson.plugins.build__timeout.BuildTimeoutWrapper>
 	'''
 
@@ -511,7 +514,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch wrapper(MatrixTieParent m) '''
 		<matrixtieparent.BuildWrapperMtp>
-		  <labelName>ï¿½m.matrixParentï¿½</labelName>
+		  <labelName>«m.matrixParent»</labelName>
 		</matrixtieparent.BuildWrapperMtp>
 	'''
 
@@ -522,42 +525,42 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch wrapper(Release r) '''
 	<hudson.plugins.release.ReleaseWrapper>
 	  <releaseVersionTemplate></releaseVersionTemplate>
-	  <doNotKeepLog>ï¿½r.notKeepForeverï¿½</doNotKeepLog>
+	  <doNotKeepLog>«r.notKeepForever»</doNotKeepLog>
 	  <overrideBuildParameters>false</overrideBuildParameters>
 	  <parameterDefinitions>
-	    ï¿½IF r.paramSection != nullï¿½
-	    ï¿½FOR p:r.paramSection.parametersï¿½
-	    ï¿½param(p, p.type)ï¿½
-	    ï¿½ENDFORï¿½
-	    ï¿½ENDIFï¿½
+	    «IF r.paramSection != null»
+	    «FOR p:r.paramSection.parameters»
+	    «param(p, p.type)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </parameterDefinitions>
 	  <preBuildSteps>
-	    ï¿½IF r.preBuildSection != nullï¿½
-	    ï¿½FOR b:r.preBuildSection.buildsï¿½
-	    ï¿½build(b)ï¿½
-	    ï¿½ENDFORï¿½
-	    ï¿½ENDIFï¿½
+	    «IF r.preBuildSection != null»
+	    «FOR b:r.preBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </preBuildSteps>
 	  <postBuildSteps>
-	    ï¿½IF r.finalBuildSection != nullï¿½
-	    ï¿½FOR b:r.finalBuildSection.buildsï¿½
-	    ï¿½build(b)ï¿½
-	    ï¿½ENDFORï¿½
-	    ï¿½ENDIFï¿½
+	    «IF r.finalBuildSection != null»
+	    «FOR b:r.finalBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </postBuildSteps>
 	  <postSuccessfulBuildSteps>
-	    ï¿½IF r.successBuildSection != nullï¿½
-	    ï¿½FOR b:r.successBuildSection.buildsï¿½
-	    ï¿½build(b)ï¿½
-	    ï¿½ENDFORï¿½
-	    ï¿½ENDIFï¿½
+	    «IF r.successBuildSection != null»
+	    «FOR b:r.successBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </postSuccessfulBuildSteps>
 	  <postFailedBuildSteps>
-	    ï¿½IF r.failedBuildSection != nullï¿½
-	    ï¿½FOR b:r.failedBuildSection.buildsï¿½
-	    ï¿½build(b)ï¿½
-	    ï¿½ENDFORï¿½
-	    ï¿½ENDIFï¿½
+	    «IF r.failedBuildSection != null»
+	    «FOR b:r.failedBuildSection.builds»
+	    «build(b)»
+	    «ENDFOR»
+	    «ENDIF»
 	  </postFailedBuildSteps>
 	</hudson.plugins.release.ReleaseWrapper>
 	'''
@@ -577,69 +580,69 @@ class JobConfigGenerator implements IGenerator {
 	}
 
 	def matrix(Config c) '''
-		ï¿½val r = new LinkedHashMap<String, List<String>>()ï¿½
-		ï¿½getMatrixes(c, r)ï¿½
-		ï¿½FOR e:r.entrySetï¿½
+		«val r = new LinkedHashMap<String, List<String>>()»
+		«getMatrixes(c, r)»
+		«FOR e:r.entrySet»
 		<axes>
 		  <hudson.matrix.LabelAxis>
-		    <name>ï¿½e.keyï¿½</name>
+		    <name>«e.key»</name>
 		    <values>
-		      ï¿½FOR v:e.valueï¿½
-		      <string>ï¿½vï¿½</string>
-		      ï¿½ENDFORï¿½
+		      «FOR v:e.value»
+		      <string>«v»</string>
+		      «ENDFOR»
 		    </values>
 		  </hudson.matrix.LabelAxis>
 		</axes>
-		ï¿½ENDFORï¿½
+		«ENDFOR»
 	'''
 
 	def builders(Config c) '''
 		<builders>
-		  ï¿½val l = new ArrayList<EObject>()ï¿½
-		  ï¿½FOR b:getAllBuilders(c, l)ï¿½
-		  ï¿½build(b)ï¿½
-		  ï¿½ENDFORï¿½
+		  «val l = new ArrayList<EObject>()»
+		  «FOR b:getAllBuilders(c, l)»
+		  «build(b)»
+		  «ENDFOR»
 		</builders>
 	'''
 
 	def dispatch build (Maven m) '''
 		<hudson.tasks.Maven>
-		  <targets>ï¿½m.mavenGoalsï¿½</targets>
-		  <mavenName>ï¿½m.version.nameï¿½</mavenName>
-		  ï¿½IF m.mavenPOM != nullï¿½
-		  <pom>ï¿½m.mavenPOM.normalizeï¿½</pom>
-		  ï¿½ENDIFï¿½
-		  ï¿½IF m.mavenProperties != nullï¿½
-		  <properties>ï¿½m.mavenPropertiesï¿½</properties>
-		  ï¿½ENDIFï¿½
-		  <usePrivateRepository>ï¿½m.mavenPrivateRepoï¿½</usePrivateRepository>
+		  <targets>«m.mavenGoals»</targets>
+		  <mavenName>«m.version.name»</mavenName>
+		  «IF m.mavenPOM != null»
+		  <pom>«m.mavenPOM.normalize»</pom>
+		  «ENDIF»
+		  «IF m.mavenProperties != null»
+		  <properties>«m.mavenProperties»</properties>
+		  «ENDIF»
+		  <usePrivateRepository>«m.mavenPrivateRepo»</usePrivateRepository>
 		</hudson.tasks.Maven>
 	'''
 
 	def dispatch build (Shell s) '''
 		<hudson.tasks.Shell>
-		  <command>ï¿½s.shellScript.normalizeï¿½</command>
+		  <command>«s.shellScript.normalize»</command>
 		</hudson.tasks.Shell>
 	'''
 
 	def dispatch build (Batch b) '''
 		<hudson.tasks.BatchFile>
-		  <command>ï¿½b.batchScript.normalizeï¿½</command>
+		  <command>«b.batchScript.normalize»</command>
 		</hudson.tasks.BatchFile>
 	'''
 
 	def dispatch build (Ant a) '''
 		<hudson.tasks.Ant>
 		  <targets></targets>
-		  <antName>ï¿½a.version.nameï¿½</antName>
-		  <buildFile>ï¿½a.buildFileï¿½</buildFile>
+		  <antName>«a.version.name»</antName>
+		  <buildFile>«a.buildFile»</buildFile>
 		</hudson.tasks.Ant>
 	'''
 
 	def dispatch build (SystemGroovy sg) '''
 		<hudson.plugins.groovy.SystemGroovy>
 		  <scriptSource class="hudson.plugins.groovy.StringScriptSource">
-		    <command>ï¿½sg.groovyScript.normalizeï¿½</command>
+		    <command>«sg.groovyScript.normalize»</command>
 		  </scriptSource>
 		  <bindings></bindings>
 		  <classpath></classpath>
@@ -649,9 +652,9 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch build (TriggerBuilderSection tbs) '''
 		<hudson.plugins.parameterizedtrigger.TriggerBuilder>
 		  <configs>
-		    ï¿½FOR tb:tbs.triggeredBuildsï¿½
-		    ï¿½triggeredBuild(tb)ï¿½
-		    ï¿½ENDFORï¿½
+		    «FOR tb:tbs.triggeredBuilds»
+		    «triggeredBuild(tb)»
+		    «ENDFOR»
 		  </configs>
 		</hudson.plugins.parameterizedtrigger.TriggerBuilder>
 	'''
@@ -659,11 +662,11 @@ class JobConfigGenerator implements IGenerator {
 	def triggeredBuild(TriggeredBuild tb) '''
 		<hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
 		  <configs>
-		    ï¿½FOR p:tb.triggerParamsï¿½
-		    ï¿½triggerParam(p)ï¿½
-		    ï¿½ENDFORï¿½
+		    «FOR p:tb.triggerParams»
+		    «triggerParam(p)»
+		    «ENDFOR»
 		  </configs>
-		  <projects>ï¿½tb.builds.fqnï¿½</projects>
+		  <projects>«tb.builds.fqn»</projects>
 		  <condition>ALWAYS</condition>
 		  <triggerWithNoParameters>false</triggerWithNoParameters>
 		  <block>
@@ -688,10 +691,10 @@ class JobConfigGenerator implements IGenerator {
 
 	def publishers(Config c) '''
 		<publishers>
-		  ï¿½val m = new LinkedHashMap<EClass, EObject>()ï¿½
-		  ï¿½FOR p:getAllPublishers(c, m).valuesï¿½
-		  ï¿½publisher(p)ï¿½
-		  ï¿½ENDFORï¿½
+		  «val m = new LinkedHashMap<EClass, EObject>()»
+		  «FOR p:getAllPublishers(c, m).values»
+		  «publisher(p)»
+		  «ENDFOR»
 		</publishers>
 	'''
 
@@ -773,103 +776,103 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch publisher (ExtMail em) '''
 		<hudson.plugins.emailext.ExtendedEmailPublisher>
-		  <recipientList>ï¿½getTo(em)ï¿½</recipientList>
+		  <recipientList>«getTo(em)»</recipientList>
 		  <configuredTriggers>
-		    ï¿½val m = new LinkedHashMap<String, MailTrigger>()ï¿½
-		    ï¿½FOR mt:getAllMailTriggers(em, m).valuesï¿½
-		    ï¿½mailTrigger(mt)ï¿½
-		    ï¿½ENDFORï¿½
+		    «val m = new LinkedHashMap<String, MailTrigger>()»
+		    «FOR mt:getAllMailTriggers(em, m).values»
+		    «mailTrigger(mt)»
+		    «ENDFOR»
 		  </configuredTriggers>
-		  ï¿½IF em.type == nullï¿½
+		  «IF em.type == null»
 		  <contentType>default</contentType>
-		  ï¿½ELSEï¿½
-		  <contentType>ï¿½em.typeï¿½</contentType>
-		  ï¿½ENDIFï¿½
-		  ï¿½val subject = getSubject(em)ï¿½
-		  ï¿½IF subject == nullï¿½
+		  «ELSE»
+		  <contentType>«em.type»</contentType>
+		  «ENDIF»
+		  «val subject = getSubject(em)»
+		  «IF subject == null»
 		  <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
-		  ï¿½ELSEï¿½
-		  <defaultSubject>ï¿½subjectï¿½</defaultSubject>
-		  ï¿½ENDIFï¿½
-		  ï¿½val content = getContent(em)ï¿½
-		  ï¿½IF content == nullï¿½
+		  «ELSE»
+		  <defaultSubject>«subject»</defaultSubject>
+		  «ENDIF»
+		  «val content = getContent(em)»
+		  «IF content == null»
 		  <defaultContent>$DEFAULT_CONTENT</defaultContent>
-		  ï¿½ELSEï¿½
-		  <defaultContent>ï¿½contentï¿½</defaultContent>
-		  ï¿½ENDIFï¿½
-		  <attachmentsPattern>ï¿½getAttachments(em)ï¿½</attachmentsPattern>
-		  ï¿½IF em.mailConfig != nullï¿½
-		  ï¿½mailConfig(em.mailConfig)ï¿½
-		  ï¿½ENDIFï¿½
+		  «ELSE»
+		  <defaultContent>«content»</defaultContent>
+		  «ENDIF»
+		  <attachmentsPattern>«getAttachments(em)»</attachmentsPattern>
+		  «IF em.mailConfig != null»
+		  «mailConfig(em.mailConfig)»
+		  «ENDIF»
 		</hudson.plugins.emailext.ExtendedEmailPublisher>
 	'''
 
 	def mailTrigger(MailTrigger mt) '''
-		<hudson.plugins.emailext.plugins.trigger.ï¿½mt.type.replace("-", "")ï¿½Trigger>
+		<hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
 		  <email>
-		    ï¿½IF mt.to == nullï¿½
+		    «IF mt.to == null»
 		    <recipientList></recipientList>
-		    ï¿½ELSEï¿½
-		    <recipientList>ï¿½mt.toï¿½</recipientList>
-		    ï¿½ENDIFï¿½
-		    ï¿½IF mt.mailConfig != null && mt.mailConfig.subject == nullï¿½
+		    «ELSE»
+		    <recipientList>«mt.to»</recipientList>
+		    «ENDIF»
+		    «IF mt.mailConfig != null && mt.mailConfig.subject == null»
 		    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-		    ï¿½ELSEï¿½
-		    <subject>ï¿½mt.mailConfig.subjectï¿½</subject>
-		    ï¿½ENDIFï¿½
-		    ï¿½IF mt.mailConfig != null && mt.mailConfig.content == nullï¿½
+		    «ELSE»
+		    <subject>«mt.mailConfig.subject»</subject>
+		    «ENDIF»
+		    «IF mt.mailConfig != null && mt.mailConfig.content == null»
 		    <body>$PROJECT_DEFAULT_CONTENT</body>
-		    ï¿½ELSEï¿½
-		    <body>ï¿½mt.mailConfig.contentï¿½</body>
-		    ï¿½ENDIFï¿½
-		    <sendToDevelopers>ï¿½mt.toCommiterï¿½</sendToDevelopers>
-		    <sendToRequester>ï¿½mt.toRequesterï¿½</sendToRequester>
-		    <includeCulprits>ï¿½mt.toCulpritsï¿½</includeCulprits>
-		    <sendToRecipientList>ï¿½mt.toListï¿½</sendToRecipientList>
-		    ï¿½IF mt.mailConfig != nullï¿½
-		    <attachmentsPattern>ï¿½mt.mailConfig.attachmentsï¿½</attachmentsPattern>
-		    ï¿½mailConfig(mt.mailConfig)ï¿½
-		    ï¿½ENDIFï¿½
+		    «ELSE»
+		    <body>«mt.mailConfig.content»</body>
+		    «ENDIF»
+		    <sendToDevelopers>«mt.toCommiter»</sendToDevelopers>
+		    <sendToRequester>«mt.toRequester»</sendToRequester>
+		    <includeCulprits>«mt.toCulprits»</includeCulprits>
+		    <sendToRecipientList>«mt.toList»</sendToRecipientList>
+		    «IF mt.mailConfig != null»
+		    <attachmentsPattern>«mt.mailConfig.attachments»</attachmentsPattern>
+		    «mailConfig(mt.mailConfig)»
+		    «ENDIF»
 		  </email>
-		</hudson.plugins.emailext.plugins.trigger.ï¿½mt.type.replace("-", "")ï¿½Trigger>
+		</hudson.plugins.emailext.plugins.trigger.«mt.type.replace("-", "")»Trigger>
 	'''
 
 	def mailConfig(MailConfig mc) '''
-		<attachBuildLog>ï¿½mc.attachBuildLogï¿½</attachBuildLog>
+		<attachBuildLog>«mc.attachBuildLog»</attachBuildLog>
 	'''
 
 	def dispatch publisher (TestResult t) '''
-		ï¿½IF isNotEmpty(t.testresults)ï¿½
+		«IF isNotEmpty(t.testresults)»
 		<hudson.tasks.junit.JUnitResultArchiver>
-		  <testResults>ï¿½t.testresults.normalizeï¿½</testResults>
-		  <keepLongStdio>ï¿½t.longIOï¿½</keepLongStdio>
+		  <testResults>«t.testresults.normalize»</testResults>
+		  <keepLongStdio>«t.longIO»</keepLongStdio>
 		  <testDataPublishers>
-		  ï¿½IF t.claimï¿½
+		  «IF t.claim»
 		    <hudson.plugins.claim.ClaimTestDataPublisher/>
-		  ï¿½ENDIFï¿½
+		  «ENDIF»
 		  </testDataPublishers>
 		</hudson.tasks.junit.JUnitResultArchiver>
-		ï¿½ENDIFï¿½
+		«ENDIF»
 	'''
 
 	def dispatch publisher (DownStream d) '''
 		<hudson.plugins.parameterizedtrigger.BuildTrigger>
 		  <configs>
-		    ï¿½FOR b:d.buildsï¿½
-		    ï¿½downStreamBuild(b)ï¿½
-		    ï¿½ENDFORï¿½
+		    «FOR b:d.builds»
+		    «downStreamBuild(b)»
+		    «ENDFOR»
 		  </configs>
 		</hudson.plugins.parameterizedtrigger.BuildTrigger>
 	'''
 
 	def dispatch publisher (Artifacts a) '''
 		<hudson.tasks.ArtifactArchiver>
-		  <artifacts>ï¿½a.artifacts.normalizeï¿½</artifacts>
-		  ï¿½IF falseï¿½
+		  <artifacts>«a.artifacts.normalize»</artifacts>
+		  «IF false»
 		  <latestOnly>true</latestOnly>
-		  ï¿½ELSEï¿½
+		  «ELSE»
 		  <latestOnly>false</latestOnly>
-		  ï¿½ENDIFï¿½
+		  «ENDIF»
 		</hudson.tasks.ArtifactArchiver>
 	'''
 
@@ -877,11 +880,11 @@ class JobConfigGenerator implements IGenerator {
 		<hudson.plugins.git.GitPublisher>
 		  <configVersion>2</configVersion>
 		  <pushMerge>false</pushMerge>
-		  <pushOnlyIfSuccess>ï¿½g.onlyOnSuccessï¿½</pushOnlyIfSuccess>
+		  <pushOnlyIfSuccess>«g.onlyOnSuccess»</pushOnlyIfSuccess>
 		  <branchesToPush>
 		    <hudson.plugins.git.GitPublisher_-BranchToPush>
-		      <targetRepoName>ï¿½g.originï¿½</targetRepoName>
-		      <branchName>ï¿½g.branchï¿½</branchName>
+		      <targetRepoName>«g.origin»</targetRepoName>
+		      <branchName>«g.branch»</branchName>
 		    </hudson.plugins.git.GitPublisher_-BranchToPush>
 		  </branchesToPush>
 		</hudson.plugins.git.GitPublisher>
@@ -890,7 +893,7 @@ class JobConfigGenerator implements IGenerator {
 	def dispatch publisher(Gatling g) '''
 		<com.excilys.ebi.gatling.jenkins.GatlingPublisher plugin="gatling@1.0.0">
 		  <simulation>
-		    <name>ï¿½g.resultprefix.normalizeï¿½</name>
+		    <name>«g.resultprefix.normalize»</name>
 		  </simulation>
 		</com.excilys.ebi.gatling.jenkins.GatlingPublisher>
 	'''
@@ -903,9 +906,9 @@ class JobConfigGenerator implements IGenerator {
 		    </suppressions>
 		    <typeConfigs>
 		      <no-comparator/>
-		      ï¿½FOR vc:v.violationsï¿½
-		      ï¿½violationsConfig(vc)ï¿½
-		      ï¿½ENDFORï¿½
+		      «FOR vc:v.violations»
+		      «violationsConfig(vc)»
+		      «ENDFOR»
 		    </typeConfigs>
 		    <limit>100</limit>
 		    <sourcePathPattern></sourcePathPattern>
@@ -919,12 +922,12 @@ class JobConfigGenerator implements IGenerator {
 		<entry>
 		  <string>checkstyle</string>
 		  <hudson.plugins.violations.TypeConfig>
-		    <type>ï¿½vc.typeï¿½</type>
-		    <min>ï¿½vc.minï¿½</min>
-		    <max>ï¿½vc.maxï¿½</max>
-		    <unstable>ï¿½vc.unstableï¿½</unstable>
+		    <type>«vc.type»</type>
+		    <min>«vc.min»</min>
+		    <max>«vc.max»</max>
+		    <unstable>«vc.unstable»</unstable>
 		    <usePattern>false</usePattern>
-		    <pattern>ï¿½vc.patternï¿½</pattern>
+		    <pattern>«vc.pattern»</pattern>
 		  </hudson.plugins.violations.TypeConfig>
 		</entry>
 	'''
@@ -933,10 +936,10 @@ class JobConfigGenerator implements IGenerator {
 		<htmlpublisher.HtmlPublisher>
 		  <reportTargets>
 		    <htmlpublisher.HtmlPublisherTarget>
-		      <reportName>ï¿½h.nameï¿½</reportName>
-		      <reportDir>ï¿½h.dirï¿½</reportDir>
-		      <reportFiles>ï¿½h.filesï¿½</reportFiles>
-		      <keepAll>ï¿½h.keepPastï¿½</keepAll>
+		      <reportName>«h.name»</reportName>
+		      <reportDir>«h.dir»</reportDir>
+		      <reportFiles>«h.files»</reportFiles>
+		      <keepAll>«h.keepPast»</keepAll>
 		      <wrapperName>htmlpublisher-wrapper.html</wrapperName>
 		    </htmlpublisher.HtmlPublisherTarget>
 		  </reportTargets>
@@ -953,11 +956,11 @@ class JobConfigGenerator implements IGenerator {
 		  <canRunOnFailed>false</canRunOnFailed>
 		  <useDeltaValues>false</useDeltaValues>
 		  <thresholds>
-		    ï¿½IF w.unstableTotalAll > 0ï¿½
-		    <unstableTotalAll>ï¿½w.unstableTotalAllï¿½</unstableTotalAll>
-		    ï¿½ELSEï¿½
+		    «IF w.unstableTotalAll > 0»
+		    <unstableTotalAll>«w.unstableTotalAll»</unstableTotalAll>
+		    «ELSE»
 		    <unstableTotalAll></unstableTotalAll>
-		    ï¿½ENDIFï¿½
+		    «ENDIF»
 		    <unstableTotalHigh></unstableTotalHigh>
 		    <unstableTotalNormal></unstableTotalNormal>
 		    <unstableTotalLow></unstableTotalLow>
@@ -965,11 +968,11 @@ class JobConfigGenerator implements IGenerator {
 		    <unstableNewHigh></unstableNewHigh>
 		    <unstableNewNormal></unstableNewNormal>
 		    <unstableNewLow></unstableNewLow>
-		    ï¿½IF w.failTotalAll > 0ï¿½
-		    <failedTotalAll>ï¿½w.failTotalAllï¿½</failedTotalAll>
-		    ï¿½ELSEï¿½
+		    «IF w.failTotalAll > 0»
+		    <failedTotalAll>«w.failTotalAll»</failedTotalAll>
+		    «ELSE»
 		    <failedTotalAll></failedTotalAll>
-		    ï¿½ENDIFï¿½
+		    «ENDIF»
 		    <failedTotalHigh></failedTotalHigh>
 		    <failedTotalNormal></failedTotalNormal>
 		    <failedTotalLow></failedTotalLow>
@@ -982,7 +985,7 @@ class JobConfigGenerator implements IGenerator {
 		  <dontComputeNew>true</dontComputeNew>
 		  <parserConfigurations/>
 		  <consoleLogParsers>
-		    <string>ï¿½w.parser.nameï¿½</string>
+		    <string>«w.parser.name»</string>
 		  </consoleLogParsers>
 		</hudson.plugins.warnings.WarningsPublisher>
 	'''
@@ -993,7 +996,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch publisher (HipChat h) '''
 		<jenkins.plugins.hipchat.HipChatPublisher>
-		  <room>ï¿½h.roomï¿½</room>
+		  <room>«h.room»</room>
 		</jenkins.plugins.hipchat.HipChatPublisher>
 	'''
 
@@ -1003,31 +1006,115 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch publisher (JaCoCo j) '''
 		<hudson.plugins.jacoco.JacocoPublisher>
-		  <execPattern>ï¿½j.execPatternï¿½</execPattern>
-		  <classPattern>ï¿½j.classPatternï¿½</classPattern>
-		  <sourcePattern>ï¿½j.sourcePatternï¿½</sourcePattern>
-		  <inclusionPattern>ï¿½j.inclusionPatternï¿½</inclusionPattern>
-		  <exclusionPattern>ï¿½j.exclusionPatternï¿½</exclusionPattern>
-		  <minimumInstructionCoverage>ï¿½j.minimumInstructionCoverageï¿½</minimumInstructionCoverage>
-		  <minimumBranchCoverage>ï¿½j.minimumBranchCoverageï¿½</minimumBranchCoverage>
-		  <minimumComplexityCoverage>ï¿½j.minimumComplexityCoverageï¿½</minimumComplexityCoverage>
-		  <minimumLineCoverage>ï¿½j.minimumLineCoverageï¿½</minimumLineCoverage>
-		  <minimumMethodCoverage>ï¿½j.minimumMethodCoverageï¿½</minimumMethodCoverage>
-		  <minimumClassCoverage>ï¿½j.minimumClassCoverageï¿½</minimumClassCoverage>
-		  <maximumInstructionCoverage>ï¿½j.maximumInstructionCoverageï¿½</maximumInstructionCoverage>
-		  <maximumBranchCoverage>ï¿½j.maximumBranchCoverageï¿½</maximumBranchCoverage>
-		  <maximumComplexityCoverage>ï¿½j.maximumComplexityCoverageï¿½</maximumComplexityCoverage>
-		  <maximumLineCoverage>ï¿½j.maximumLineCoverageï¿½</maximumLineCoverage>
-		  <maximumMethodCoverage>ï¿½j.maximumMethodCoverageï¿½</maximumMethodCoverage>
-		  <maximumClassCoverage>ï¿½j.maximumClassCoverageï¿½</maximumClassCoverage>
-		  <changeBuildStatus>ï¿½j.changeBuildStatusï¿½</changeBuildStatus>
+		  <execPattern>«j.execPattern»</execPattern>
+		  <classPattern>«j.classPattern»</classPattern>
+		  <sourcePattern>«j.sourcePattern»</sourcePattern>
+		  <inclusionPattern>«j.inclusionPattern»</inclusionPattern>
+		  <exclusionPattern>«j.exclusionPattern»</exclusionPattern>
+		  <minimumInstructionCoverage>«j.minimumInstructionCoverage»</minimumInstructionCoverage>
+		  <minimumBranchCoverage>«j.minimumBranchCoverage»</minimumBranchCoverage>
+		  <minimumComplexityCoverage>«j.minimumComplexityCoverage»</minimumComplexityCoverage>
+		  <minimumLineCoverage>«j.minimumLineCoverage»</minimumLineCoverage>
+		  <minimumMethodCoverage>«j.minimumMethodCoverage»</minimumMethodCoverage>
+		  <minimumClassCoverage>«j.minimumClassCoverage»</minimumClassCoverage>
+		  <maximumInstructionCoverage>«j.maximumInstructionCoverage»</maximumInstructionCoverage>
+		  <maximumBranchCoverage>«j.maximumBranchCoverage»</maximumBranchCoverage>
+		  <maximumComplexityCoverage>«j.maximumComplexityCoverage»</maximumComplexityCoverage>
+		  <maximumLineCoverage>«j.maximumLineCoverage»</maximumLineCoverage>
+		  <maximumMethodCoverage>«j.maximumMethodCoverage»</maximumMethodCoverage>
+		  <maximumClassCoverage>«j.maximumClassCoverage»</maximumClassCoverage>
+		  <changeBuildStatus>«j.changeBuildStatus»</changeBuildStatus>
 		</hudson.plugins.jacoco.JacocoPublisher>
+	'''
+	
+	def dispatch publisher (Checkstyle c) '''
+	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	      <healthy>«c.healthy»</healthy>
+	      <unHealthy>«c.unHealthy»</unHealthy>
+	      <thresholdLimit>«c.thresholdLimit»</thresholdLimit>
+	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <defaultEncoding>«c.defaultEncoding»</defaultEncoding>
+	      <canRunOnFailed>«c.canRunOnFailed»</canRunOnFailed>
+	      <useStableBuildAsReference>«c.useStableBuildAsReference»</useStableBuildAsReference>
+	      <useDeltaValues>«c.useDeltaValues»</useDeltaValues>
+	      <thresholds>
+	        <unstableTotalAll>«c.thresholds.unstableTotalAll»</unstableTotalAll>
+	        <unstableTotalHigh>«c.thresholds.unstableTotalHigh»</unstableTotalHigh>
+	        <unstableTotalNormal>«c.thresholds.unstableTotalNormal»</unstableTotalNormal>
+	        <unstableTotalLow>«c.thresholds.unstableTotalLow»</unstableTotalLow>
+	        <failedTotalAll>«c.thresholds.failedTotalAll»</failedTotalAll>
+	        <failedTotalHigh>«c.thresholds.failedTotalHigh»</failedTotalHigh>
+	        <failedTotalNormal>«c.thresholds.failedTotalNormal»</failedTotalNormal>
+	        <failedTotalLow>«c.thresholds.failedTotalLow»</failedTotalLow>
+	      </thresholds>
+	      <shouldDetectModules>«c.shouldDetectModules»</shouldDetectModules>
+	      <dontComputeNew>«c.dontComputeNew»</dontComputeNew>
+	      <doNotResolveRelativePaths>«c.doNotResolveRelativePaths»</doNotResolveRelativePaths>
+	      <pattern>«c.pattern»</pattern>
+	    </hudson.plugins.checkstyle.CheckStylePublisher>
+	'''
+	
+	def dispatch publisher (PMD p) '''
+	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	      <healthy>«p.healthy»</healthy>
+	      <unHealthy>«p.unHealthy»</unHealthy>
+	      <thresholdLimit>«p.thresholdLimit»</thresholdLimit>
+	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <defaultEncoding>«p.defaultEncoding»</defaultEncoding>
+	      <canRunOnFailed>«p.canRunOnFailed»</canRunOnFailed>
+	      <useStableBuildAsReference>«p.useStableBuildAsReference»</useStableBuildAsReference>
+	      <useDeltaValues>«p.useDeltaValues»</useDeltaValues>
+	      <thresholds>
+	        <unstableTotalAll>«p.thresholds.unstableTotalAll»</unstableTotalAll>
+	        <unstableTotalHigh>«p.thresholds.unstableTotalHigh»</unstableTotalHigh>
+	        <unstableTotalNormal>«p.thresholds.unstableTotalNormal»</unstableTotalNormal>
+	        <unstableTotalLow>«p.thresholds.unstableTotalLow»</unstableTotalLow>
+	        <failedTotalAll>«p.thresholds.failedTotalAll»</failedTotalAll>
+	        <failedTotalHigh>«p.thresholds.failedTotalHigh»</failedTotalHigh>
+	        <failedTotalNormal>«p.thresholds.failedTotalNormal»</failedTotalNormal>
+	        <failedTotalLow>«p.thresholds.failedTotalLow»</failedTotalLow>
+	      </thresholds>
+	      <shouldDetectModules>«p.shouldDetectModules»</shouldDetectModules>
+	      <dontComputeNew>«p.dontComputeNew»</dontComputeNew>
+	      <doNotResolveRelativePaths>«p.doNotResolveRelativePaths»</doNotResolveRelativePaths>
+	      <pattern>«p.pattern»</pattern>
+	    </hudson.plugins.checkstyle.CheckStylePublisher>
+	'''
+	
+	def dispatch publisher (FindBugs f) '''
+	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	      <healthy>«f.healthy»</healthy>
+	      <unHealthy>«f.unHealthy»</unHealthy>
+	      <thresholdLimit>«f.thresholdLimit»</thresholdLimit>
+	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <defaultEncoding>«f.defaultEncoding»</defaultEncoding>
+	      <canRunOnFailed>«f.canRunOnFailed»</canRunOnFailed>
+	      <useStableBuildAsReference>«f.useStableBuildAsReference»</useStableBuildAsReference>
+	      <useDeltaValues>«f.useDeltaValues»</useDeltaValues>
+	      <thresholds>
+	        <unstableTotalAll>«f.thresholds.unstableTotalAll»</unstableTotalAll>
+	        <unstableTotalHigh>«f.thresholds.unstableTotalHigh»</unstableTotalHigh>
+	        <unstableTotalNormal>«f.thresholds.unstableTotalNormal»</unstableTotalNormal>
+	        <unstableTotalLow>«f.thresholds.unstableTotalLow»</unstableTotalLow>
+	        <failedTotalAll>«f.thresholds.failedTotalAll»</failedTotalAll>
+	        <failedTotalHigh>«f.thresholds.failedTotalHigh»</failedTotalHigh>
+	        <failedTotalNormal>«f.thresholds.failedTotalNormal»</failedTotalNormal>
+	        <failedTotalLow>«f.thresholds.failedTotalLow»</failedTotalLow>
+	      </thresholds>
+	      <shouldDetectModules>«f.shouldDetectModules»</shouldDetectModules>
+	      <dontComputeNew>«f.dontComputeNew»</dontComputeNew>
+	      <doNotResolveRelativePaths>«f.doNotResolveRelativePaths»</doNotResolveRelativePaths>
+	      <pattern>«f.pattern»</pattern>
+	      <isRankActivated>«f.isRankActivated»</isRankActivated>
+	      <excludePattern>«f.excludePattern»</excludePattern>
+	      <includePattern>«f.includePattern»</includePattern>
+	    </hudson.plugins.checkstyle.CheckStylePublisher>
 	'''
 
 	def dispatch publisher (Cobertura c) '''
 		<hudson.plugins.cobertura.CoberturaPublisher>
-		  <coberturaReportFile>ï¿½c.xmlreportï¿½</coberturaReportFile>
-		  <onlyStable>ï¿½c.onlyStableï¿½</onlyStable>
+		  <coberturaReportFile>«c.xmlreport»</coberturaReportFile>
+		  <onlyStable>«c.onlyStable»</onlyStable>
 		  <healthyTarget>
 		    <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
 		      <entry>
@@ -1058,7 +1145,7 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch publisher (Rcov r) '''
 		<hudson.plugins.rubyMetrics.rcov.RcovPublisher>
-		  <reportDir>ï¿½r.reportDirï¿½</reportDir>
+		  <reportDir>«r.reportDir»</reportDir>
 		  <targets>
 		    <hudson.plugins.rubyMetrics.rcov.model.MetricTarget>
 		      <metric>TOTAL_COVERAGE</metric>
@@ -1110,18 +1197,18 @@ class JobConfigGenerator implements IGenerator {
 
 	def downStreamBuild (DownStreamBuild b) '''
 		<hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-		  ï¿½IF b.triggerParams.emptyï¿½
+		  «IF b.triggerParams.empty»
 		  <configs class="java.util.Collections$EmptyList"/>
 		  <triggerWithNoParameters>true</triggerWithNoParameters>
-		  ï¿½ELSEï¿½
+		  «ELSE»
 		  <configs>
-		    ï¿½FOR p:b.triggerParamsï¿½
-		    ï¿½triggerParam(p)ï¿½
-		    ï¿½ENDFORï¿½
+		    «FOR p:b.triggerParams»
+		    «triggerParam(p)»
+		    «ENDFOR»
 		  </configs>
-		  ï¿½ENDIFï¿½
-		  <projects>ï¿½b.builds.fqnï¿½</projects>
-		  <condition>ï¿½b.condition.translateConditionï¿½</condition>
+		  «ENDIF»
+		  <projects>«b.builds.fqn»</projects>
+		  <condition>«b.condition.translateCondition»</condition>
 		</hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
 	'''
 
@@ -1135,13 +1222,13 @@ class JobConfigGenerator implements IGenerator {
 
 	def dispatch triggerParam(PropertyFileTriggerParams p) '''
 		<hudson.plugins.parameterizedtrigger.FileBuildParameters>
-		  <propertiesFile>ï¿½p.propertyFileï¿½</propertiesFile>
+		  <propertiesFile>«p.propertyFile»</propertiesFile>
 		</hudson.plugins.parameterizedtrigger.FileBuildParameters>
 	'''
 
 	def dispatch triggerParam(PredefinedTriggerParams p) '''
 		<hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-		  <properties>ï¿½p.predefined.normalizeï¿½</properties>
+		  <properties>«p.predefined.normalize»</properties>
 		</hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
 	'''
 }
