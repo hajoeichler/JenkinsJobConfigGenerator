@@ -62,6 +62,9 @@ import de.hajoeichler.jenkins.jobConfig.ViolationsConfig
 import de.hajoeichler.jenkins.jobConfig.Gatling
 import de.hajoeichler.jenkins.jobConfig.MailConfig
 import de.hajoeichler.jenkins.jobConfig.GitPublisher
+import de.hajoeichler.jenkins.jobConfig.Checkstyle
+import de.hajoeichler.jenkins.jobConfig.FindBugs
+import de.hajoeichler.jenkins.jobConfig.PMD
 
 class JobConfigGenerator implements IGenerator {
 
@@ -1022,6 +1025,90 @@ class JobConfigGenerator implements IGenerator {
 		  <maximumClassCoverage>ï¿½j.maximumClassCoverageï¿½</maximumClassCoverage>
 		  <changeBuildStatus>ï¿½j.changeBuildStatusï¿½</changeBuildStatus>
 		</hudson.plugins.jacoco.JacocoPublisher>
+	'''
+	
+	def dispatch publisher (Checkstyle c) '''
+	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	      <healthy>«c.healthy»</healthy>
+	      <unHealthy>«c.unHealthy»</unHealthy>
+	      <thresholdLimit>«c.thresholdLimit»</thresholdLimit>
+	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <defaultEncoding>«c.defaultEncoding»</defaultEncoding>
+	      <canRunOnFailed>«c.canRunOnFailed»</canRunOnFailed>
+	      <useStableBuildAsReference>«c.useStableBuildAsReference»</useStableBuildAsReference>
+	      <useDeltaValues>«c.useDeltaValues»</useDeltaValues>
+	      <thresholds>
+	        <unstableTotalAll>«c.thresholds.unstableTotalAll»</unstableTotalAll>
+	        <unstableTotalHigh>«c.thresholds.unstableTotalHigh»</unstableTotalHigh>
+	        <unstableTotalNormal>«c.thresholds.unstableTotalNormal»</unstableTotalNormal>
+	        <unstableTotalLow>«c.thresholds.unstableTotalLow»</unstableTotalLow>
+	        <failedTotalAll>«c.thresholds.failedTotalAll»</failedTotalAll>
+	        <failedTotalHigh>«c.thresholds.failedTotalHigh»</failedTotalHigh>
+	        <failedTotalNormal>«c.thresholds.failedTotalNormal»</failedTotalNormal>
+	        <failedTotalLow>«c.thresholds.failedTotalLow»</failedTotalLow>
+	      </thresholds>
+	      <shouldDetectModules>«c.shouldDetectModules»</shouldDetectModules>
+	      <dontComputeNew>«c.dontComputeNew»</dontComputeNew>
+	      <doNotResolveRelativePaths>«c.doNotResolveRelativePaths»</doNotResolveRelativePaths>
+	      <pattern>«c.pattern»</pattern>
+	    </hudson.plugins.checkstyle.CheckStylePublisher>
+	'''
+	
+	def dispatch publisher (PMD p) '''
+	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	      <healthy>«p.healthy»</healthy>
+	      <unHealthy>«p.unHealthy»</unHealthy>
+	      <thresholdLimit>«p.thresholdLimit»</thresholdLimit>
+	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <defaultEncoding>«p.defaultEncoding»</defaultEncoding>
+	      <canRunOnFailed>«p.canRunOnFailed»</canRunOnFailed>
+	      <useStableBuildAsReference>«p.useStableBuildAsReference»</useStableBuildAsReference>
+	      <useDeltaValues>«p.useDeltaValues»</useDeltaValues>
+	      <thresholds>
+	        <unstableTotalAll>«p.thresholds.unstableTotalAll»</unstableTotalAll>
+	        <unstableTotalHigh>«p.thresholds.unstableTotalHigh»</unstableTotalHigh>
+	        <unstableTotalNormal>«p.thresholds.unstableTotalNormal»</unstableTotalNormal>
+	        <unstableTotalLow>«p.thresholds.unstableTotalLow»</unstableTotalLow>
+	        <failedTotalAll>«p.thresholds.failedTotalAll»</failedTotalAll>
+	        <failedTotalHigh>«p.thresholds.failedTotalHigh»</failedTotalHigh>
+	        <failedTotalNormal>«p.thresholds.failedTotalNormal»</failedTotalNormal>
+	        <failedTotalLow>«p.thresholds.failedTotalLow»</failedTotalLow>
+	      </thresholds>
+	      <shouldDetectModules>«p.shouldDetectModules»</shouldDetectModules>
+	      <dontComputeNew>«p.dontComputeNew»</dontComputeNew>
+	      <doNotResolveRelativePaths>«p.doNotResolveRelativePaths»</doNotResolveRelativePaths>
+	      <pattern>«p.pattern»</pattern>
+	    </hudson.plugins.checkstyle.CheckStylePublisher>
+	'''
+	
+	def dispatch publisher (FindBugs f) '''
+	    <hudson.plugins.checkstyle.CheckStylePublisher>
+	      <healthy>«f.healthy»</healthy>
+	      <unHealthy>«f.unHealthy»</unHealthy>
+	      <thresholdLimit>«f.thresholdLimit»</thresholdLimit>
+	      <pluginName>[CHECKSTYLE] </pluginName>
+	      <defaultEncoding>«f.defaultEncoding»</defaultEncoding>
+	      <canRunOnFailed>«f.canRunOnFailed»</canRunOnFailed>
+	      <useStableBuildAsReference>«f.useStableBuildAsReference»</useStableBuildAsReference>
+	      <useDeltaValues>«f.useDeltaValues»</useDeltaValues>
+	      <thresholds>
+	        <unstableTotalAll>«f.thresholds.unstableTotalAll»</unstableTotalAll>
+	        <unstableTotalHigh>«f.thresholds.unstableTotalHigh»</unstableTotalHigh>
+	        <unstableTotalNormal>«f.thresholds.unstableTotalNormal»</unstableTotalNormal>
+	        <unstableTotalLow>«f.thresholds.unstableTotalLow»</unstableTotalLow>
+	        <failedTotalAll>«f.thresholds.failedTotalAll»</failedTotalAll>
+	        <failedTotalHigh>«f.thresholds.failedTotalHigh»</failedTotalHigh>
+	        <failedTotalNormal>«f.thresholds.failedTotalNormal»</failedTotalNormal>
+	        <failedTotalLow>«f.thresholds.failedTotalLow»</failedTotalLow>
+	      </thresholds>
+	      <shouldDetectModules>«f.shouldDetectModules»</shouldDetectModules>
+	      <dontComputeNew>«f.dontComputeNew»</dontComputeNew>
+	      <doNotResolveRelativePaths>«f.doNotResolveRelativePaths»</doNotResolveRelativePaths>
+	      <pattern>«f.pattern»</pattern>
+	      <isRankActivated>«f.isRankActivated»</isRankActivated>
+	      <excludePattern>«f.excludePattern»</excludePattern>
+	      <includePattern>«f.includePattern»</includePattern>
+	    </hudson.plugins.checkstyle.CheckStylePublisher>
 	'''
 
 	def dispatch publisher (Cobertura c) '''
