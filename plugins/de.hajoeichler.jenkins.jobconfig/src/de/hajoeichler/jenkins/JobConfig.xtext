@@ -289,7 +289,7 @@ HipChat:
 	{HipChat} "hipchat" ("room" room=STRING)?;
 
 FindBugs:
-	{FindBugs} "findbugs"
+	{FindBugs} "findbugs" BracketOpen
 	"pattern" pattern=STRING
 	(canRunOnFailed?="canRunOnFailed")?
 	(shouldDetectModules?="shouldDetectModules")?
@@ -304,10 +304,11 @@ FindBugs:
 	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?
 	(isRankActivated?="isRankActivated")?
 	("excludePattern" excludePattern=STRING)?
-	("includePattern" includePattern=STRING)?;
+	("includePattern" includePattern=STRING)?
+	BracketClose;
 
 Checkstyle:
-	{Checkstyle} "checkstyle"
+	{Checkstyle} "checkstyle" BracketOpen
 	"pattern" pattern=STRING
 	(canRunOnFailed?="canRunOnFailed")?
 	(shouldDetectModules?="shouldDetectModules")?
@@ -319,10 +320,11 @@ Checkstyle:
 	("defaultEncoding" defaultEncoding=STRING)?
 	(useStableBuildAsReference?="useStableBuildAsReference")?
 	(useDeltaValues?="useDeltaValues")?
-	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?;
+	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?
+	BracketClose;
 	
 PMD:
-	{PMD} "pmd"
+	{PMD} "pmd" BracketOpen
 	"pattern" pattern=STRING
 	(canRunOnFailed?="canRunOnFailed")?
 	(shouldDetectModules?="shouldDetectModules")?
@@ -334,7 +336,8 @@ PMD:
 	("defaultEncoding" defaultEncoding=STRING)?
 	(useStableBuildAsReference?="useStableBuildAsReference")?
 	(useDeltaValues?="useDeltaValues")?
-	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?;
+	(doNotResolveRelativePaths?="doNotResolveRelativePaths")?
+	BracketClose;
 
 Thresholds:
 	{Thresholds} ("unstableTotalAll" unstableTotalAll=INT)? ("unstableTotalHigh" unstableTotalHigh=INT)? ("unstableTotalNormal" unstableTotalNormal=INT)? ("unstableTotalLow" unstableTotalLow=INT)? ("failedTotalAll" failedTotalAll=INT)? ("failedTotalHigh" failedTotalHigh=INT)? ("failedTotalNormal" failedTotalNormal=INT)? ("failedTotalLow" failedTotalLow=INT)?;
