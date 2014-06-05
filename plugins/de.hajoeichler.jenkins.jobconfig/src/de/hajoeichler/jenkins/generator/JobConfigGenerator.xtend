@@ -65,6 +65,7 @@ import de.hajoeichler.jenkins.jobConfig.GitPublisher
 import de.hajoeichler.jenkins.jobConfig.Checkstyle
 import de.hajoeichler.jenkins.jobConfig.FindBugs
 import de.hajoeichler.jenkins.jobConfig.PMD
+import de.hajoeichler.jenkins.jobConfig.Thresholds
 
 class JobConfigGenerator implements IGenerator {
 
@@ -1037,16 +1038,7 @@ class JobConfigGenerator implements IGenerator {
 	      <canRunOnFailed>«c.canRunOnFailed»</canRunOnFailed>
 	      <useStableBuildAsReference>«c.useStableBuildAsReference»</useStableBuildAsReference>
 	      <useDeltaValues>«c.useDeltaValues»</useDeltaValues>
-	      <thresholds>
-	        <unstableTotalAll>«c.thresholds.unstableTotalAll»</unstableTotalAll>
-	        <unstableTotalHigh>«c.thresholds.unstableTotalHigh»</unstableTotalHigh>
-	        <unstableTotalNormal>«c.thresholds.unstableTotalNormal»</unstableTotalNormal>
-	        <unstableTotalLow>«c.thresholds.unstableTotalLow»</unstableTotalLow>
-	        <failedTotalAll>«c.thresholds.failedTotalAll»</failedTotalAll>
-	        <failedTotalHigh>«c.thresholds.failedTotalHigh»</failedTotalHigh>
-	        <failedTotalNormal>«c.thresholds.failedTotalNormal»</failedTotalNormal>
-	        <failedTotalLow>«c.thresholds.failedTotalLow»</failedTotalLow>
-	      </thresholds>
+	      «thresholds(c.thresholds)»
 	      <shouldDetectModules>«c.shouldDetectModules»</shouldDetectModules>
 	      <dontComputeNew>«c.dontComputeNew»</dontComputeNew>
 	      <doNotResolveRelativePaths>«c.doNotResolveRelativePaths»</doNotResolveRelativePaths>
@@ -1064,16 +1056,7 @@ class JobConfigGenerator implements IGenerator {
 	      <canRunOnFailed>«p.canRunOnFailed»</canRunOnFailed>
 	      <useStableBuildAsReference>«p.useStableBuildAsReference»</useStableBuildAsReference>
 	      <useDeltaValues>«p.useDeltaValues»</useDeltaValues>
-	      <thresholds>
-	        <unstableTotalAll>«p.thresholds.unstableTotalAll»</unstableTotalAll>
-	        <unstableTotalHigh>«p.thresholds.unstableTotalHigh»</unstableTotalHigh>
-	        <unstableTotalNormal>«p.thresholds.unstableTotalNormal»</unstableTotalNormal>
-	        <unstableTotalLow>«p.thresholds.unstableTotalLow»</unstableTotalLow>
-	        <failedTotalAll>«p.thresholds.failedTotalAll»</failedTotalAll>
-	        <failedTotalHigh>«p.thresholds.failedTotalHigh»</failedTotalHigh>
-	        <failedTotalNormal>«p.thresholds.failedTotalNormal»</failedTotalNormal>
-	        <failedTotalLow>«p.thresholds.failedTotalLow»</failedTotalLow>
-	      </thresholds>
+	      «thresholds(p.thresholds)»
 	      <shouldDetectModules>«p.shouldDetectModules»</shouldDetectModules>
 	      <dontComputeNew>«p.dontComputeNew»</dontComputeNew>
 	      <doNotResolveRelativePaths>«p.doNotResolveRelativePaths»</doNotResolveRelativePaths>
@@ -1091,16 +1074,7 @@ class JobConfigGenerator implements IGenerator {
 	      <canRunOnFailed>«f.canRunOnFailed»</canRunOnFailed>
 	      <useStableBuildAsReference>«f.useStableBuildAsReference»</useStableBuildAsReference>
 	      <useDeltaValues>«f.useDeltaValues»</useDeltaValues>
-	      <thresholds>
-	        <unstableTotalAll>«f.thresholds.unstableTotalAll»</unstableTotalAll>
-	        <unstableTotalHigh>«f.thresholds.unstableTotalHigh»</unstableTotalHigh>
-	        <unstableTotalNormal>«f.thresholds.unstableTotalNormal»</unstableTotalNormal>
-	        <unstableTotalLow>«f.thresholds.unstableTotalLow»</unstableTotalLow>
-	        <failedTotalAll>«f.thresholds.failedTotalAll»</failedTotalAll>
-	        <failedTotalHigh>«f.thresholds.failedTotalHigh»</failedTotalHigh>
-	        <failedTotalNormal>«f.thresholds.failedTotalNormal»</failedTotalNormal>
-	        <failedTotalLow>«f.thresholds.failedTotalLow»</failedTotalLow>
-	      </thresholds>
+	      «thresholds(f.thresholds)»
 	      <shouldDetectModules>«f.shouldDetectModules»</shouldDetectModules>
 	      <dontComputeNew>«f.dontComputeNew»</dontComputeNew>
 	      <doNotResolveRelativePaths>«f.doNotResolveRelativePaths»</doNotResolveRelativePaths>
@@ -1109,6 +1083,27 @@ class JobConfigGenerator implements IGenerator {
 	      <excludePattern>«f.excludePattern»</excludePattern>
 	      <includePattern>«f.includePattern»</includePattern>
 	    </hudson.plugins.findbugs.FindBugsPublisher>
+	'''
+	
+	def thresholds (Thresholds t) '''
+	    <thresholds>
+	      <unstableTotalAll>«t.unstableTotalAll»</unstableTotalAll>
+	      <unstableTotalHigh>«t.unstableTotalHigh»</unstableTotalHigh>
+	      <unstableTotalNormal>«t.unstableTotalNormal»</unstableTotalNormal>
+	      <unstableTotalLow>«t.unstableTotalLow»</unstableTotalLow>
+	      <failedTotalAll>«t.failedTotalAll»</failedTotalAll>
+	      <failedTotalHigh>«t.failedTotalHigh»</failedTotalHigh>
+	      <failedTotalNormal>«t.failedTotalNormal»</failedTotalNormal>
+	      <failedTotalLow>«t.failedTotalLow»</failedTotalLow>	      
+	      <unstableNewAll>«t.unstableNewAll»</unstableNewAll>
+	      <unstableNewHigh>«t.unstableNewHigh»</unstableNewHigh>
+	      <unstableNewNormal>«t.unstableNewNormal»</unstableNewNormal>
+	      <unstableNewLow>«t.unstableNewLow»</unstableNewLow>
+	      <failedNewAll>«t.failedNewAll»</failedNewAll>
+	      <failedNewHigh>«t.failedNewHigh»</failedNewHigh>
+	      <failedNewNormal>«t.failedNewNormal»</failedNewNormal>
+	      <failedNewLow>«t.failedNewLow»</failedNewLow>
+	    </thresholds>
 	'''
 
 	def dispatch publisher (Cobertura c) '''

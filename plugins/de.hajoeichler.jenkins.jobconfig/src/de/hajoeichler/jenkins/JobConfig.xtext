@@ -347,7 +347,15 @@ Thresholds:
 	("failedTotalAll" failedTotalAll=STRING)?
 	("failedTotalHigh" failedTotalHigh=STRING)?
 	("failedTotalNormal" failedTotalNormal=STRING)?
-	("failedTotalLow" failedTotalLow=STRING)?;
+	("failedTotalLow" failedTotalLow=STRING)?
+	("unstableNewAll" unstableNewAll=STRING)?
+	("unstableNewHigh" unstableNewHigh=STRING)?
+	("unstableNewNormal" unstableNewNormal=STRING)?
+	("unstableNewLow" unstableNewLow=STRING)?
+	("failedNewAll" failedNewAll=STRING)?
+	("failedNewHigh" failedNewHigh=STRING)?
+	("failedNewNormal" failedNewNormal=STRING)?
+	("failedNewLow" failedNewLow=STRING)?;
 
 JaCoCo:
 	{JaCoCo} "jacoco" ("execPattern" execPattern=STRING)? ("classPattern" classPattern=STRING)? ("sourcePattern" sourcePattern=STRING)? ("inclusionPattern" inclusionPattern=STRING)? ("exclusionPattern" exclusionPattern=STRING)? ("minimumInstructionCoverage" minimumInstructionCoverage=INT)? ("minimumBranchCoverage" minimumBranchCoverage=INT)? ("minimumComplexityCoverage" minimumComplexityCoverage=INT)? ("minimumLineCoverage" minimumLineCoverage=INT)? ("minimumMethodCoverage" minimumMethodCoverage=INT)? ("minimumClassCoverage" minimumClassCoverage=INT)? ("maximumInstructionCoverage" maximumInstructionCoverage=INT)? ("maximumBranchCoverage" maximumBranchCoverage=INT)? ("maximumComplexityCoverage" maximumComplexityCoverage=INT)? ("maximumLineCoverage" maximumLineCoverage=INT)? ("maximumMethodCoverage" maximumMethodCoverage=INT)? ("maximumClassCoverage" maximumClassCoverage=INT)? (changeBuildStatus?="changeBuildStatus")?;
