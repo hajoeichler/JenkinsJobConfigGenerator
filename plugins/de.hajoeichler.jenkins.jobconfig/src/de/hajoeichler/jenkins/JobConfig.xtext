@@ -293,8 +293,8 @@ FindBugs:
 	"pattern" pattern=STRING
 	(canRunOnFailed?="canRunOnFailed")?
 	(shouldDetectModules?="shouldDetectModules")?
-	("healthy" healthy=INT)?
-	("unHealthy" unHealthy=INT)?
+	("healthy" healthy=STRING)?
+	("unHealthy" unHealthy=STRING)?
 	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
 	thresholds=Thresholds
 	(dontComputeNew?="dontComputeNew")?
@@ -312,8 +312,8 @@ Checkstyle:
 	"pattern" pattern=STRING
 	(canRunOnFailed?="canRunOnFailed")?
 	(shouldDetectModules?="shouldDetectModules")?
-	("healthy" healthy=INT)?
-	("unHealthy" unHealthy=INT)?
+	("healthy" healthy=STRING)?
+	("unHealthy" unHealthy=STRING)?
 	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
 	thresholds=Thresholds
 	(dontComputeNew?="dontComputeNew")?
@@ -328,8 +328,8 @@ PMD:
 	"pattern" pattern=STRING
 	(canRunOnFailed?="canRunOnFailed")?
 	(shouldDetectModules?="shouldDetectModules")?
-	("healthy" healthy=INT)?
-	("unHealthy" unHealthy=INT)?
+	("healthy" healthy=STRING)?
+	("unHealthy" unHealthy=STRING)?
 	("thresholdLimit" thresholdLimit=("low" | "normal" | "high"))?
 	thresholds=Thresholds
 	(dontComputeNew?="dontComputeNew")?
