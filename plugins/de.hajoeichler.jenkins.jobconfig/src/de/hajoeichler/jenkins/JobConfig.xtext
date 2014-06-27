@@ -126,6 +126,7 @@ ScmSVN:
 	browser=STRING)? regions=ScmRegions BracketClose;
 
 ScmRegions:
+	{ScmRegions}
 	("excludedRegions" excludedRegions=STRING)? ("includedRegions" includedRegions=STRING)?;
 
 ScmCVS:
