@@ -434,7 +434,15 @@ class JobConfigGenerator implements IGenerator {
 		    <excludedUsers></excludedUsers>
 		    <excludedRevprop></excludedRevprop>
 		    <excludedCommitMessages></excludedCommitMessages>
+			«IF svn.strategy == "checkout"»
+		    <workspaceUpdater class="hudson.scm.subversion.CheckoutUpdater"/>
+			«ELSE IF svn.strategy == "up"»
 		    <workspaceUpdater class="hudson.scm.subversion.UpdateUpdater"/>
+			«ELSE IF svn.strategy == "clean"»
+		    <workspaceUpdater class="hudson.scm.subversion.UpdateWithCleanUpdater"/>
+			«ELSE IF svn.strategy == "revert"»
+		    <workspaceUpdater class="hudson.scm.subversion.UpdateWithRevertUpdater"/>
+		    «ENDIF»
 		  </scm>
 	'''
 

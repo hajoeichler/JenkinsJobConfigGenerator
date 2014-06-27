@@ -121,7 +121,7 @@ ScmGit:
 	regions=ScmRegions BracketClose;
 
 ScmSVN:
-	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=("up" | "ceckout" | "stash" |
+	"svn" BracketOpen "url" url=STRING ("localDir" localDir=STRING)? ("strategy" strategy=("checkout" | "update" | "clean" |
 	"revert"))? ("browser"
 	browser=STRING)? regions=ScmRegions BracketClose;
 
