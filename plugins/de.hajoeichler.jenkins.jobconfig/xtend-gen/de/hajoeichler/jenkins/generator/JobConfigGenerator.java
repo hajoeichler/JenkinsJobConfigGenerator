@@ -1046,9 +1046,40 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("<excludedCommitMessages></excludedCommitMessages>");
     _builder.newLine();
+    {
+      String _strategy = svn.getStrategy();
+      boolean _operator_equals = ObjectExtensions.operator_equals(_strategy, "checkout");
+      if (_operator_equals) {
+        _builder.append("  ");
+        _builder.append("<workspaceUpdater class=\"hudson.scm.subversion.CheckoutUpdater\"/>");
+        _builder.newLine();
+      } else {
+        String _strategy_1 = svn.getStrategy();
+        boolean _operator_equals_1 = ObjectExtensions.operator_equals(_strategy_1, "up");
+        if (_operator_equals_1) {
+          _builder.append("  ");
+          _builder.append("<workspaceUpdater class=\"hudson.scm.subversion.UpdateUpdater\"/>");
+          _builder.newLine();
+        } else {
+          String _strategy_2 = svn.getStrategy();
+          boolean _operator_equals_2 = ObjectExtensions.operator_equals(_strategy_2, "clean");
+          if (_operator_equals_2) {
+            _builder.append("  ");
+            _builder.append("<workspaceUpdater class=\"hudson.scm.subversion.UpdateWithCleanUpdater\"/>");
+            _builder.newLine();
+          } else {
+            String _strategy_3 = svn.getStrategy();
+            boolean _operator_equals_3 = ObjectExtensions.operator_equals(_strategy_3, "revert");
+            if (_operator_equals_3) {
+              _builder.append("  ");
+              _builder.append("<workspaceUpdater class=\"hudson.scm.subversion.UpdateWithRevertUpdater\"/>");
+              _builder.newLine();
+            }
+          }
+        }
+      }
+    }
     _builder.append("  ");
-    _builder.append("<workspaceUpdater class=\"hudson.scm.subversion.UpdateUpdater\"/>");
-    _builder.newLine();
     _builder.append("</scm>");
     _builder.newLine();
     return _builder;

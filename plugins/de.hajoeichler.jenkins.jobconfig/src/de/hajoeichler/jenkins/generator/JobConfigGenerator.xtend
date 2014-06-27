@@ -417,32 +417,32 @@ class JobConfigGenerator implements IGenerator {
 	'''
 
 	def dispatch scm(ScmSVN svn) '''
-		  <scm class="hudson.scm.SubversionSCM">
-		    <locations>
-		      <hudson.scm.SubversionSCM_-ModuleLocation>
-		        <remote>«svn.url.normalize»</remote>
-		        <local>«svn.localDir.normalize»</local>
-		      </hudson.scm.SubversionSCM_-ModuleLocation>
-		    </locations>
-		    «IF svn.regions != null»
-		    <excludedRegions>«svn.regions.excludedRegions.normalize»</excludedRegions>
-		    <includedRegions>«svn.regions.includedRegions.normalize»</includedRegions>
-		    «ELSE»
-		    <excludedRegions></excludedRegions>
-		    <includedRegions></includedRegions>
-		    «ENDIF»
-		    <excludedUsers></excludedUsers>
-		    <excludedRevprop></excludedRevprop>
-		    <excludedCommitMessages></excludedCommitMessages>
-			«IF svn.strategy == "checkout"»
-		    <workspaceUpdater class="hudson.scm.subversion.CheckoutUpdater"/>
-			«ELSE IF svn.strategy == "up"»
-		    <workspaceUpdater class="hudson.scm.subversion.UpdateUpdater"/>
-			«ELSE IF svn.strategy == "clean"»
-		    <workspaceUpdater class="hudson.scm.subversion.UpdateWithCleanUpdater"/>
-			«ELSE IF svn.strategy == "revert"»
-		    <workspaceUpdater class="hudson.scm.subversion.UpdateWithRevertUpdater"/>
-		    «ENDIF»
+		<scm class="hudson.scm.SubversionSCM">
+		  <locations>
+		    <hudson.scm.SubversionSCM_-ModuleLocation>
+		      <remote>«svn.url.normalize»</remote>
+		      <local>«svn.localDir.normalize»</local>
+		    </hudson.scm.SubversionSCM_-ModuleLocation>
+		  </locations>
+		  «IF svn.regions != null»
+		  <excludedRegions>«svn.regions.excludedRegions.normalize»</excludedRegions>
+		  <includedRegions>«svn.regions.includedRegions.normalize»</includedRegions>
+		  «ELSE»
+		  <excludedRegions></excludedRegions>
+		  <includedRegions></includedRegions>
+		  «ENDIF»
+		  <excludedUsers></excludedUsers>
+		  <excludedRevprop></excludedRevprop>
+		  <excludedCommitMessages></excludedCommitMessages>
+		  «IF svn.strategy == "checkout"»
+		  <workspaceUpdater class="hudson.scm.subversion.CheckoutUpdater"/>
+		  «ELSEIF svn.strategy == "up"»
+		  <workspaceUpdater class="hudson.scm.subversion.UpdateUpdater"/>
+		  «ELSEIF svn.strategy == "clean"»
+		  <workspaceUpdater class="hudson.scm.subversion.UpdateWithCleanUpdater"/>
+		  «ELSEIF svn.strategy == "revert"»
+		  <workspaceUpdater class="hudson.scm.subversion.UpdateWithRevertUpdater"/>
+		  «ENDIF»
 		  </scm>
 	'''
 
