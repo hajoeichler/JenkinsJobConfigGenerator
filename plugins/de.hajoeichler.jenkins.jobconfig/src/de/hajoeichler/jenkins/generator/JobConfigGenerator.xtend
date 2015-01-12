@@ -396,6 +396,13 @@ class JobConfigGenerator implements IGenerator {
 		  <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
 		  <gitTool>Default</gitTool>
 		  <submoduleCfg class="list"/>
+		  <extensions>
+		    <hudson.plugins.git.extensions.impl.SubmoduleOption>
+		      <disableSubmodules>false</disableSubmodules>
+		      <recursiveSubmodules>true</recursiveSubmodules>
+		      <trackingSubmodules>false</trackingSubmodules>
+		    </hudson.plugins.git.extensions.impl.SubmoduleOption>
+		  </extensions>
 		  <relativeTargetDir></relativeTargetDir>
 		  <reference></reference>
 		  «IF git.regions != null»
