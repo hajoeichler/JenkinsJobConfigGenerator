@@ -381,7 +381,7 @@ class JobConfigGenerator implements IGenerator {
 		    </hudson.plugins.git.BranchSpec>
 		  </branches>
 		  <disableSubmodules>false</disableSubmodules>
-		  <recursiveSubmodules>false</recursiveSubmodules>
+		  <recursiveSubmodules>true</recursiveSubmodules>
 		  <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
 		  <authorOrCommitter>false</authorOrCommitter>
 		  <clean>false</clean>
