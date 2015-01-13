@@ -875,7 +875,7 @@ public class JobConfigGenerator implements IGenerator {
     _builder.append("<disableSubmodules>false</disableSubmodules>");
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("<recursiveSubmodules>false</recursiveSubmodules>");
+    _builder.append("<recursiveSubmodules>true</recursiveSubmodules>");
     _builder.newLine();
     _builder.append("  ");
     _builder.append("<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>");
